@@ -1,0 +1,7 @@
+{
+  "appId": "com.hypergram.app",
+  "appName": "HYPERGRAM",
+  "webDir": "www",
+  "android": { "backgroundColor": "#121110" },
+  "server": { "androidScheme": "https" }
+}
