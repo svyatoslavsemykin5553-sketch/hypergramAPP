@@ -3,6 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <style id="hgBoot">body { opacity: 0 !important; }</style>
+  <script>
+    (function () {
+      try {
+        var t = (JSON.parse(localStorage.getItem('hypergram_settings_v1') || '{}')).theme || 'dark';
+        document.documentElement.style.background = t === 'dark' ? '#121110' : '#f1f5f9';
+      } catch (e) { document.documentElement.style.background = '#121110'; }
+      setTimeout(function () { var b = document.getElementById('hgBoot'); if (b) b.remove(); }, 2500);
+    })();
+  </script>
   <title>HYPERGRAM — Мессенджер</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -3323,6 +3333,9 @@
       selectChat(dmId);
     };
 
+    const animatedMsgIds = new Set();
+    let lastRenderedChatId = null;
+
     function renderActiveChat() {
       const chat = chatsMap[activeChatId];
       const emptyEl = document.getElementById('emptyChatState');
@@ -3376,7 +3389,15 @@
         return;
       }
 
+      const switched = lastRenderedChatId !== chat.id;
+      const prevTop = container.scrollTop;
+      const nearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
+      const lastM = msgs[msgs.length - 1];
+      const mineNew = !!lastM && lastM.senderId === currentUserId && !animatedMsgIds.has(lastM.id);
+      if (switched) { msgs.forEach(m => animatedMsgIds.add(m.id)); lastRenderedChatId = chat.id; }
+
       container.innerHTML = msgs.map(msg => {
+        const isNewMsg = !animatedMsgIds.has(msg.id);
         const isOut = msg.senderId === currentUserId && chat.type !== 'channel';
         const sender = usersMap[msg.senderId] || { displayName: 'Пользователь', initials: '?', avatarColor: 'from-slate-500 to-slate-600', badges: {} };
 
@@ -3447,7 +3468,7 @@
         ` : '';
 
         return `
-          <div id="msg_${msg.id}" class="flex items-end gap-2 ${isOut ? 'justify-end' : 'justify-start'} group msg-animate" oncontextmenu="openCtxMenu(event, '${msg.id}')" ondblclick="quickReactMsg('${msg.id}')">
+          <div id="msg_${msg.id}" class="flex items-end gap-2 ${isOut ? 'justify-end' : 'justify-start'} group ${isNewMsg ? 'msg-animate' : ''}" oncontextmenu="openCtxMenu(event, '${msg.id}')" ondblclick="quickReactMsg('${msg.id}')">
             ${showAvatar ? avatarBoxHtml(sender, 'w-8 h-8 rounded-xl text-[11px] cursor-pointer', `onclick="openUserProfile('${sender.id}')"`) : ''}
             <div class="hg-bubble relative max-w-[85%] sm:max-w-[70%] px-3.5 py-2 ${isOut
               ? 'hg-bubble-out'
@@ -3474,7 +3495,8 @@
         `;
       }).join('');
 
-      container.scrollTop = container.scrollHeight;
+      msgs.forEach(m => animatedMsgIds.add(m.id));
+      container.scrollTop = (switched || nearBottom || mineNew) ? container.scrollHeight : prevTop;
       markActiveChatAsRead();
       markChannelPostsViewed(chat, msgs);
     }
@@ -4787,6 +4809,7 @@
     applySettings();
     probeStorage();
     prefillLastLogin();
+    requestAnimationFrame(() => requestAnimationFrame(() => { const b = document.getElementById('hgBoot'); if (b) b.remove(); }));
     setTimeout(() => { if (!currentUserId) hideSessionLoader(true); }, 12000);
     initBackend();
   </script>
