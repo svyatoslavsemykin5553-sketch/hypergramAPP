@@ -26,6 +26,15 @@ jobs:
       - name: Создание Android-проекта
         run: npx cap add android
 
+      - name: Копирование google-services.json для push-уведомлений
+        run: |
+          if [ -f "google-services.json" ]; then
+            cp google-services.json android/app/google-services.json
+          else
+            echo "Внимание: google-services.json не найден в корне репозитория!"
+            exit 1
+          fi
+
       - name: Иконки и разрешения (микрофон для звонков)
         run: |
           RES=android/app/src/main/res
