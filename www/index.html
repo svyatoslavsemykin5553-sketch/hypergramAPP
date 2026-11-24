@@ -2350,14 +2350,6 @@
             }
             if (hadMore && latest && latest.senderId !== currentUserId && !settings.blockedUsers.includes(latest.senderId)) {
               playSound('receive');
-              if (document.hidden && !settings.dndMode && 'Notification' in window && Notification.permission === 'granted' && (!window.Capacitor || !window.Capacitor.isNativePlatform || !window.Capacitor.isNativePlatform())) {
-                try {
-                  const senderName = usersMap[latest.senderId]?.displayName || 'HYPERGRAM';
-                  const bodyText = settings.hidePreviews ? 'Новое сообщение' : getMessagePreviewText(latest);
-                  const n = new Notification(senderName, { body: bodyText });
-                  n.onclick = () => { window.focus(); if (latest.chatId) selectChat(latest.chatId); n.close(); };
-                } catch (e) {}
-              }
             }
             renderIfLoggedIn();
           }, (err) => reportSyncError('Messages', err));
@@ -2689,6 +2681,7 @@
     // =========================================================
     // PUSH-УВЕДОМЛЕНИЯ (FCM): ТОКЕН, СОСТОЯНИЕ ЭКРАНА И ПЕРЕХОД В ЧАТ
     // =========================================================
+    const PUSH_WORKER_URL = 'https://hypergram-push.zeqbpes.workers.dev';
     let pendingPushChatId = null;
 
     function syncPushPresenceState() {
@@ -2703,6 +2696,15 @@
         isAppForeground: !document.hidden && !pinLocked,
         pushUpdatedAt: Date.now()
       }).catch(() => {});
+    }
+
+    function triggerPushWorkerForMessage(messageId) {
+      if (!messageId || !PUSH_WORKER_URL) return;
+      fetch(PUSH_WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messageId })
+      }).catch(e => console.warn('Push worker call failed:', e));
     }
 
     window.saveAndroidFcmToken = async function(token) {
@@ -3651,6 +3653,7 @@
       };
       if (mediaPayload) msgDoc.media = mediaPayload;
       await dbSet('hg_messages', id, msgDoc);
+      triggerPushWorkerForMessage(id);
     };
 
     window.quickReactMsg = function(msgId) {
