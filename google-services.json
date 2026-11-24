@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "587088350954",
+    "project_id": "hypergram-5f5ee",
+    "storage_bucket": "hypergram-5f5ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587088350954:android:69eafed96ba361d4695193",
+        "android_client_info": {
+          "package_name": "com.hypergram.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsagDAvDGRNXPWTGTRSz4RpIn5nKNar7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
