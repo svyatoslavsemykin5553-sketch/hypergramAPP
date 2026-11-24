@@ -2,7 +2,7 @@
 <html lang="ru" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <style id="hgBoot">body { opacity: 0 !important; }</style>
   <script>
     (function () {
@@ -53,7 +53,11 @@
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; font-family: 'Instrument Sans', system-ui, sans-serif; letter-spacing: -0.005em; }
+    html, body { height: 100%; height: 100dvh; margin: 0; padding: 0; overflow: hidden; overscroll-behavior: none; font-family: 'Instrument Sans', system-ui, sans-serif; letter-spacing: -0.005em; }
+    #app { height: 100vh; height: 100dvh; }
+    .hg-safe-top { padding-top: env(safe-area-inset-top, 0px); }
+    .hg-safe-bottom { padding-bottom: max(0.625rem, env(safe-area-inset-bottom, 0px)); }
+    .hg-chat-row { -webkit-touch-callout: none; touch-action: pan-y; }
     .font-display { font-family: 'Bricolage Grotesque', 'Instrument Sans', sans-serif; letter-spacing: -0.03em; }
     ::selection { background: var(--hg-accent); color: #fff; }
 
@@ -254,12 +258,12 @@
     } catch (e) {}
   </script>
 
-  <div id="app" class="hidden h-screen w-screen flex overflow-hidden relative bg-slate-100 dark:bg-[#121110] text-slate-900 dark:text-slate-100 transition-colors duration-200">
+  <div id="app" class="hidden h-[100dvh] w-screen flex overflow-hidden relative bg-slate-100 dark:bg-[#121110] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
     <!-- ЛЕВАЯ ПАНЕЛЬ: Список чатов -->
     <aside id="leftSidebar" class="w-full md:w-[340px] lg:w-[360px] flex-shrink-0 h-full flex flex-col bg-white dark:bg-[#1a1917] border-r border-slate-200 dark:border-[#2e2b28] z-20">
       <!-- Шапка -->
-      <div class="px-3 pt-3 pb-2 flex items-center gap-1.5">
+      <div class="px-3 pt-3 pb-2 flex items-center gap-1.5 hg-safe-top">
         <button onclick="openDrawer()" title="Меню" class="p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-600 dark:text-slate-300 transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
@@ -305,7 +309,7 @@
       <div id="chatList" class="flex-1 overflow-y-auto custom-scroll p-2 space-y-1"></div>
 
       <!-- Нижняя панель профиля -->
-      <div class="p-3 border-t border-slate-200 dark:border-[#2e2b28] flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-[#161513]">
+      <div class="p-3 border-t border-slate-200 dark:border-[#2e2b28] flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-[#161513] hg-safe-bottom">
         <div onclick="openSettingsModal('profile')" title="Редактировать профиль" class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer p-1 rounded-xl hover:bg-slate-200/60 dark:hover:bg-[#2a2724] transition">
           <div class="relative flex-shrink-0">
             <div id="bottomUserAvatar" class="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold text-white"></div>
@@ -336,7 +340,7 @@
       <!-- Активный чат -->
       <div id="activeChatContainer" class="hidden flex-1 flex flex-col h-full min-h-0">
         <!-- Шапка чата -->
-        <header class="h-16 px-3 sm:px-4 flex items-center justify-between gap-2 bg-white/95 dark:bg-[#1a1917]/95 backdrop-blur border-b border-slate-200 dark:border-[#2e2b28] flex-shrink-0">
+        <header class="min-h-16 px-3 sm:px-4 flex items-center justify-between gap-2 bg-white/95 dark:bg-[#1a1917]/95 backdrop-blur border-b border-slate-200 dark:border-[#2e2b28] flex-shrink-0 hg-safe-top">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <button id="btnMobileBack" onclick="mobileBackToList()" class="md:hidden p-2 -ml-1 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724]">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -413,7 +417,7 @@
         </div>
 
         <!-- Поле ввода -->
-        <div class="p-2.5 sm:p-3 bg-white dark:bg-[#1a1917] border-t border-slate-200 dark:border-[#2e2b28] relative flex-shrink-0">
+        <div class="p-2.5 sm:p-3 bg-white dark:bg-[#1a1917] border-t border-slate-200 dark:border-[#2e2b28] relative flex-shrink-0 hg-safe-bottom">
           <!-- Кнопка вступления / подписки на публичный чат или канал -->
           <div id="composerJoinBar" class="hidden flex items-center justify-center">
             <button id="btnComposerJoin" onclick="joinActiveChat()" class="w-full py-2.5 px-4 rounded-xl hg-accent-bg text-white text-xs sm:text-sm font-bold transition"></button>
@@ -432,7 +436,7 @@
             <div class="flex-1 relative">
               <textarea id="messageInput" rows="1" placeholder="Написать сообщение..." class="w-full max-h-32 resize-none rounded-2xl bg-slate-100 dark:bg-[#262421] text-slate-900 dark:text-slate-100 placeholder-slate-400 px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition custom-scroll"></textarea>
               <button id="btnEmoji" onclick="toggleEmojiPopover(event)" class="absolute right-2 bottom-1.5 p-1.5 rounded-lg hover:bg-slate-200/70 dark:hover:bg-[#36322e] text-slate-500 dark:text-[#8d887c]">😊</button>
-              <div id="emojiPopover" class="hidden absolute bottom-12 right-0 w-64 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-2.5 z-30">
+              <div id="emojiPopover" class="hidden absolute bottom-12 right-0 w-64 max-w-[82vw] rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-2.5 z-30">
                 <div id="emojiGrid" class="grid grid-cols-7 gap-1 text-lg"></div>
               </div>
             </div>
@@ -446,7 +450,7 @@
 
     <!-- ПРАВАЯ ПАНЕЛЬ ПРОФИЛЯ / ИНФО -->
     <aside id="rightInfoPanel" class="hidden fixed inset-y-0 right-0 lg:static w-full sm:w-[330px] flex-shrink-0 h-full bg-white dark:bg-[#1a1917] border-l border-slate-200 dark:border-[#2e2b28] z-30 flex-col shadow-2xl lg:shadow-none">
-      <div class="h-16 px-4 flex items-center justify-between border-b border-slate-200 dark:border-[#2e2b28]">
+      <div class="min-h-16 px-4 flex items-center justify-between border-b border-slate-200 dark:border-[#2e2b28] hg-safe-top">
         <span class="font-semibold text-sm">Профиль</span>
         <button onclick="closeInfoPanel()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724]">✕</button>
       </div>
@@ -456,7 +460,7 @@
     <!-- БОКОВОЕ МЕНЮ (DRAWER) -->
     <div id="drawerOverlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-[2px] z-40" onclick="closeDrawer()"></div>
     <div id="mainDrawer" class="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-white dark:bg-[#1a1917] border-r border-slate-200 dark:border-[#2e2b28] z-50 transform -translate-x-full transition-transform duration-200 flex flex-col shadow-2xl">
-      <div class="p-5 bg-slate-900 dark:bg-[#262421] text-white">
+      <div class="p-5 bg-slate-900 dark:bg-[#262421] text-white hg-safe-top">
         <div id="drawerAvatar" class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-xl font-bold mb-3"></div>
         <div id="drawerName" class="font-bold text-base flex items-center gap-1.5"></div>
         <div id="drawerUsername" class="text-xs text-sky-100/90 mt-0.5"></div>
@@ -493,6 +497,15 @@
           <span>Выйти из аккаунта</span>
         </button>
       </nav>
+    </div>
+
+    <!-- КОНТЕКСТНОЕ МЕНЮ ЧАТА (УДЕРЖАНИЕ ПАЛЬЦА / ПКМ В СПИСКЕ ЧАТОВ) -->
+    <div id="chatContextMenu" class="hidden fixed z-50 w-56 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-1.5 msg-animate">
+      <div id="chatCtxTitle" class="px-3 py-1.5 text-[11px] font-semibold text-slate-500 dark:text-[#8d887c] truncate border-b border-slate-200/80 dark:border-[#36322e] mb-1"></div>
+      <button onclick="ctxChatDelete()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-red-500/10 active:bg-red-500/15 text-red-500 text-xs font-semibold text-left">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        <span>Удалить</span>
+      </button>
     </div>
 
     <!-- КОНТЕКСТНОЕ МЕНЮ СООБЩЕНИЯ -->
@@ -3139,16 +3152,133 @@
       }
     }
 
-    window.restoreHiddenChats = async function() {
+    let ctxChatId = null;
+    let selectedRestoreChats = new Set();
+    let chatLongPressTimer = null;
+    let chatLongPressTriggered = false;
+    let chatTouchStartX = 0;
+    let chatTouchStartY = 0;
+
+    window.startChatLongPress = function(e, chatId) {
+      clearTimeout(chatLongPressTimer);
+      chatLongPressTriggered = false;
+      const touch = e.touches && e.touches[0];
+      if (!touch) return;
+      chatTouchStartX = touch.clientX;
+      chatTouchStartY = touch.clientY;
+      const x = touch.clientX;
+      const y = touch.clientY;
+      chatLongPressTimer = setTimeout(() => {
+        chatLongPressTriggered = true;
+        if (navigator.vibrate) { try { navigator.vibrate(25); } catch (err) {} }
+        openChatCtxMenuAt(x, y, chatId);
+      }, 450);
+    };
+
+    window.cancelChatLongPress = function(e) {
+      if (!chatLongPressTimer) return;
+      const touch = e && e.touches && e.touches[0];
+      if (touch) {
+        const dx = Math.abs(touch.clientX - chatTouchStartX);
+        const dy = Math.abs(touch.clientY - chatTouchStartY);
+        if (dx < 10 && dy < 10) return;
+      }
+      clearTimeout(chatLongPressTimer);
+      chatLongPressTimer = null;
+    };
+
+    window.endChatLongPress = function() {
+      clearTimeout(chatLongPressTimer);
+      chatLongPressTimer = null;
+    };
+
+    window.handleChatRowClick = function(e, chatId) {
+      if (chatLongPressTriggered) {
+        e.preventDefault();
+        e.stopPropagation();
+        chatLongPressTriggered = false;
+        return;
+      }
+      selectChat(chatId);
+    };
+
+    function openChatCtxMenuAt(clientX, clientY, chatId) {
+      const chat = chatsMap[chatId];
+      if (!chat) return;
+      ctxChatId = chatId;
+      document.getElementById('msgContextMenu')?.classList.add('hidden');
+      const titleEl = document.getElementById('chatCtxTitle');
+      if (titleEl) titleEl.textContent = getChatMeta(chat).title;
+      const menu = document.getElementById('chatContextMenu');
+      if (!menu) return;
+      menu.classList.remove('hidden');
+      const menuW = 224;
+      const menuH = 96;
+      menu.style.left = Math.max(12, Math.min(clientX - menuW / 2, window.innerWidth - menuW - 12)) + 'px';
+      menu.style.top = Math.max(12, Math.min(clientY - 24, window.innerHeight - menuH - 16)) + 'px';
+    }
+
+    window.openChatCtxMenu = function(e, chatId) {
+      e.preventDefault();
+      e.stopPropagation();
+      openChatCtxMenuAt(e.clientX, e.clientY, chatId);
+    };
+
+    window.ctxChatDelete = function() {
+      const id = ctxChatId;
+      document.getElementById('chatContextMenu')?.classList.add('hidden');
+      if (id) deleteChatFromList(null, id);
+    };
+
+    function getAllHiddenChatIds() {
       const userHidden = Array.isArray(usersMap[currentUserId]?.hiddenChats) ? usersMap[currentUserId].hiddenChats : [];
-      const total = new Set([...(settings.hiddenChats || []), ...userHidden]).size;
+      return Array.from(new Set([...(settings.hiddenChats || []), ...userHidden])).filter(id => !!chatsMap[id]);
+    }
+
+    window.toggleRestoreChatSelect = function(chatId) {
+      if (selectedRestoreChats.has(chatId)) selectedRestoreChats.delete(chatId);
+      else selectedRestoreChats.add(chatId);
+      renderSettingsModal();
+    };
+
+    window.toggleSelectAllRestoreChats = function() {
+      const allIds = getAllHiddenChatIds();
+      if (selectedRestoreChats.size === allIds.length) {
+        selectedRestoreChats.clear();
+      } else {
+        selectedRestoreChats = new Set(allIds);
+      }
+      renderSettingsModal();
+    };
+
+    window.restoreSelectedHiddenChats = async function() {
+      const allIds = getAllHiddenChatIds();
+      const toRestore = allIds.filter(id => selectedRestoreChats.has(id));
+      if (!toRestore.length) {
+        showToast('Выберите хотя бы один чат для восстановления', 'error');
+        return;
+      }
+      const remaining = allIds.filter(id => !selectedRestoreChats.has(id));
+      selectedRestoreChats.clear();
+      await persistHiddenChats(remaining);
+      if (currentUserId && usersMap[currentUserId] && usersMap[currentUserId].hgSettings) {
+        const nextHgSettings = { ...usersMap[currentUserId].hgSettings, hiddenChats: [...remaining] };
+        await dbUpdate('hg_users', currentUserId, { hgSettings: nextHgSettings }).catch(() => {});
+      }
+      renderIfLoggedIn();
+      showToast(`Восстановлено чатов: ${toRestore.length}`, 'success');
+    };
+
+    window.restoreHiddenChats = async function() {
+      const allIds = getAllHiddenChatIds();
+      selectedRestoreChats.clear();
       await persistHiddenChats([]);
       if (currentUserId && usersMap[currentUserId] && usersMap[currentUserId].hgSettings) {
         const nextHgSettings = { ...usersMap[currentUserId].hgSettings, hiddenChats: [] };
         await dbUpdate('hg_users', currentUserId, { hgSettings: nextHgSettings }).catch(() => {});
       }
       renderIfLoggedIn();
-      showToast(total > 0 ? `Восстановлено скрытых чатов: ${total}` : 'Скрытых чатов не было', 'success');
+      showToast(allIds.length > 0 ? `Восстановлено скрытых чатов: ${allIds.length}` : 'Скрытых чатов не было', 'success');
     };
 
     async function hideChatForMe(chatId) {
@@ -3293,7 +3423,7 @@
           : '';
 
         return `
-          <div onclick="selectChat('${c.id}')" class="hg-chat-row group relative flex items-center gap-3 px-2.5 py-3 cursor-pointer transition border-b border-slate-200/80 dark:border-[#2e2b28] ${active ? 'hg-chat-active' : 'hover:bg-slate-100 dark:hover:bg-[#2a2724]'}">
+          <div onclick="handleChatRowClick(event, '${c.id}')" oncontextmenu="openChatCtxMenu(event, '${c.id}')" ontouchstart="startChatLongPress(event, '${c.id}')" ontouchmove="cancelChatLongPress(event)" ontouchend="endChatLongPress()" ontouchcancel="endChatLongPress()" class="hg-chat-row group relative flex items-center gap-3 px-2.5 py-3 cursor-pointer transition border-b border-slate-200/80 dark:border-[#2e2b28] ${active ? 'hg-chat-active' : 'hover:bg-slate-100 dark:hover:bg-[#2a2724]'}">
             ${avatarBoxHtml(meta, 'w-11 h-11 rounded-2xl text-sm')}
             <div class="min-w-0 flex-1">
               <div class="flex items-center justify-between gap-1.5">
@@ -3304,7 +3434,6 @@
                 <div class="text-xs text-slate-500 dark:text-[#8d887c] truncate flex-1">${previewHtml}</div>
                 <div class="flex items-center gap-1 flex-shrink-0">
                   ${unreadBadgeHtml}
-                  <button type="button" onclick="deleteChatFromList(event, '${c.id}')" title="Удалить чат из списка" class="opacity-0 group-hover:opacity-100 focus:opacity-100 w-5 h-5 rounded hover:bg-red-500/15 text-slate-400 hover:text-red-500 flex items-center justify-center text-[11px] transition">✕</button>
                 </div>
               </div>
             </div>
@@ -3538,7 +3667,7 @@
         ` : '';
 
         return `
-          <div id="msg_${msg.id}" class="flex items-end gap-2 ${isOut ? 'justify-end' : 'justify-start'} group ${isNewMsg ? 'msg-animate' : ''}" oncontextmenu="openCtxMenu(event, '${msg.id}')" ondblclick="quickReactMsg('${msg.id}')">
+          <div id="msg_${msg.id}" class="flex items-end gap-2 ${isOut ? 'justify-end' : 'justify-start'} group ${isNewMsg ? 'msg-animate' : ''}" oncontextmenu="openCtxMenu(event, '${msg.id}')" ontouchstart="startMsgLongPress(event, '${msg.id}')" ontouchmove="cancelMsgLongPress(event)" ontouchend="endMsgLongPress()" ontouchcancel="endMsgLongPress()" ondblclick="quickReactMsg('${msg.id}')">
             ${showAvatar ? avatarBoxHtml(sender, 'w-8 h-8 rounded-xl text-[11px] cursor-pointer', `onclick="openUserProfile('${sender.id}')"`) : ''}
             <div class="hg-bubble relative max-w-[85%] sm:max-w-[70%] px-3.5 py-2 ${isOut
               ? 'hg-bubble-out'
@@ -3668,6 +3797,39 @@
         void el.offsetWidth;
         el.classList.add('msg-highlight');
       }
+    };
+
+    let msgLongPressTimer = null;
+    let msgTouchStartX = 0;
+    let msgTouchStartY = 0;
+
+    window.startMsgLongPress = function(e, msgId) {
+      clearTimeout(msgLongPressTimer);
+      const touch = e.touches && e.touches[0];
+      if (!touch) return;
+      msgTouchStartX = touch.clientX;
+      msgTouchStartY = touch.clientY;
+      const x = touch.clientX;
+      const y = touch.clientY;
+      msgLongPressTimer = setTimeout(() => {
+        if (navigator.vibrate) { try { navigator.vibrate(25); } catch (err) {} }
+        openCtxMenu({ preventDefault(){}, stopPropagation(){}, clientX: x, clientY: y }, msgId);
+      }, 450);
+    };
+
+    window.cancelMsgLongPress = function(e) {
+      if (!msgLongPressTimer) return;
+      const touch = e && e.touches && e.touches[0];
+      if (touch) {
+        if (Math.abs(touch.clientX - msgTouchStartX) < 10 && Math.abs(touch.clientY - msgTouchStartY) < 10) return;
+      }
+      clearTimeout(msgLongPressTimer);
+      msgLongPressTimer = null;
+    };
+
+    window.endMsgLongPress = function() {
+      clearTimeout(msgLongPressTimer);
+      msgLongPressTimer = null;
     };
 
     window.openCtxMenu = function(e, msgId) {
@@ -4396,9 +4558,52 @@
             </div>
 
             <div class="p-4 rounded-2xl bg-slate-100/70 dark:bg-[#262421] border border-slate-200 dark:border-[#36322e] space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#8d887c]">Скрытые (удалённые из списка) чаты</div>
+                ${(() => {
+                  const hIds = getAllHiddenChatIds();
+                  if (!hIds.length) return '';
+                  const allSel = selectedRestoreChats.size === hIds.length;
+                  return `<button type="button" onclick="toggleSelectAllRestoreChats()" class="text-[11px] font-semibold hg-accent-text hover:underline">${allSel ? 'Снять выделение' : 'Выбрать все (' + hIds.length + ')'}</button>`;
+                })()}
+              </div>
+              ${(() => {
+                const hIds = getAllHiddenChatIds();
+                if (!hIds.length) {
+                  return `<div class="text-xs text-slate-500 dark:text-[#8d887c]">Нет скрытых чатов, групп или каналов.</div>`;
+                }
+                return `
+                  <div class="max-h-48 overflow-y-auto custom-scroll space-y-1.5 pr-1">
+                    ${hIds.map(id => {
+                      const ch = chatsMap[id];
+                      const meta = getChatMeta(ch);
+                      const checked = selectedRestoreChats.has(id);
+                      const kindLabel = ch.type === 'dm' ? 'Личный чат' : (ch.type === 'channel' ? 'Канал' : 'Группа');
+                      return `
+                        <div onclick="toggleRestoreChatSelect('${id}')" class="flex items-center justify-between gap-2.5 p-2.5 rounded-xl cursor-pointer border transition ${checked ? 'hg-accent-border hg-accent-soft' : 'bg-white dark:bg-[#1a1917] border-slate-200 dark:border-[#36322e] hover:bg-slate-50 dark:hover:bg-[#2a2724]'}">
+                          <div class="flex items-center gap-2.5 min-w-0">
+                            ${avatarBoxHtml(meta, 'w-8 h-8 rounded-lg text-xs')}
+                            <div class="min-w-0">
+                              <div class="text-xs font-semibold truncate">${escapeHtml(meta.title)}</div>
+                              <div class="text-[10px] text-slate-500 dark:text-[#8d887c] truncate">${kindLabel}</div>
+                            </div>
+                          </div>
+                          <span class="w-5 h-5 rounded flex items-center justify-center text-xs font-bold flex-shrink-0 ${checked ? 'hg-accent-bg text-white' : 'border border-slate-400 dark:border-[#5a564b]'}">${checked ? '✓' : ''}</span>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                  <div class="flex flex-wrap gap-2 pt-1">
+                    <button type="button" onclick="restoreSelectedHiddenChats()" class="px-4 py-2 rounded-xl hg-accent-bg text-white text-xs font-bold transition ${selectedRestoreChats.size === 0 ? 'opacity-50' : ''}">Восстановить выбранные${selectedRestoreChats.size > 0 ? ' (' + selectedRestoreChats.size + ')' : ''}</button>
+                    <button type="button" onclick="restoreHiddenChats()" class="px-3.5 py-2 rounded-xl border border-slate-300 dark:border-[#36322e] hover:bg-slate-200/60 dark:hover:bg-[#2a2724] text-xs font-semibold transition">Восстановить все</button>
+                  </div>
+                `;
+              })()}
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-100/70 dark:bg-[#262421] border border-slate-200 dark:border-[#36322e] space-y-3">
               <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#8d887c]">Экспорт и сброс</div>
               <div class="flex flex-wrap gap-2">
-                <button onclick="restoreHiddenChats()" class="px-4 py-2.5 rounded-xl hg-accent-bg text-white text-xs font-bold transition">Восстановить скрытые чаты</button>
                 <button onclick="exportChatsJson()" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-[#36322e] hover:bg-slate-200/60 dark:hover:bg-[#2a2724] text-xs font-semibold transition">Скачать экспорт чатов (.json)</button>
                 <button onclick="resetAllSettings()" class="px-4 py-2.5 rounded-xl bg-red-500/15 text-red-500 hover:bg-red-500/25 text-xs font-bold transition">Сбросить настройки по умолчанию</button>
               </div>
@@ -4863,6 +5068,7 @@
         return;
       }
       if (e.key === 'Escape') {
+        document.getElementById('chatContextMenu')?.classList.add('hidden');
         closeConfirmChatModal();
         closeMediaLightbox();
         closeCreateChatModal();
@@ -4875,8 +5081,18 @@
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('#msgContextMenu')) document.getElementById('msgContextMenu').classList.add('hidden');
+      if (!e.target.closest('#chatContextMenu')) document.getElementById('chatContextMenu')?.classList.add('hidden');
       if (!e.target.closest('#emojiPopover') && !e.target.closest('#btnEmoji')) document.getElementById('emojiPopover').classList.add('hidden');
     });
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => {
+        const appEl = document.getElementById('app');
+        if (appEl) appEl.style.height = window.visualViewport.height + 'px';
+        const mc = document.getElementById('messagesContainer');
+        if (mc && activeChatId) mc.scrollTop = mc.scrollHeight;
+      });
+    }
 
     // Запуск
     applySettings();
@@ -4897,7 +5113,12 @@
         if (P.App) P.App.addListener('backButton', function () {
           var hidden = function (id) { var el = document.getElementById(id); return !el || el.classList.contains('hidden'); };
           if (!hidden('callOverlay')) return;
+          if (!hidden('chatContextMenu')) { document.getElementById('chatContextMenu').classList.add('hidden'); return; }
+          if (!hidden('msgContextMenu')) { document.getElementById('msgContextMenu').classList.add('hidden'); return; }
+          if (!hidden('confirmChatModal') && window.closeConfirmChatModal) return window.closeConfirmChatModal();
+          if (!hidden('createChatModal') && window.closeCreateChatModal) return window.closeCreateChatModal();
           if (!hidden('mediaLightbox') && window.closeMediaLightbox) return window.closeMediaLightbox();
+          if (!hidden('rightInfoPanel') && window.closeInfoPanel) return window.closeInfoPanel();
           if (!hidden('settingsModal') && window.closeSettingsModal) return window.closeSettingsModal();
           if (!hidden('adminModal') && window.closeAdminModal) return window.closeAdminModal();
           if (!hidden('drawerOverlay') && window.closeDrawer) return window.closeDrawer();
