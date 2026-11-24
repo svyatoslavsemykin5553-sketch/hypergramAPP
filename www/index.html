@@ -2350,6 +2350,14 @@
             }
             if (hadMore && latest && latest.senderId !== currentUserId && !settings.blockedUsers.includes(latest.senderId)) {
               playSound('receive');
+              if (document.hidden && !settings.dndMode && 'Notification' in window && Notification.permission === 'granted' && (!window.Capacitor || !window.Capacitor.isNativePlatform || !window.Capacitor.isNativePlatform())) {
+                try {
+                  const senderName = usersMap[latest.senderId]?.displayName || 'HYPERGRAM';
+                  const bodyText = settings.hidePreviews ? 'Новое сообщение' : getMessagePreviewText(latest);
+                  const n = new Notification(senderName, { body: bodyText });
+                  n.onclick = () => { window.focus(); if (latest.chatId) selectChat(latest.chatId); n.close(); };
+                } catch (e) {}
+              }
             }
             renderIfLoggedIn();
           }, (err) => reportSyncError('Messages', err));
@@ -2678,6 +2686,54 @@
       }
     };
 
+    // =========================================================
+    // PUSH-УВЕДОМЛЕНИЯ (FCM): ТОКЕН, СОСТОЯНИЕ ЭКРАНА И ПЕРЕХОД В ЧАТ
+    // =========================================================
+    let pendingPushChatId = null;
+
+    function syncPushPresenceState() {
+      window.activeChatId = activeChatId;
+      if (!currentUserId || !usersMap[currentUserId]) return;
+      const pinLocked = !document.getElementById('pinLockScreen')?.classList.contains('hidden');
+      const chatArea = document.getElementById('chatArea');
+      const isChatVisible = !!chatArea && window.getComputedStyle(chatArea).display !== 'none';
+      const chatVisible = !!activeChatId && !document.hidden && !pinLocked && isChatVisible;
+      dbUpdate('hg_users', currentUserId, {
+        activePushChatId: chatVisible ? activeChatId : '',
+        isAppForeground: !document.hidden && !pinLocked,
+        pushUpdatedAt: Date.now()
+      }).catch(() => {});
+    }
+
+    window.saveAndroidFcmToken = async function(token) {
+      if (!token) return;
+      store.set('hypergram_fcm_token_v1', token);
+      if (!currentUserId || !usersMap[currentUserId]) return;
+      const existing = Array.isArray(usersMap[currentUserId].fcmTokens)
+        ? usersMap[currentUserId].fcmTokens
+        : [];
+      const nextTokens = Array.from(new Set([...existing, token]));
+      await dbUpdate('hg_users', currentUserId, {
+        fcmTokens: nextTokens,
+        fcmToken: token,
+        pushUpdatedAt: Date.now()
+      }).catch(e => console.warn('FCM token save error:', e));
+    };
+
+    window.handlePushNotificationOpen = function(data) {
+      const chatId = data?.chatId || data?.chat_id || '';
+      if (!chatId) return;
+      if (!currentUserId || !usersMap[currentUserId]) {
+        pendingPushChatId = chatId;
+        return;
+      }
+      if (chatsMap[chatId]) {
+        selectChat(chatId);
+      } else {
+        pendingPushChatId = chatId;
+      }
+    };
+
     function loginSuccess(uid, restored = false) {
       resetReadCursorsCache();
       currentUserId = uid;
@@ -2688,6 +2744,16 @@
 
       saveSession(uid, restored);
       hideSessionLoader(false);
+      window.activeChatId = activeChatId;
+      const cachedFcm = store.get('hypergram_fcm_token_v1');
+      if (cachedFcm) window.saveAndroidFcmToken(cachedFcm);
+      syncPushPresenceState();
+      if (pendingPushChatId && chatsMap[pendingPushChatId]) {
+        const targetPushChat = pendingPushChatId;
+        pendingPushChatId = null;
+        activeChatId = targetPushChat;
+        saveLastChat();
+      }
       startCallListeners(uid);
       if (usersMap[uid]) {
         const loginPatch = { isOnline: !document.hidden, lastSeenAt: Date.now() };
@@ -2958,7 +3024,7 @@
       saveLastChat();
       if (uid && usersMap[uid]) {
         lastPresenceSentAt = 0;
-        dbUpdate('hg_users', uid, { isOnline: false, lastSeenAt: Date.now(), lastLogoutAt: Date.now() }).catch(() => {});
+        dbUpdate('hg_users', uid, { isOnline: false, isAppForeground: false, activePushChatId: '', lastSeenAt: Date.now(), lastLogoutAt: Date.now() }).catch(() => {});
       }
       clearSession();
       currentUserId = null;
@@ -3297,6 +3363,7 @@
       }
       activeChatId = chatId;
       saveLastChat();
+      syncPushPresenceState();
       cancelReply();
       clearPendingMedia();
       if (window.innerWidth < 768) {
@@ -3316,6 +3383,7 @@
       document.getElementById('leftSidebar').classList.remove('hidden');
       document.getElementById('chatArea').classList.add('hidden');
       document.getElementById('chatArea').classList.remove('flex');
+      syncPushPresenceState();
     };
 
     window.startDm = async function(peerId) {
@@ -4734,8 +4802,10 @@
       if (document.hidden) {
         notifyTyping(false);
         updateMyPresence(false, true);
+        syncPushPresenceState();
       } else {
         updateMyPresence(true, true);
+        syncPushPresenceState();
         if (currentUserId && settings.pinCode && (Number(settings.pinTimeoutSec) || 0) > 0 && isPinRequiredNow(currentUserId)) {
           lockScreenNow(false);
         } else {
@@ -4834,6 +4904,44 @@
           P.App.minimizeApp();
         });
       } catch (e) {}
+      try {
+        var PN = P.PushNotifications;
+        if (PN) {
+          PN.requestPermissions().then(function (perm) {
+            if (perm && perm.receive === 'granted') {
+              return PN.register();
+            }
+          }).catch(function (err) { console.warn('Push perm error:', err); });
+
+          PN.addListener('registration', function (tokenObj) {
+            if (tokenObj && tokenObj.value && window.saveAndroidFcmToken) {
+              window.saveAndroidFcmToken(tokenObj.value);
+            }
+          });
+
+          PN.addListener('registrationError', function (err) {
+            console.warn('Push reg error:', err);
+          });
+
+          PN.addListener('pushNotificationReceived', function (notif) {
+            var data = notif && notif.data ? notif.data : {};
+            var incomingChatId = data.chatId || data.chat_id || '';
+            if (incomingChatId && window.activeChatId === incomingChatId && !document.hidden) {
+              return;
+            }
+            if (window.showToast && notif && (notif.title || notif.body)) {
+              window.showToast((notif.title ? notif.title + ': ' : '') + (notif.body || ''), 'info');
+            }
+          });
+
+          PN.addListener('pushNotificationActionPerformed', function (action) {
+            var data = action && action.notification && action.notification.data ? action.notification.data : {};
+            if (window.handlePushNotificationOpen) {
+              window.handlePushNotificationOpen(data);
+            }
+          });
+        }
+      } catch (e) { console.warn('Push init error:', e); }
     })();
   </script>
 </body>
