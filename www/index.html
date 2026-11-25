@@ -2,7 +2,7 @@
 <html lang="ru" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <style id="hgBoot">body { opacity: 0 !important; }</style>
   <script>
     (function () {
@@ -25,8 +25,9 @@
       darkMode: 'class',
       theme: { extend: {
         fontFamily: { sans: ['Instrument Sans', 'system-ui', 'sans-serif'], display: ['Bricolage Grotesque', 'Instrument Sans', 'sans-serif'] },
-        borderRadius: { md: '2px', lg: '3px', xl: '4px', '2xl': '8px', '3xl': '10px' },
-        boxShadow: { sm: 'none', DEFAULT: 'none', md: 'none', lg: 'none', xl: 'none', '2xl': '4px 4px 0 rgba(0,0,0,.22)' },
+        borderRadius: { md: '8px', lg: '10px', xl: '14px', '2xl': '18px', '3xl': '24px' },
+        fontSize: { xs: ['13px', '18px'], sm: ['14.5px', '21px'], base: ['16px', '24px'] },
+        boxShadow: { sm: 'none', DEFAULT: 'none', md: '0 2px 8px rgba(0,0,0,.18)', lg: '0 6px 18px rgba(0,0,0,.24)', xl: '0 10px 28px rgba(0,0,0,.3)', '2xl': '0 18px 48px rgba(0,0,0,.5)' },
         colors: {
           white: '#faf7f0',
           slate: { 50:'#f4f1e8', 100:'#ece8dc', 200:'#d9d4c5', 300:'#bdb7a6', 400:'#9a9485', 500:'#6f6a5e', 600:'#5a564b', 700:'#47443b', 800:'#2e2b28', 900:'#1a1814' },
@@ -48,16 +49,12 @@
       --hg-accent: #e2461f;
       --hg-accent-hover: #c93a17;
       --hg-accent-soft: rgba(226, 70, 31, 0.14);
-      --hg-msg-font: 14px;
-      --hg-bubble-radius: 8px;
+      --hg-msg-font: 15px;
+      --hg-bubble-radius: 18px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; height: 100dvh; margin: 0; padding: 0; overflow: hidden; overscroll-behavior: none; font-family: 'Instrument Sans', system-ui, sans-serif; letter-spacing: -0.005em; }
-    #app { height: 100vh; height: 100dvh; }
-    .hg-safe-top { padding-top: env(safe-area-inset-top, 0px); }
-    .hg-safe-bottom { padding-bottom: max(0.625rem, env(safe-area-inset-bottom, 0px)); }
-    .hg-chat-row { -webkit-touch-callout: none; touch-action: pan-y; }
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; font-family: 'Instrument Sans', system-ui, sans-serif; letter-spacing: -0.005em; }
     .font-display { font-family: 'Bricolage Grotesque', 'Instrument Sans', sans-serif; letter-spacing: -0.03em; }
     ::selection { background: var(--hg-accent); color: #fff; }
 
@@ -146,6 +143,33 @@
       width: 14px;
       background-color: #ffffff;
     }
+
+    /* ===== EMBER v2: обновлённый дизайн ===== */
+    .text-\[9px\] { font-size: 11px !important; }
+    .text-\[10px\] { font-size: 12px !important; }
+    .text-\[11px\] { font-size: 12.5px !important; }
+
+    .hg-bubble { line-height: 1.45; box-shadow: 0 1px 2px rgba(0,0,0,.18); }
+    .hg-bubble-out { border-bottom-right-radius: 6px !important; }
+    .hg-bubble:not(.hg-bubble-out) { border-bottom-left-radius: 6px !important; }
+    .hg-msg-text { line-height: 1.5; }
+
+    .hg-chat-row { border-radius: 16px; border-bottom-color: transparent !important; margin-bottom: 2px; }
+    .hg-chat-active { box-shadow: none !important; }
+
+    .hg-switch { width: 46px; height: 26px; border-radius: 13px; }
+    .hg-switch::after { top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; }
+    .hg-switch[aria-checked="true"]::after { transform: translateX(20px); }
+
+    .custom-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+    .custom-scroll::-webkit-scrollbar-thumb { border-radius: 4px; }
+
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--hg-accent); outline-offset: 2px; }
+    input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
+    #hgFab { box-shadow: 0 8px 22px rgba(226, 70, 31, .38); transition: transform .12s ease, background-color .12s ease; }
+    #hgFab:active { transform: scale(.94); }
+    #messageInput { line-height: 1.4; }
+    .hg-sig { height: 3px; }
   </style>
 </head>
 
@@ -182,7 +206,7 @@
         <button onclick="pinPress('9')" class="py-3 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] font-bold text-base transition">9</button>
         <button onclick="pinClear()" class="py-3 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] text-xs font-semibold text-slate-500 transition">Сброс</button>
         <button onclick="pinPress('0')" class="py-3 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] font-bold text-base transition">0</button>
-        <button onclick="pinBackspace()" class="py-3 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] font-bold text-sm transition">⌫</button>
+        <button onclick="pinBackspace()" class="py-3 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] font-bold text-sm transition flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12a1 1 0 001-1V6a1 1 0 00-1-1zM18 9l-6 6M12 9l6 6"/></svg></button>
       </div>
 
       <button onclick="unlockByLogout()" class="w-full py-2 text-xs text-red-500 hover:underline font-medium">Выйти из аккаунта</button>
@@ -258,70 +282,69 @@
     } catch (e) {}
   </script>
 
-  <div id="app" class="hidden h-[100dvh] w-screen flex overflow-hidden relative bg-slate-100 dark:bg-[#121110] text-slate-900 dark:text-slate-100 transition-colors duration-200">
+  <div id="app" class="hidden h-screen w-screen flex overflow-hidden relative bg-slate-100 dark:bg-[#121110] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
     <!-- ЛЕВАЯ ПАНЕЛЬ: Список чатов -->
-    <aside id="leftSidebar" class="w-full md:w-[340px] lg:w-[360px] flex-shrink-0 h-full flex flex-col bg-white dark:bg-[#1a1917] border-r border-slate-200 dark:border-[#2e2b28] z-20">
+    <aside id="leftSidebar" class="w-full md:w-[360px] lg:w-[390px] flex-shrink-0 h-full flex flex-col relative bg-white dark:bg-[#1a1917] border-r border-slate-200 dark:border-[#2e2b28] z-20">
       <!-- Шапка -->
-      <div class="px-3 pt-3 pb-2 flex items-center gap-1.5 hg-safe-top">
-        <button onclick="openDrawer()" title="Меню" class="p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-600 dark:text-slate-300 transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="px-4 pt-4 pb-3 flex items-center gap-2">
+        <button onclick="openDrawer()" title="Меню" class="w-11 h-11 flex items-center justify-center rounded-2xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-600 dark:text-slate-300 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </button>
 
         <div class="flex items-center gap-2 flex-1 min-w-0">
           <div class="truncate">
-            <div class="font-display font-extrabold text-xl leading-none">hyperchat<span class="hg-accent-text">.</span></div>
+            <div class="font-display font-extrabold text-2xl leading-none">hyperchat<span class="hg-accent-text">.</span></div>
             <div id="sidebarUserSubtitle" class="text-[11px] text-slate-500 dark:text-[#8d887c] truncate mt-1"></div>
           </div>
         </div>
 
         <!-- Кнопка Админ-панели (только для Hyperchat) -->
-        <button id="btnHeaderAdmin" onclick="openAdminModal()" class="hidden px-2.5 py-1.5 rounded-xl border hg-accent-border hg-accent-text hover:text-white hover:bg-sky-500 flex items-center transition">
+        <button id="btnHeaderAdmin" onclick="openAdminModal()" class="hidden px-3.5 h-9 rounded-full border hg-accent-border hg-accent-text hover:text-white hover:bg-sky-500 flex items-center transition">
           <span class="uppercase tracking-wider text-[10px] font-bold">Админ</span>
         </button>
 
-        <!-- Кнопка создания чата / канала -->
-        <button onclick="openCreateChatModal()" title="Создать чат или канал" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] hg-accent-text transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-          </svg>
-        </button>
 
 
       </div>
 
       <!-- Поиск чатов и пользователей по @username -->
-      <div class="px-3 pb-2">
+      <div class="px-4 pb-3">
         <div class="relative">
-          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <input id="searchInput" type="search" name="hg_chat_search" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="renderChatList()" placeholder="Поиск чатов или @username..." class="w-full pl-10 pr-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-[#262421] text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/60 transition" />
+          <input id="searchInput" type="search" name="hg_chat_search" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="renderChatList()" placeholder="Поиск чатов или @username..." class="w-full pl-12 pr-4 py-3 text-sm rounded-2xl bg-slate-100 dark:bg-[#262421] text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/60 transition" />
         </div>
       </div>
 
       <!-- Вкладки фильтрации чатов -->
-      <div id="chatFilterTabs" class="px-3 pb-2 flex items-center gap-1 overflow-x-auto custom-scroll"></div>
+      <div id="chatFilterTabs" class="px-4 pb-3 flex items-center gap-2 overflow-x-auto custom-scroll"></div>
 
       <!-- Список чатов + результаты поиска пользователей и каналов -->
-      <div id="chatList" class="flex-1 overflow-y-auto custom-scroll p-2 space-y-1"></div>
+      <div id="chatList" class="flex-1 overflow-y-auto custom-scroll px-2 pb-24 pt-1 space-y-0.5"></div>
+
+      <!-- Плавающая кнопка: создать чат или канал -->
+      <button id="hgFab" onclick="openCreateChatModal()" title="Создать чат или канал" aria-label="Создать чат или канал" class="absolute right-5 bottom-24 w-14 h-14 rounded-2xl hg-accent-bg text-white flex items-center justify-center z-10">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
 
       <!-- Нижняя панель профиля -->
-      <div class="p-3 border-t border-slate-200 dark:border-[#2e2b28] flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-[#161513] hg-safe-bottom">
+      <div class="px-3 py-3 border-t border-slate-200 dark:border-[#2e2b28] flex items-center justify-between gap-2 bg-slate-50/70 dark:bg-[#161513]">
         <div onclick="openSettingsModal('profile')" title="Редактировать профиль" class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer p-1 rounded-xl hover:bg-slate-200/60 dark:hover:bg-[#2a2724] transition">
           <div class="relative flex-shrink-0">
-            <div id="bottomUserAvatar" class="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold text-white"></div>
+            <div id="bottomUserAvatar" class="w-11 h-11 rounded-2xl flex items-center justify-center text-sm font-bold text-white"></div>
             <span id="bottomStatusDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#161513] absolute -bottom-0.5 -right-0.5"></span>
           </div>
           <div class="min-w-0 flex-1">
-            <div id="bottomUserName" class="text-xs font-semibold truncate flex items-center gap-1"></div>
+            <div id="bottomUserName" class="text-sm font-semibold truncate flex items-center gap-1"></div>
             <div id="bottomUserHandle" class="text-[11px] text-slate-500 dark:text-[#8d887c] truncate"></div>
           </div>
         </div>
-        <button onclick="logout()" title="Выйти из аккаунта" class="p-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button onclick="logout()" title="Выйти из аккаунта" class="w-11 h-11 flex items-center justify-center rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-500 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
           </svg>
         </button>
@@ -340,33 +363,33 @@
       <!-- Активный чат -->
       <div id="activeChatContainer" class="hidden flex-1 flex flex-col h-full min-h-0">
         <!-- Шапка чата -->
-        <header class="min-h-16 px-3 sm:px-4 flex items-center justify-between gap-2 bg-white/95 dark:bg-[#1a1917]/95 backdrop-blur border-b border-slate-200 dark:border-[#2e2b28] flex-shrink-0 hg-safe-top">
+        <header class="h-[68px] px-3 sm:px-5 flex items-center justify-between gap-2 bg-white/95 dark:bg-[#1a1917]/95 backdrop-blur border-b border-slate-200 dark:border-[#2e2b28] flex-shrink-0">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
-            <button id="btnMobileBack" onclick="mobileBackToList()" class="md:hidden p-2 -ml-1 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724]">
+            <button id="btnMobileBack" onclick="mobileBackToList()" class="md:hidden w-10 h-10 flex items-center justify-center -ml-1 rounded-2xl hover:bg-slate-100 dark:hover:bg-[#2a2724]">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
               </svg>
             </button>
             <div onclick="openChatInfoPanel()" class="flex items-center gap-3 min-w-0 flex-1 cursor-pointer group">
-              <div id="chatHeaderAvatar" class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"></div>
+              <div id="chatHeaderAvatar" class="w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"></div>
               <div class="min-w-0 flex-1">
-                <div id="chatHeaderTitle" class="font-semibold text-sm sm:text-base truncate flex items-center gap-1.5 group-hover:opacity-80 transition"></div>
+                <div id="chatHeaderTitle" class="font-semibold text-base truncate flex items-center gap-1.5 group-hover:opacity-80 transition"></div>
                 <div id="chatHeaderStatus" class="text-xs text-slate-500 dark:text-[#8d887c] truncate"></div>
               </div>
             </div>
           </div>
           <div class="flex items-center gap-1 flex-shrink-0">
-            <button id="btnCall" onclick="callActiveChat()" title="Голосовой звонок" class="hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-500 dark:text-slate-300 transition">
+            <button id="btnCall" onclick="callActiveChat()" title="Голосовой звонок" class="hidden w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-500 dark:text-slate-300 transition">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
               </svg>
             </button>
-            <button onclick="toggleChatSearch()" title="Поиск по сообщениям" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-500 dark:text-slate-300 transition">
+            <button onclick="toggleChatSearch()" title="Поиск по сообщениям" class="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-500 dark:text-slate-300 transition">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
               </svg>
             </button>
-            <button onclick="openChatInfoPanel()" title="Информация" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-500 dark:text-slate-300 transition">
+            <button onclick="openChatInfoPanel()" title="Информация" class="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-500 dark:text-slate-300 transition">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
@@ -376,11 +399,11 @@
 
         <!-- Поиск внутри чата -->
         <div id="inChatSearchBar" class="hidden px-3 py-2 bg-white dark:bg-[#1a1917] border-b border-slate-200 dark:border-[#2e2b28] flex items-center gap-2 flex-shrink-0">
-          <input id="inChatSearchInput" type="search" autocomplete="off" oninput="updateInChatSearch(this.value)" placeholder="Поиск по сообщениям в этом чате..." class="flex-1 px-3 py-1.5 text-xs rounded-xl bg-slate-100 dark:bg-[#262421] focus:outline-none" />
+          <input id="inChatSearchInput" type="search" autocomplete="off" oninput="updateInChatSearch(this.value)" placeholder="Поиск по сообщениям в этом чате..." class="flex-1 px-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-[#262421] focus:outline-none" />
           <span id="inChatSearchCount" class="text-[11px] text-slate-500 dark:text-[#8d887c] whitespace-nowrap"></span>
-          <button onclick="stepInChatSearch(-1)" title="Предыдущее" class="px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs">↑</button>
-          <button onclick="stepInChatSearch(1)" title="Следующее" class="px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs">↓</button>
-          <button onclick="toggleChatSearch(false)" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400">✕</button>
+          <button onclick="stepInChatSearch(-1)" title="Предыдущее" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724]"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+          <button onclick="stepInChatSearch(1)" title="Следующее" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724]"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+          <button onclick="toggleChatSearch(false)" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <!-- Закреплённое сообщение -->
@@ -389,11 +412,11 @@
             <div class="text-[10px] font-bold uppercase tracking-wider hg-accent-text">Закреплённое сообщение</div>
             <div id="pinnedBannerText" class="text-xs text-slate-700 dark:text-slate-200 truncate"></div>
           </div>
-          <button id="btnUnpinBanner" onclick="unpinCurrentChatMessage()" title="Открепить" class="hidden p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400">✕</button>
+          <button id="btnUnpinBanner" onclick="unpinCurrentChatMessage()" title="Открепить" class="hidden p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <!-- Лента сообщений -->
-        <div id="messagesContainer" class="flex-1 overflow-y-auto custom-scroll px-3 sm:px-6 py-4 space-y-2 chat-wallpaper-dark wp-lines select-text"></div>
+        <div id="messagesContainer" class="flex-1 overflow-y-auto custom-scroll px-3 sm:px-8 py-5 space-y-1.5 chat-wallpaper-dark wp-lines select-text"></div>
 
         <!-- Превью прикреплённого фото/видео -->
         <div id="mediaPreviewBar" class="hidden px-4 py-2 bg-white dark:bg-[#1a1917] border-t border-slate-200 dark:border-[#2e2b28] flex items-center justify-between gap-3 flex-shrink-0">
@@ -404,7 +427,7 @@
               <div id="mediaPreviewSub" class="text-[11px] text-slate-500 dark:text-[#8d887c] truncate"></div>
             </div>
           </div>
-          <button onclick="clearPendingMedia()" title="Убрать вложение" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-400">✕</button>
+          <button onclick="clearPendingMedia()" title="Убрать вложение" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <!-- Баннер ответа (Reply) -->
@@ -413,24 +436,24 @@
             <div id="replyBannerTitle" class="text-xs font-semibold hg-accent-text"></div>
             <div id="replyBannerText" class="text-xs text-slate-500 dark:text-slate-300 truncate"></div>
           </div>
-          <button onclick="cancelReply()" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-400">✕</button>
+          <button onclick="cancelReply()" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2a2724] text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <!-- Поле ввода -->
-        <div class="p-2.5 sm:p-3 bg-white dark:bg-[#1a1917] border-t border-slate-200 dark:border-[#2e2b28] relative flex-shrink-0 hg-safe-bottom">
+        <div class="p-3 sm:p-4 bg-white dark:bg-[#1a1917] border-t border-slate-200 dark:border-[#2e2b28] relative flex-shrink-0">
           <!-- Кнопка вступления / подписки на публичный чат или канал -->
           <div id="composerJoinBar" class="hidden flex items-center justify-center">
-            <button id="btnComposerJoin" onclick="joinActiveChat()" class="w-full py-2.5 px-4 rounded-xl hg-accent-bg text-white text-xs sm:text-sm font-bold transition"></button>
+            <button id="btnComposerJoin" onclick="joinActiveChat()" class="w-full py-3.5 px-4 rounded-2xl hg-accent-bg text-white text-sm font-bold transition"></button>
           </div>
 
           <!-- Баннер ограничения (Бан / Канал / ЧС / Мут / Slow Mode) -->
           <div id="composerRestriction" class="hidden py-2.5 px-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs sm:text-sm font-medium text-center"></div>
 
-          <div id="composerControls" class="flex items-end gap-2">
+          <div id="composerControls" class="flex items-end gap-2.5">
             <input id="mediaFileInput" type="file" accept="image/*,video/*" class="hidden" onchange="handleChatMediaSelect(event)" />
             <div class="relative flex-shrink-0">
-              <button id="btnAttachMenu" type="button" onclick="toggleAttachMenu(event)" title="Прикрепить" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] text-slate-600 dark:text-slate-300 flex items-center justify-center transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <button id="btnAttachMenu" type="button" onclick="toggleAttachMenu(event)" title="Прикрепить" class="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] text-slate-600 dark:text-slate-300 flex items-center justify-center transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
                 </svg>
               </button>
@@ -451,15 +474,15 @@
               </div>
             </div>
             <div class="flex-1 relative">
-              <textarea id="messageInput" rows="1" placeholder="Сообщение..." class="w-full max-h-32 resize-none rounded-2xl bg-slate-100 dark:bg-[#262421] text-slate-900 dark:text-slate-100 placeholder-slate-400 px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition custom-scroll"></textarea>
-              <button id="btnEmoji" onclick="toggleEmojiPopover(event)" class="absolute right-2 bottom-1.5 p-1.5 rounded-lg hover:bg-slate-200/70 dark:hover:bg-[#36322e] text-slate-500 dark:text-[#8d887c]">😊</button>
-              <div id="emojiPopover" class="hidden absolute bottom-12 right-0 w-64 max-w-[82vw] rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-2.5 z-30">
+              <textarea id="messageInput" rows="1" placeholder="Сообщение..." class="w-full max-h-32 resize-none rounded-2xl bg-slate-100 dark:bg-[#262421] text-slate-900 dark:text-slate-100 placeholder-slate-400 px-4 py-3 pr-12 text-[15px] focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition custom-scroll"></textarea>
+              <button id="btnEmoji" onclick="toggleEmojiPopover(event)" class="absolute right-2 bottom-1.5 w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-200/70 dark:hover:bg-[#36322e] text-slate-500 dark:text-[#8d887c]"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zM8.5 14.5a4.5 4.5 0 007 0M9 9.5h.01M15 9.5h.01"/></svg></button>
+              <div id="emojiPopover" class="hidden absolute bottom-12 right-0 w-64 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-2.5 z-30">
                 <div id="emojiGrid" class="grid grid-cols-7 gap-1 text-lg"></div>
               </div>
             </div>
-            <button id="btnVoiceRecord" type="button" onclick="toggleVoiceRecording()" title="Голосовое сообщение" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] text-slate-600 dark:text-slate-300 flex items-center justify-center transition flex-shrink-0"></button>
-            <button onclick="sendMessage()" class="w-10 h-10 rounded-xl hg-accent-bg text-white flex items-center justify-center transition active:translate-y-px flex-shrink-0">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <button id="btnVoiceRecord" type="button" onclick="toggleVoiceRecording()" title="Голосовое сообщение" class="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] text-slate-600 dark:text-slate-300 flex items-center justify-center transition flex-shrink-0"></button>
+            <button onclick="sendMessage()" class="w-11 h-11 rounded-2xl hg-accent-bg text-white flex items-center justify-center transition active:translate-y-px flex-shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
             </button>
           </div>
         </div>
@@ -468,9 +491,9 @@
 
     <!-- ПРАВАЯ ПАНЕЛЬ ПРОФИЛЯ / ИНФО -->
     <aside id="rightInfoPanel" class="hidden fixed inset-y-0 right-0 lg:static w-full sm:w-[330px] flex-shrink-0 h-full bg-white dark:bg-[#1a1917] border-l border-slate-200 dark:border-[#2e2b28] z-30 flex-col shadow-2xl lg:shadow-none">
-      <div class="min-h-16 px-4 flex items-center justify-between border-b border-slate-200 dark:border-[#2e2b28] hg-safe-top">
+      <div class="h-16 px-4 flex items-center justify-between border-b border-slate-200 dark:border-[#2e2b28]">
         <span class="font-semibold text-sm">Профиль</span>
-        <button onclick="closeInfoPanel()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724]">✕</button>
+        <button onclick="closeInfoPanel()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724]"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
       <div id="rightInfoContent" class="flex-1 overflow-y-auto custom-scroll p-4 space-y-4"></div>
     </aside>
@@ -478,7 +501,7 @@
     <!-- БОКОВОЕ МЕНЮ (DRAWER) -->
     <div id="drawerOverlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-[2px] z-40" onclick="closeDrawer()"></div>
     <div id="mainDrawer" class="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-white dark:bg-[#1a1917] border-r border-slate-200 dark:border-[#2e2b28] z-50 transform -translate-x-full transition-transform duration-200 flex flex-col shadow-2xl">
-      <div class="p-5 bg-slate-900 dark:bg-[#262421] text-white hg-safe-top">
+      <div class="p-5 bg-slate-900 dark:bg-[#262421] text-white">
         <div id="drawerAvatar" class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-xl font-bold mb-3"></div>
         <div id="drawerName" class="font-bold text-base flex items-center gap-1.5"></div>
         <div id="drawerUsername" class="text-xs text-sky-100/90 mt-0.5"></div>
@@ -490,7 +513,7 @@
           <span>Админ-панель</span>
         </button>
         <button onclick="closeDrawer(); openSavedMessagesChat();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-sm font-medium transition">
-          <span class="w-4 text-center hg-accent-text font-bold">★</span>
+          <span class="w-4 flex items-center justify-center hg-accent-text"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9L12 3.5z"/></svg></span>
           <span>Избранное</span>
         </button>
         <button onclick="closeDrawer(); openCreateChatModal();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-sm font-semibold hg-accent-text transition">
@@ -521,30 +544,30 @@
       </nav>
     </div>
 
-    <!-- КОНТЕКСТНОЕ МЕНЮ ЧАТА (УДЕРЖАНИЕ ПАЛЬЦА / ПКМ В СПИСКЕ ЧАТОВ) -->
-    <div id="chatContextMenu" class="hidden fixed z-50 w-56 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-1.5 msg-animate">
+    <!-- КОНТЕКСТНОЕ МЕНЮ ЧАТА (ПКМ В СПИСКЕ ЧАТОВ) -->
+    <div id="chatContextMenu" class="hidden fixed z-50 w-56 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-1.5">
       <div id="chatCtxTitle" class="px-3 py-1.5 text-[11px] font-semibold text-slate-500 dark:text-[#8d887c] truncate border-b border-slate-200/80 dark:border-[#36322e] mb-1"></div>
-      <button onclick="ctxChatDelete()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-red-500/10 active:bg-red-500/15 text-red-500 text-xs font-semibold text-left">
+      <button onclick="ctxChatDelete()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-red-500/10 text-red-500 text-xs font-semibold text-left">
         <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         <span>Удалить</span>
       </button>
     </div>
 
     <!-- КОНТЕКСТНОЕ МЕНЮ СООБЩЕНИЯ -->
-    <div id="msgContextMenu" class="hidden fixed z-50 w-52 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-1.5">
+    <div id="msgContextMenu" class="hidden fixed z-50 w-60 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-1.5">
       <div class="flex items-center justify-around py-1.5 mb-1 border-b border-slate-200 dark:border-[#36322e]">
-        <button onclick="ctxReact('❤️')" class="text-lg hover:scale-125 transition p-1">❤️</button>
-        <button onclick="ctxReact('🔥')" class="text-lg hover:scale-125 transition p-1">🔥</button>
-        <button onclick="ctxReact('👍')" class="text-lg hover:scale-125 transition p-1">👍</button>
-        <button onclick="ctxReact('😂')" class="text-lg hover:scale-125 transition p-1">😂</button>
-        <button onclick="ctxReact('⚡')" class="text-lg hover:scale-125 transition p-1">⚡</button>
+        <button onclick="ctxReact('❤️')" class="text-xl hover:scale-125 transition p-1.5">❤️</button>
+        <button onclick="ctxReact('🔥')" class="text-xl hover:scale-125 transition p-1.5">🔥</button>
+        <button onclick="ctxReact('👍')" class="text-xl hover:scale-125 transition p-1.5">👍</button>
+        <button onclick="ctxReact('😂')" class="text-xl hover:scale-125 transition p-1.5">😂</button>
+        <button onclick="ctxReact('⚡')" class="text-xl hover:scale-125 transition p-1.5">⚡</button>
       </div>
-      <button onclick="ctxReply()" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-xs font-medium text-left">Ответить</button>
-      <button id="ctxBtnEdit" onclick="ctxEdit()" class="hidden w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-xs font-medium text-left">Редактировать</button>
-      <button onclick="ctxForward()" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-xs font-medium text-left">Переслать</button>
-      <button onclick="ctxCopy()" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-xs font-medium text-left">Копировать текст</button>
-      <button id="ctxBtnPin" onclick="ctxTogglePin()" class="hidden w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-xs font-medium text-left">Закрепить</button>
-      <button id="ctxBtnDelete" onclick="ctxDelete()" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-500/10 text-red-500 text-xs font-medium text-left">Удалить</button>
+      <button onclick="ctxReply()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-sm font-medium text-left"><svg class="w-[18px] h-[18px] flex-shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 016 6v3"/></svg><span>Ответить</span></button>
+      <button id="ctxBtnEdit" onclick="ctxEdit()" class="hidden w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-sm font-medium text-left"><svg class="w-[18px] h-[18px] flex-shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg><span>Редактировать</span></button>
+      <button onclick="ctxForward()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-sm font-medium text-left"><svg class="w-[18px] h-[18px] flex-shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 7l5 5-5 5M20 12H9a5 5 0 00-5 5v1"/></svg><span>Переслать</span></button>
+      <button onclick="ctxCopy()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-sm font-medium text-left"><svg class="w-[18px] h-[18px] flex-shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h10a1 1 0 011 1v10a1 1 0 01-1 1H8a1 1 0 01-1-1V9a1 1 0 011-1zM5 16V6a1 1 0 011-1h10"/></svg><span>Копировать текст</span></button>
+      <button id="ctxBtnPin" onclick="ctxTogglePin()" class="hidden w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] text-sm font-medium text-left"><svg class="w-[18px] h-[18px] flex-shrink-0 opacity-80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 6 3 3H7l3-3-1-6zM12 13v7"/></svg><span id="ctxBtnPinLabel">Закрепить</span></button>
+      <button id="ctxBtnDelete" onclick="ctxDelete()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-500/10 text-red-500 text-sm font-medium text-left"><svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12a1 1 0 001 1h8a1 1 0 001-1l1-12M9 7V4h6v3"/></svg><span>Удалить</span></button>
     </div>
 
     <!-- =========================================================
@@ -566,7 +589,7 @@
               <p class="text-xs text-slate-500 dark:text-[#8d887c]">Персонализация, приватность, звуки и профиль</p>
             </div>
           </div>
-          <button onclick="closeSettingsModal()" class="p-2 rounded-xl hover:bg-slate-200/70 dark:hover:bg-[#2a2724] text-sm">✕</button>
+          <button onclick="closeSettingsModal()" class="p-2 rounded-xl hover:bg-slate-200/70 dark:hover:bg-[#2a2724] text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <!-- Тело настроек: боковое меню вкладок + контент -->
@@ -590,7 +613,7 @@
               <p class="text-xs text-slate-500 dark:text-[#8d887c]">Верификация, баны, титулы и новости</p>
             </div>
           </div>
-          <button onclick="closeAdminModal()" class="p-2 rounded-xl hover:bg-slate-200/70 dark:hover:bg-[#2a2724]">✕</button>
+          <button onclick="closeAdminModal()" class="p-2 rounded-xl hover:bg-slate-200/70 dark:hover:bg-[#2a2724]"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <div class="px-4 pt-3 pb-2 border-b border-slate-200 dark:border-[#2e2b28] flex flex-wrap gap-2">
@@ -617,7 +640,7 @@
               <p class="text-xs text-slate-500 dark:text-[#8d887c]">Новая группа, канал или вход по приглашению</p>
             </div>
           </div>
-          <button onclick="closeCreateChatModal()" class="p-2 rounded-xl hover:bg-slate-200/70 dark:hover:bg-[#2a2724] text-sm">✕</button>
+          <button onclick="closeCreateChatModal()" class="p-2 rounded-xl hover:bg-slate-200/70 dark:hover:bg-[#2a2724] text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <div class="px-4 pt-3 pb-2 border-b border-slate-200 dark:border-[#2e2b28] flex gap-1.5 flex-shrink-0">
@@ -641,7 +664,7 @@
       <div onclick="event.stopPropagation()" class="w-full max-w-md rounded-3xl bg-white dark:bg-[#1a1917] border border-slate-200 dark:border-[#36322e] shadow-2xl p-5 space-y-3.5 msg-animate">
         <div class="flex items-center justify-between">
           <h3 class="font-display font-bold text-base">Переслать сообщение</h3>
-          <button onclick="closeForwardModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400">✕</button>
+          <button onclick="closeForwardModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
         <div id="forwardPreviewBox" class="p-3 rounded-xl bg-slate-100 dark:bg-[#262421] text-xs text-slate-600 dark:text-slate-300 truncate"></div>
         <div id="forwardChatTargets" class="max-h-60 overflow-y-auto custom-scroll space-y-1.5"></div>
@@ -653,7 +676,7 @@
       <div onclick="event.stopPropagation()" class="w-full max-w-md rounded-3xl bg-white dark:bg-[#1a1917] border border-slate-200 dark:border-[#36322e] shadow-2xl p-5 space-y-3.5 msg-animate">
         <div class="flex items-center justify-between">
           <h3 class="font-display font-bold text-base">Создать опрос</h3>
-          <button onclick="closePollModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400">✕</button>
+          <button onclick="closePollModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-500 dark:text-[#8d887c] mb-1">Вопрос</label>
@@ -682,7 +705,7 @@
           <h3 id="confirmChatTitle" class="font-display font-bold text-lg leading-snug">Удалить чат?</h3>
           <p id="confirmChatDesc" class="text-xs text-slate-500 dark:text-[#8d887c] mt-1 leading-relaxed"></p>
         </div>
-        <button onclick="closeConfirmChatModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400">✕</button>
+        <button onclick="closeConfirmChatModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
       <div id="confirmChatActions" class="flex flex-col gap-2 pt-1"></div>
     </div>
@@ -693,7 +716,7 @@
     <div onclick="event.stopPropagation()" class="relative max-w-4xl max-h-[90vh] flex flex-col items-center gap-3">
       <div class="flex items-center justify-end gap-2 w-full">
         <a id="mediaLightboxDownload" href="#" download="hyperchat-media.jpg" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold transition">Скачать</a>
-        <button onclick="closeMediaLightbox()" class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-sm transition">✕</button>
+        <button onclick="closeMediaLightbox()" class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-sm transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
       <img id="mediaLightboxImg" src="" alt="" class="max-w-full max-h-[80vh] rounded-xl object-contain" />
       <div id="mediaLightboxCaption" class="text-xs text-white/85 text-center max-w-xl"></div>
@@ -708,9 +731,9 @@
       <div id="callName" class="font-display text-xl font-bold truncate"></div>
       <div id="callStatus" class="text-sm text-slate-500 dark:text-[#8d887c]"></div>
       <div class="flex justify-center gap-4 pt-2">
-        <button id="callBtnMute" onclick="toggleCallMute()" class="hidden w-14 h-14 rounded-full bg-slate-200 dark:bg-[#2a2724] text-xl">🎤</button>
-        <button id="callBtnAccept" onclick="acceptCall()" class="hidden w-14 h-14 rounded-full bg-emerald-500 text-white text-xl">📞</button>
-        <button onclick="endCall()" class="w-14 h-14 rounded-full bg-red-500 text-white text-xl">✕</button>
+        <button id="callBtnMute" onclick="toggleCallMute()" class="hidden w-14 h-14 rounded-full bg-slate-200 dark:bg-[#2a2724] flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zM19 11a7 7 0 01-14 0M12 18v3"/></svg></button>
+        <button id="callBtnAccept" onclick="acceptCall()" class="hidden w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></button>
+        <button onclick="endCall()" class="w-14 h-14 rounded-full bg-red-500 text-white text-xl"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
     </div>
   </div>
@@ -722,6 +745,15 @@
        ЛОГИКА FIREBASE FIRESTORE + РЕЗЕРВНЫЙ РЕЖИМ + НАСТРОЙКИ
   ========================================================== -->
   <script type="module">
+    const ICON_PATHS = {"close": "M6 6l12 12M18 6L6 18", "chevron-up": "M6 15l6-6 6 6", "chevron-down": "M6 9l6 6 6-6", "backspace": "M21 5H9l-6 7 6 7h12a1 1 0 001-1V6a1 1 0 00-1-1zM18 9l-6 6M12 9l6 6", "smile": "M21 12a9 9 0 11-18 0 9 9 0 0118 0zM8.5 14.5a4.5 4.5 0 007 0M9 9.5h.01M15 9.5h.01", "star": "M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9L12 3.5z", "mic": "M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zM19 11a7 7 0 01-14 0M12 18v3", "mic-off": "M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zM19 11a7 7 0 01-14 0M12 18v3M4 4l16 16", "phone": "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z", "chart": "M5 20V10M12 20V4M19 20v-7", "image": "M4 16l4.5-4.5a2 2 0 012.8 0L16 16m-2-2l1.5-1.5a2 2 0 012.8 0L20 14M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2zM14 9h.01", "chat": "M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z", "megaphone": "M3 11v2a1 1 0 001 1h2l5 4V6L6 10H4a1 1 0 00-1 1zM15 9a4 4 0 010 6M18 6a8 8 0 010 12", "rocket": "M12 3c3 2 5 5 5 9l-2 3H9l-2-3c0-4 2-7 5-9zM9 15l-2 4M15 15l2 4M12 9h.01", "bolt": "M13 3L5 13h6l-1 8 8-10h-6l1-8z", "flame": "M12 3c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z", "gamepad": "M6 8h12a4 4 0 014 4v2a3 3 0 01-5.2 2L15 14H9l-1.8 2A3 3 0 012 14v-2a4 4 0 014-4zM8 10v3M6.5 11.5h3M16 11h.01M18 13h.01", "music": "M9 18V6l10-2v12M9 18a3 3 0 11-6 0 3 3 0 016 0zM19 16a3 3 0 11-6 0 3 3 0 016 0z", "laptop": "M4 6a1 1 0 011-1h14a1 1 0 011 1v9H4V6zM2 19h20", "globe": "M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z", "palette": "M12 3a9 9 0 100 18c1.2 0 2-.8 2-1.8 0-1.2-1-1.4-1-2.5 0-.9.7-1.7 1.7-1.7H17a4 4 0 004-4c0-4.4-4-8-9-8zM7.5 11h.01M10 7.5h.01M14.5 7.5h.01", "book": "M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3V4zM5 17a3 3 0 013-3h10", "shield": "M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z", "ban": "M21 12a9 9 0 11-18 0 9 9 0 0118 0zM5.6 5.6l12.8 12.8", "lock": "M6 11h12a1 1 0 011 1v7a1 1 0 01-1 1H6a1 1 0 01-1-1v-7a1 1 0 011-1zM8 11V8a4 4 0 018 0v3", "unlock": "M6 11h12a1 1 0 011 1v7a1 1 0 01-1 1H6a1 1 0 01-1-1v-7a1 1 0 011-1zM8 11V8a4 4 0 017.5-2", "bell": "M6 17v-6a6 6 0 0112 0v6l1.5 2h-15L6 17zM10 21h4", "bell-off": "M6 17v-6a6 6 0 0112 0v6l1.5 2h-15L6 17zM10 21h4M4 4l16 16", "eye": "M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 100-6 3 3 0 000 6z", "forward": "M15 7l5 5-5 5M20 12H9a5 5 0 00-5 5v1", "reply": "M9 14L4 9l5-5M4 9h10a6 6 0 016 6v3", "edit": "M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4", "copy": "M8 8h10a1 1 0 011 1v10a1 1 0 01-1 1H8a1 1 0 01-1-1V9a1 1 0 011-1zM5 16V6a1 1 0 011-1h10", "pin": "M9 4h6l-1 6 3 3H7l3-3-1-6zM12 13v7", "trash": "M5 7h14M10 11v6M14 11v6M6 7l1 12a1 1 0 001 1h8a1 1 0 001-1l1-12M9 7V4h6v3", "check": "M5 12.5l4.5 4.5L19 7.5", "refresh": "M20 11a8 8 0 10-2.3 5.7M20 4v7h-7", "alert": "M12 4l9 16H3L12 4zM12 10v4M12 17h.01", "check-circle": "M21 12a9 9 0 11-18 0 9 9 0 0118 0zM8 12.5l3 3 5-6", "plus": "M12 5v14M5 12h14"};
+    function icon(name, cls = 'w-4 h-4') {
+      const d = ICON_PATHS[name];
+      if (!d) return '';
+      return `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+    }
+    const EMOJI_ICON_MAP = { '💬': 'chat', '📢': 'megaphone', '🚀': 'rocket', '⚡': 'bolt', '🔥': 'flame', '🎮': 'gamepad', '🎵': 'music', '💻': 'laptop', '🌍': 'globe', '🌐': 'globe', '🎨': 'palette', '📚': 'book', '🛡': 'shield', '★': 'star' };
+    const INL = 'w-4 h-4 inline-block align-[-3px] mr-1.5';
+    const INL_S = 'w-3.5 h-3.5 inline-block align-[-2px] mr-1';
     let initializeApp, getAuth, signInAnonymously, signInWithCustomToken;
     let getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, collection, onSnapshot, query, orderBy, limit, where;
     let fbStorage = null, storageModRef = null;
@@ -833,8 +865,8 @@
       theme: 'dark',
       accent: 'terracotta',
       wallpaper: 'lines',
-      fontSize: 14,
-      bubbleRadius: 8,
+      fontSize: 15,
+      bubbleRadius: 18,
       compactMode: false,
       reduceMotion: false,
       sendOnEnter: true,
@@ -1145,9 +1177,9 @@
 
     function getMessagePreviewText(msg) {
       if (!msg) return '';
-      if (msg.poll?.question) return `📊 Опрос: ${msg.poll.question}`;
-      if (msg.voice) return `🎤 Голосовое (${msg.voice.durationSec || 1} сек)`;
-      const prefix = msg.media?.type === 'image' ? '📷 Фото' : (msg.media?.type === 'video' ? '🎬 Видео' : '');
+      if (msg.poll?.question) return `Опрос: ${msg.poll.question}`;
+      if (msg.voice) return `Голосовое (${msg.voice.durationSec || 1} сек)`;
+      const prefix = msg.media?.type === 'image' ? 'Фото' : (msg.media?.type === 'video' ? 'Видео' : '');
       const txt = (msg.text || '').trim();
       if (prefix && txt) return `${prefix}: ${txt}`;
       return prefix || txt;
@@ -1364,7 +1396,7 @@
     function canWriteToChat(chat, uid = currentUserId) {
       if (!chat || !uid) return { ok: false, reason: '' };
       const u = usersMap[uid];
-      if (u?.banned) return { ok: false, reason: '🚫 Ваш аккаунт заблокирован администратором @Hypergram.' };
+      if (u?.banned) return { ok: false, reason: 'Ваш аккаунт заблокирован администратором @Hypergram.' };
       if (chat.type === 'dm') {
         const peerId = (chat.participants || []).find(id => id !== uid);
         if (peerId && settings.blockedUsers.includes(peerId)) {
@@ -1377,18 +1409,18 @@
       }
       if (chat.type === 'channel') {
         if (chat.id === 'news_channel') {
-          return isAdmin() ? { ok: true, reason: '' } : { ok: false, reason: '📢 Писать в канал «Новости HYPERCHAT» может только администратор Hyperchat.' };
+          return isAdmin() ? { ok: true, reason: '' } : { ok: false, reason: 'Писать в канал «Новости HYPERCHAT» может только администратор Hyperchat.' };
         }
         return isChatAdmin(chat, uid)
           ? { ok: true, reason: '' }
-          : { ok: false, reason: '📢 Публиковать посты в этом канале могут только его администраторы.' };
+          : { ok: false, reason: 'Публиковать посты в этом канале могут только его администраторы.' };
       }
       // Group chat checks
       if (Array.isArray(chat.muted) && chat.muted.includes(uid) && !isChatAdmin(chat, uid)) {
-        return { ok: false, reason: '🔇 Администратор ограничил вам отправку сообщений в этой группе.' };
+        return { ok: false, reason: 'Администратор ограничил вам отправку сообщений в этой группе.' };
       }
       if (chat.adminsOnly && !isChatAdmin(chat, uid)) {
-        return { ok: false, reason: '🔒 Включён режим «Только администраторы могут писать».' };
+        return { ok: false, reason: 'Включён режим «Только администраторы могут писать».' };
       }
       return { ok: true, reason: '' };
     }
@@ -1553,7 +1585,7 @@
                   ${d.avatarUrl ? `<button type="button" onclick="ccUpdateDraft('avatarUrl',''); renderCreateChatModal();" class="px-3 py-1.5 rounded-xl bg-red-500/10 text-red-500 text-[11px] font-semibold">Убрать</button>` : ''}
                 </div>
                 <div class="flex flex-wrap gap-1">
-                  ${CHAT_ICON_PRESETS.map(ic => `<button type="button" onclick="ccUpdateDraft('initials','${ic}'); ccUpdateDraft('avatarUrl',''); renderCreateChatModal();" class="w-7 h-7 rounded-lg text-sm flex items-center justify-center border ${!d.avatarUrl && d.initials === ic ? 'hg-accent-border hg-accent-soft' : 'border-transparent hover:bg-slate-200 dark:hover:bg-[#322f2b]'}">${ic}</button>`).join('')}
+                  ${CHAT_ICON_PRESETS.map(ic => `<button type="button" onclick="ccUpdateDraft('initials','${ic}'); ccUpdateDraft('avatarUrl',''); renderCreateChatModal();" class="w-9 h-9 rounded-xl text-sm flex items-center justify-center border ${!d.avatarUrl && d.initials === ic ? 'hg-accent-border hg-accent-soft' : 'border-transparent hover:bg-slate-200 dark:hover:bg-[#322f2b]'}">${icon(EMOJI_ICON_MAP[ic.replace(/\uFE0F/g, '')] || 'chat', 'w-[18px] h-[18px]')}</button>`).join('')}
                 </div>
               </div>
             </div>
@@ -1626,7 +1658,7 @@
                         <div class="text-[11px] text-slate-500 dark:text-[#8d887c]">${escapeHtml(u.username)}</div>
                       </div>
                     </div>
-                    <span class="w-5 h-5 rounded flex items-center justify-center text-xs font-bold ${sel ? 'hg-accent-bg text-white' : 'border border-slate-400 dark:border-[#5a564b]'}">${sel ? '✓' : ''}</span>
+                    <span class="w-5 h-5 rounded flex items-center justify-center text-xs font-bold ${sel ? 'hg-accent-bg text-white' : 'border border-slate-400 dark:border-[#5a564b]'}">${sel ? icon('check', 'w-3.5 h-3.5') : ''}</span>
                   </div>
                 `;
               }).join('') || `<div class="text-xs text-slate-400 text-center py-2">Других пользователей нет</div>`}
@@ -1793,7 +1825,7 @@
       if (muted.has(uid)) muted.delete(uid); else muted.add(uid);
       await dbUpdate('hg_chats', chatId, { muted: Array.from(muted) });
       const targetName = usersMap[uid]?.displayName || uid;
-      showToast(muted.has(uid) ? `${targetName} получил мут 🔇` : `С ${targetName} снят мут`, 'info');
+      showToast(muted.has(uid) ? `${targetName} получил мут` : `С ${targetName} снят мут`, 'info');
     };
 
     window.chatKickMember = async function(chatId, uid) {
@@ -2033,6 +2065,7 @@
     if (!Array.isArray(settings.blockedUsers)) settings.blockedUsers = [];
     if (!Array.isArray(settings.hiddenChats)) settings.hiddenChats = [];
     if (!Array.isArray(settings.mutedChats)) settings.mutedChats = [];
+    if (!settings.designV2) { settings.designV2 = true; settings.bubbleRadius = 18; if (!settings.fontSize || settings.fontSize <= 14) settings.fontSize = 15; }
 
     let settingsSyncTimer = null;
     function saveSettings() {
@@ -2357,7 +2390,7 @@
     function reportSyncError(where, err) {
       console.error(where + ' sync error:', err);
       const el = document.getElementById('syncStatusBadge');
-      if (el) el.textContent = '🔴 Firestore: ' + (err.code || err.message || err) + ' — проверь правила базы (Rules)';
+      if (el) el.textContent = 'Firestore: ' + (err.code || err.message || err) + ' — проверь правила базы (Rules)';
     }
 
     async function initBackend() {
@@ -2404,9 +2437,9 @@
             console.warn('Сессия в облаке недоступна:', e);
             cloudSession = null;
           }
-          statusEl.textContent = '🟢 Подключено к облаку HYPERCHAT (Реальное время)';
+          statusEl.textContent = 'Подключено к облаку HYPERCHAT (Реальное время)';
           if (auth.currentUser.isAnonymous && !persistentStorageOk) {
-            statusEl.textContent += ' ⚠️ Анонимный вход меняется при каждой загрузке — автовход может не сработать';
+            statusEl.textContent += ' · Анонимный вход меняется при каждой загрузке — автовход может не сработать';
           }
 
           onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'hg_users'), (snap) => {
@@ -2439,7 +2472,7 @@
             }
             if (hadMore && latest && latest.senderId !== currentUserId && !settings.blockedUsers.includes(latest.senderId) && !isChatMutedByUser(latest.chatId)) {
               playSound('receive');
-              if ((latest.chatId !== activeChatId || document.hidden) && !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) {
+              if (latest.chatId !== activeChatId || document.hidden) {
                 const sName = usersMap[latest.senderId]?.displayName || latest.senderId;
                 showToast(`${sName}: ${getMessagePreviewText(latest) || 'Новое сообщение'}`, 'info');
               }
@@ -2460,11 +2493,11 @@
       await ensureSeedData();
       lastKnownMsgCount = messagesList.length;
       statusEl.textContent = connectError
-        ? '🔴 Не удалось подключиться к Firebase (' + (connectError.code || connectError.message || connectError) + ') — аккаунты сохраняются только в этом браузере'
-        : '🟡 Локальный режим (автосохранение в браузере)';
+        ? 'Не удалось подключиться к Firebase (' + (connectError.code || connectError.message || connectError) + ') — аккаунты сохраняются только в этом браузере'
+        : 'Локальный режим (автосохранение в браузере)';
       tryRestoreSession(true);
       if (!persistentStorageOk) {
-        statusEl.textContent += ' ⚠️ Хранилище браузера заблокировано — данные сохраняются только пока вкладка открыта';
+        statusEl.textContent += ' · Хранилище браузера заблокировано — данные сохраняются только пока вкладка открыта';
       }
     }
 
@@ -2479,6 +2512,8 @@
       if (avatarUrl && /^(data:image\/|https?:\/\/)/i.test(avatarUrl)) {
         return `<img src="${escapeHtml(avatarUrl)}" alt="" class="w-full h-full object-cover" />`;
       }
+      const emk = String(initials || '').replace(/\uFE0F/g, '');
+      if (EMOJI_ICON_MAP[emk]) return icon(EMOJI_ICON_MAP[emk], 'w-1/2 h-1/2');
       return escapeHtml(initials || '?');
     }
 
@@ -2772,10 +2807,9 @@
     };
 
     // =========================================================
-    // PUSH-УВЕДОМЛЕНИЯ (FCM): ТОКЕН, СОСТОЯНИЕ ЭКРАНА И ПЕРЕХОД В ЧАТ
+    // PUSH-УВЕДОМЛЕНИЯ (FCM): СОСТОЯНИЕ ЭКРАНА И ВЫЗОВ WORKER
     // =========================================================
     const PUSH_WORKER_URL = 'https://hypergram-push.zeqbpes.workers.dev';
-    let pendingPushChatId = null;
 
     function syncPushPresenceState() {
       window.activeChatId = activeChatId;
@@ -2800,35 +2834,6 @@
       }).catch(e => console.warn('Push worker call failed:', e));
     }
 
-    window.saveAndroidFcmToken = async function(token) {
-      if (!token) return;
-      store.set('hypergram_fcm_token_v1', token);
-      if (!currentUserId || !usersMap[currentUserId]) return;
-      const existing = Array.isArray(usersMap[currentUserId].fcmTokens)
-        ? usersMap[currentUserId].fcmTokens
-        : [];
-      const nextTokens = Array.from(new Set([...existing, token]));
-      await dbUpdate('hg_users', currentUserId, {
-        fcmTokens: nextTokens,
-        fcmToken: token,
-        pushUpdatedAt: Date.now()
-      }).catch(e => console.warn('FCM token save error:', e));
-    };
-
-    window.handlePushNotificationOpen = function(data) {
-      const chatId = data?.chatId || data?.chat_id || '';
-      if (!chatId) return;
-      if (!currentUserId || !usersMap[currentUserId]) {
-        pendingPushChatId = chatId;
-        return;
-      }
-      if (chatsMap[chatId]) {
-        selectChat(chatId);
-      } else {
-        pendingPushChatId = chatId;
-      }
-    };
-
     function loginSuccess(uid, restored = false) {
       resetReadCursorsCache();
       currentUserId = uid;
@@ -2840,15 +2845,7 @@
       saveSession(uid, restored);
       hideSessionLoader(false);
       window.activeChatId = activeChatId;
-      const cachedFcm = store.get('hypergram_fcm_token_v1');
-      if (cachedFcm) window.saveAndroidFcmToken(cachedFcm);
       syncPushPresenceState();
-      if (pendingPushChatId && chatsMap[pendingPushChatId]) {
-        const targetPushChat = pendingPushChatId;
-        pendingPushChatId = null;
-        activeChatId = targetPushChat;
-        saveLastChat();
-      }
       startCallListeners(uid);
       if (usersMap[uid]) {
         const loginPatch = { isOnline: !document.hidden, lastSeenAt: Date.now() };
@@ -2926,7 +2923,7 @@
       const peer = usersMap[peerId] || { displayName: 'Пользователь', initials: '?', avatarColor: 'from-slate-500 to-slate-600' };
       applyAvatarEl(document.getElementById('callAvatar'), peer, 'w-24 h-24 rounded-3xl mx-auto flex items-center justify-center text-3xl font-bold text-white');
       document.getElementById('callName').textContent = peer.displayName;
-      document.getElementById('callBtnMute').textContent = '🎤';
+      document.getElementById('callBtnMute').innerHTML = icon('mic', 'w-6 h-6');
       setCallUi(state);
       document.getElementById('callOverlay').classList.remove('hidden');
     }
@@ -2997,7 +2994,7 @@
       const tracks = call.stream.getAudioTracks();
       const on = !(tracks[0] && tracks[0].enabled);
       tracks.forEach(t => { t.enabled = on; });
-      document.getElementById('callBtnMute').textContent = on ? '🎤' : '🔇';
+      document.getElementById('callBtnMute').innerHTML = on ? icon('mic', 'w-6 h-6') : icon('mic-off', 'w-6 h-6');
     };
 
     window.startCall = async function(peerId) {
@@ -3246,55 +3243,10 @@
 
     let ctxChatId = null;
     let selectedRestoreChats = new Set();
-    let chatLongPressTimer = null;
-    let chatLongPressTriggered = false;
-    let chatTouchStartX = 0;
-    let chatTouchStartY = 0;
 
-    window.startChatLongPress = function(e, chatId) {
-      clearTimeout(chatLongPressTimer);
-      chatLongPressTriggered = false;
-      const touch = e.touches && e.touches[0];
-      if (!touch) return;
-      chatTouchStartX = touch.clientX;
-      chatTouchStartY = touch.clientY;
-      const x = touch.clientX;
-      const y = touch.clientY;
-      chatLongPressTimer = setTimeout(() => {
-        chatLongPressTriggered = true;
-        if (navigator.vibrate) { try { navigator.vibrate(25); } catch (err) {} }
-        openChatCtxMenuAt(x, y, chatId);
-      }, 450);
-    };
-
-    window.cancelChatLongPress = function(e) {
-      if (!chatLongPressTimer) return;
-      const touch = e && e.touches && e.touches[0];
-      if (touch) {
-        const dx = Math.abs(touch.clientX - chatTouchStartX);
-        const dy = Math.abs(touch.clientY - chatTouchStartY);
-        if (dx < 10 && dy < 10) return;
-      }
-      clearTimeout(chatLongPressTimer);
-      chatLongPressTimer = null;
-    };
-
-    window.endChatLongPress = function() {
-      clearTimeout(chatLongPressTimer);
-      chatLongPressTimer = null;
-    };
-
-    window.handleChatRowClick = function(e, chatId) {
-      if (chatLongPressTriggered) {
-        e.preventDefault();
-        e.stopPropagation();
-        chatLongPressTriggered = false;
-        return;
-      }
-      selectChat(chatId);
-    };
-
-    function openChatCtxMenuAt(clientX, clientY, chatId) {
+    window.openChatCtxMenu = function(e, chatId) {
+      e.preventDefault();
+      e.stopPropagation();
       const chat = chatsMap[chatId];
       if (!chat) return;
       ctxChatId = chatId;
@@ -3304,16 +3256,8 @@
       const menu = document.getElementById('chatContextMenu');
       if (!menu) return;
       menu.classList.remove('hidden');
-      const menuW = 224;
-      const menuH = 96;
-      menu.style.left = Math.max(12, Math.min(clientX - menuW / 2, window.innerWidth - menuW - 12)) + 'px';
-      menu.style.top = Math.max(12, Math.min(clientY - 24, window.innerHeight - menuH - 16)) + 'px';
-    }
-
-    window.openChatCtxMenu = function(e, chatId) {
-      e.preventDefault();
-      e.stopPropagation();
-      openChatCtxMenuAt(e.clientX, e.clientY, chatId);
+      menu.style.left = Math.max(10, Math.min(e.clientX, window.innerWidth - 236)) + 'px';
+      menu.style.top = Math.max(10, Math.min(e.clientY, window.innerHeight - 90)) + 'px';
     };
 
     window.ctxChatDelete = function() {
@@ -3462,7 +3406,7 @@
           ['channel', 'Каналы']
         ];
         tabsEl.innerHTML = filterItems.map(([k, lbl]) => `
-          <button onclick="setChatFilter('${k}')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition ${chatFilter === k ? 'hg-accent-bg text-white' : 'bg-slate-100 dark:bg-[#262421] text-slate-600 dark:text-[#8d887c] hover:text-slate-900 dark:hover:text-white'}">${lbl}</button>
+          <button onclick="setChatFilter('${k}')" class="px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition ${chatFilter === k ? 'hg-accent-bg text-white' : 'bg-slate-100 dark:bg-[#262421] text-slate-600 dark:text-[#8d887c] hover:text-slate-900 dark:hover:text-white'}">${lbl}</button>
         `).join('');
       }
 
@@ -3500,7 +3444,7 @@
         const lastMsg = messagesList.filter(m => m.chatId === c.id).slice(-1)[0];
         const typingLabel = getTypingLabel(c);
         const draftText = chatDraftsMap[c.id];
-        const mutedBadge = isChatMutedByUser(c.id) ? '<span title="Без звука" class="text-[10px] opacity-70">🔕</span>' : '';
+        const mutedBadge = isChatMutedByUser(c.id) ? `<span title="Без звука" class="opacity-70 inline-flex">${icon('bell-off', 'w-3.5 h-3.5')}</span>` : '';
         let previewHtml = 'Нет сообщений';
         if (draftText && c.id !== activeChatId) {
           previewHtml = `<span class="hg-accent-text font-semibold">Черновик: ${escapeHtml(draftText)}</span>`;
@@ -3518,15 +3462,15 @@
 
         const unread = getUnreadCount(c.id);
         const unreadBadgeHtml = unread > 0
-          ? `<span class="hg-accent-bg text-white text-[10px] font-bold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center flex-shrink-0">${unread > 99 ? '99+' : unread}</span>`
+          ? `<span class="hg-accent-bg text-white text-[10px] font-bold min-w-[22px] h-[22px] px-1.5 rounded-full flex items-center justify-center flex-shrink-0">${unread > 99 ? '99+' : unread}</span>`
           : '';
 
         return `
-          <div onclick="handleChatRowClick(event, '${c.id}')" oncontextmenu="openChatCtxMenu(event, '${c.id}')" ontouchstart="startChatLongPress(event, '${c.id}')" ontouchmove="cancelChatLongPress(event)" ontouchend="endChatLongPress()" ontouchcancel="endChatLongPress()" class="hg-chat-row group relative flex items-center gap-3 px-2.5 py-3 cursor-pointer transition border-b border-slate-200/80 dark:border-[#2e2b28] ${active ? 'hg-chat-active' : 'hover:bg-slate-100 dark:hover:bg-[#2a2724]'}">
-            ${avatarBoxHtml(meta, 'w-11 h-11 rounded-2xl text-sm')}
+          <div onclick="selectChat('${c.id}')" oncontextmenu="openChatCtxMenu(event, '${c.id}')" class="hg-chat-row group relative flex items-center gap-3.5 px-3 py-3 cursor-pointer transition border-b border-slate-200/80 dark:border-[#2e2b28] ${active ? 'hg-chat-active' : 'hover:bg-slate-100 dark:hover:bg-[#2a2724]'}">
+            ${avatarBoxHtml(meta, 'w-[52px] h-[52px] rounded-2xl text-base')}
             <div class="min-w-0 flex-1">
               <div class="flex items-center justify-between gap-1.5">
-                <div class="font-semibold text-sm truncate flex items-center gap-1">${escapeHtml(meta.title)}${renderBadges(meta.badges, true)}${mutedBadge}${typeTag}</div>
+                <div class="font-semibold text-[15px] truncate flex items-center gap-1">${escapeHtml(meta.title)}${renderBadges(meta.badges, true)}${mutedBadge}${typeTag}</div>
                 <span class="text-[10px] ${unread > 0 ? 'hg-accent-text font-bold' : 'text-slate-400'} flex-shrink-0">${time}</span>
               </div>
               <div class="flex items-center justify-between gap-2 mt-0.5">
@@ -3617,7 +3561,6 @@
       document.getElementById('leftSidebar').classList.remove('hidden');
       document.getElementById('chatArea').classList.add('hidden');
       document.getElementById('chatArea').classList.remove('flex');
-      syncPushPresenceState();
     };
 
     window.startDm = async function(peerId) {
@@ -3760,10 +3703,9 @@
               : '<span title="Отправлено" class="hg-sig hg-sig-sent"></span>')
           : '';
         const viewsCount = chat.type === 'channel' ? Math.max(1, Array.isArray(msg.views) ? msg.views.length : 1) : 0;
-        const viewsHtml = chat.type === 'channel' ? `<span title="Просмотры" class="inline-flex items-center gap-0.5 mr-1">👁 ${viewsCount}</span>` : '';
-        const metaRow = (settings.showTimestamps || receiptHtml || viewsHtml || msg.editedAt) ? `
+        const viewsHtml = chat.type === 'channel' ? `<span title="Просмотры" class="inline-flex items-center gap-0.5 mr-1">${icon('eye', 'w-3.5 h-3.5')} ${viewsCount}</span>` : '';
+        const metaRow = (settings.showTimestamps || receiptHtml || viewsHtml) ? `
           <div class="flex items-center justify-end gap-1 mt-1 text-[10px] ${isOut ? 'text-white/75' : 'text-slate-400'}">
-            ${msg.editedAt ? `<span class="italic mr-0.5">изм.</span>` : ''}
             ${viewsHtml}
             ${settings.showTimestamps ? `<span>${formatTime(msg.timestamp)}</span>` : ''}
             ${receiptHtml}
@@ -3771,15 +3713,15 @@
         ` : '';
 
         return `
-          <div id="msg_${msg.id}" class="flex items-end gap-2 ${isOut ? 'justify-end' : 'justify-start'} group ${isNewMsg ? 'msg-animate' : ''}" oncontextmenu="openCtxMenu(event, '${msg.id}')" ontouchstart="startMsgLongPress(event, '${msg.id}')" ontouchmove="cancelMsgLongPress(event)" ontouchend="endMsgLongPress()" ontouchcancel="endMsgLongPress()" ondblclick="quickReactMsg('${msg.id}')">
-            ${showAvatar ? avatarBoxHtml(sender, 'w-8 h-8 rounded-xl text-[11px] cursor-pointer', `onclick="openUserProfile('${sender.id}')"`) : ''}
-            <div class="hg-bubble relative max-w-[85%] sm:max-w-[70%] px-3.5 py-2 ${isOut
+          <div id="msg_${msg.id}" class="flex items-end gap-2 ${isOut ? 'justify-end' : 'justify-start'} group ${isNewMsg ? 'msg-animate' : ''}" oncontextmenu="openCtxMenu(event, '${msg.id}')" ondblclick="quickReactMsg('${msg.id}')">
+            ${showAvatar ? avatarBoxHtml(sender, 'w-9 h-9 rounded-xl text-xs cursor-pointer', `onclick="openUserProfile('${sender.id}')"`) : ''}
+            <div class="hg-bubble relative max-w-[85%] sm:max-w-[65%] px-4 py-2.5 ${isOut
               ? 'hg-bubble-out'
               : 'bg-white dark:bg-[#1e1c1a] text-slate-900 dark:text-slate-100 border border-slate-200/70 dark:border-[#2e2b28]'
             }">
               <button onclick="openCtxMenu(event, '${msg.id}')" class="opacity-0 group-hover:opacity-100 absolute -top-2 ${isOut ? '-left-7' : '-right-7'} w-6 h-6 rounded-full bg-white dark:bg-[#262421] border border-slate-200 dark:border-[#403b36] text-xs shadow flex items-center justify-center text-slate-700 dark:text-slate-200">⋮</button>
               ${senderHeader}
-              ${msg.forwardedFrom ? `<div class="text-[10px] font-semibold opacity-75 mb-1">↪ Переслано от ${escapeHtml(msg.forwardedFrom)}</div>` : ''}
+              ${msg.forwardedFrom ? `<div class="text-[10px] font-semibold opacity-75 mb-1">${icon('forward', INL_S)}Переслано от ${escapeHtml(msg.forwardedFrom)}</div>` : ''}
               ${replyHtml}
               ${msg.media?.type === 'image' && msg.media?.url ? `
                 <div class="${msg.text ? 'mb-1.5' : ''} overflow-hidden rounded-lg">
@@ -3793,7 +3735,7 @@
               ` : ''}
               ${msg.voice?.url ? `
                 <div class="space-y-1 py-0.5">
-                  <div class="text-[11px] font-semibold">🎤 Голосовое • ${Number(msg.voice.durationSec || 1)} сек</div>
+                  <div class="text-[12px] font-semibold">${icon('mic', INL_S)}Голосовое • ${Number(msg.voice.durationSec || 1)} сек</div>
                   <audio src="${escapeHtml(msg.voice.url)}" controls preload="metadata" class="max-w-[240px] h-8"></audio>
                 </div>
               ` : ''}
@@ -3804,7 +3746,7 @@
                 const myChoice = Array.isArray(votesMap[currentUserId]) ? votesMap[currentUserId] : [];
                 return `
                   <div class="space-y-1.5 min-w-[210px]">
-                    <div class="text-xs font-bold">📊 ${escapeHtml(msg.poll.question)}</div>
+                    <div class="text-sm font-bold">${icon('chart', INL_S)}${escapeHtml(msg.poll.question)}</div>
                     <div class="text-[10px] opacity-75">${msg.poll.multiple ? 'Несколько вариантов' : 'Один вариант'} • Голосов: ${totalVotes}</div>
                     <div class="space-y-1 pt-0.5">
                       ${(msg.poll.options || []).map((opt, idx) => {
@@ -3813,7 +3755,7 @@
                         const picked = myChoice.includes(idx);
                         return `
                           <button type="button" onclick="voteInPoll('${msg.id}', ${idx})" class="w-full px-2.5 py-1.5 rounded-lg text-left text-xs border transition flex items-center justify-between gap-2 ${picked ? 'border-white/70 bg-black/20 font-bold' : 'border-current/20 hover:bg-black/10'}">
-                            <span class="truncate">${picked ? '✓ ' : ''}${escapeHtml(opt)}</span>
+                            <span class="truncate">${picked ? icon('check', INL_S) : ''}${escapeHtml(opt)}</span>
                             <span class="text-[10px] opacity-85 flex-shrink-0">${cnt} (${pct}%)</span>
                           </button>
                         `;
@@ -3824,7 +3766,14 @@
               })() : ''}
               ${msg.text ? `<div class="hg-msg-text leading-relaxed whitespace-pre-wrap break-words">${formatMessageBodyHtml(msg.text)}</div>` : ''}
               ${reactionsHtml ? `<div class="flex flex-wrap gap-1 mt-1.5">${reactionsHtml}</div>` : ''}
-              ${metaRow}
+              ${(settings.showTimestamps || receiptHtml || viewsHtml || msg.editedAt) ? `
+                <div class="flex items-center justify-end gap-1 mt-1 text-[10px] ${isOut ? 'text-white/75' : 'text-slate-400'}">
+                  ${msg.editedAt ? `<span class="italic mr-0.5">изм.</span>` : ''}
+                  ${viewsHtml}
+                  ${settings.showTimestamps ? `<span>${formatTime(msg.timestamp)}</span>` : ''}
+                  ${receiptHtml}
+                </div>
+              ` : ''}
             </div>
           </div>
         `;
@@ -4333,39 +4282,6 @@
       }
     };
 
-    let msgLongPressTimer = null;
-    let msgTouchStartX = 0;
-    let msgTouchStartY = 0;
-
-    window.startMsgLongPress = function(e, msgId) {
-      clearTimeout(msgLongPressTimer);
-      const touch = e.touches && e.touches[0];
-      if (!touch) return;
-      msgTouchStartX = touch.clientX;
-      msgTouchStartY = touch.clientY;
-      const x = touch.clientX;
-      const y = touch.clientY;
-      msgLongPressTimer = setTimeout(() => {
-        if (navigator.vibrate) { try { navigator.vibrate(25); } catch (err) {} }
-        openCtxMenu({ preventDefault(){}, stopPropagation(){}, clientX: x, clientY: y }, msgId);
-      }, 450);
-    };
-
-    window.cancelMsgLongPress = function(e) {
-      if (!msgLongPressTimer) return;
-      const touch = e && e.touches && e.touches[0];
-      if (touch) {
-        if (Math.abs(touch.clientX - msgTouchStartX) < 10 && Math.abs(touch.clientY - msgTouchStartY) < 10) return;
-      }
-      clearTimeout(msgLongPressTimer);
-      msgLongPressTimer = null;
-    };
-
-    window.endMsgLongPress = function() {
-      clearTimeout(msgLongPressTimer);
-      msgLongPressTimer = null;
-    };
-
     window.openCtxMenu = function(e, msgId) {
       e.preventDefault();
       e.stopPropagation();
@@ -4384,7 +4300,7 @@
       if (pinBtn) {
         const showPin = canManage && chat && chat.type !== 'dm';
         pinBtn.classList.toggle('hidden', !showPin);
-        pinBtn.textContent = chat?.pinnedMessageId === msg.id ? 'Открепить' : 'Закрепить';
+        const pinLbl = document.getElementById('ctxBtnPinLabel'); if (pinLbl) pinLbl.textContent = chat?.pinnedMessageId === msg.id ? 'Открепить' : 'Закрепить';
       }
       const menu = document.getElementById('msgContextMenu');
       menu.classList.remove('hidden');
@@ -4511,12 +4427,12 @@
             </div>
             ${u.customTitle ? `<div><span class="inline-block mt-2 px-2.5 py-0.5 rounded-full hg-accent-soft hg-accent-text text-[11px] font-semibold">${escapeHtml(u.customTitle)}</span></div>` : ''}
             ${u.bio ? `<p class="mt-3 p-3 rounded-xl bg-slate-100 dark:bg-[#262421] text-xs text-slate-700 dark:text-slate-300 text-left">${escapeHtml(u.bio)}</p>` : ''}
-            ${u.banned ? `<div class="mt-2 text-xs font-bold text-red-500">🚫 Заблокирован</div>` : ''}
+            ${u.banned ? `<div class="mt-2 text-xs font-bold text-red-500">${icon('ban', INL_S)}Заблокирован</div>` : ''}
           </div>
 
           ${u.id !== currentUserId ? `
             <div class="space-y-2">
-              <button onclick="startDm('${u.id}'); closeInfoPanel();" class="w-full py-2.5 rounded-xl hg-accent-bg text-white text-xs font-bold transition">💬 Написать в ЛС</button>
+              <button onclick="startDm('${u.id}'); closeInfoPanel();" class="w-full py-2.5 rounded-xl hg-accent-bg text-white text-sm font-bold transition">${icon('chat', INL)}Написать в ЛС</button>
               <button onclick="toggleBlockUser('${u.id}')" class="w-full py-2 rounded-xl border border-slate-300 dark:border-[#36322e] hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs font-semibold ${isBlocked ? 'text-emerald-500' : 'text-red-500'} transition">
                 ${isBlocked ? 'Разблокировать (убрать из ЧС)' : 'Добавить в чёрный список'}
               </button>
@@ -4529,13 +4445,13 @@
             <div class="p-3.5 rounded-2xl hg-accent-soft border hg-accent-border space-y-2.5">
               <div class="text-xs font-bold hg-accent-text">Быстрое управление</div>
               <div class="grid grid-cols-2 gap-1.5">
-                <button onclick="adminToggleBadge('${u.id}','verified')" class="px-2 py-2 rounded-xl text-[11px] font-semibold border ${b.verified ? 'bg-sky-500 text-white border-sky-500' : 'border-slate-300 dark:border-[#403b36]'}">✅ Синяя</button>
-                <button onclick="adminToggleBadge('${u.id}','premium')" class="px-2 py-2 rounded-xl text-[11px] font-semibold border ${b.premium ? 'bg-amber-500 text-white border-amber-500' : 'border-slate-300 dark:border-[#403b36]'}">⭐ VIP</button>
+                <button onclick="adminToggleBadge('${u.id}','verified')" class="px-2 py-2 rounded-xl text-[11px] font-semibold border ${b.verified ? 'bg-sky-500 text-white border-sky-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('check-circle', INL_S)}Синяя</button>
+                <button onclick="adminToggleBadge('${u.id}','premium')" class="px-2 py-2 rounded-xl text-[11px] font-semibold border ${b.premium ? 'bg-amber-500 text-white border-amber-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('star', INL_S)}VIP</button>
                 <button onclick="adminToggleBadge('${u.id}','staff')" class="px-2 py-2 rounded-xl text-[11px] font-semibold border ${b.staff ? 'bg-indigo-500 text-white border-indigo-500' : 'border-slate-300 dark:border-[#403b36]'}">STAFF</button>
-                <button onclick="adminToggleBadge('${u.id}','scam')" class="px-2 py-2 rounded-xl text-[11px] font-semibold border ${b.scam ? 'bg-red-500 text-white border-red-500' : 'border-slate-300 dark:border-[#403b36]'}">⚠️ SCAM</button>
+                <button onclick="adminToggleBadge('${u.id}','scam')" class="px-2 py-2 rounded-xl text-[11px] font-semibold border ${b.scam ? 'bg-red-500 text-white border-red-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('alert', INL_S)}SCAM</button>
               </div>
               ${u.role !== 'admin' ? `
-                <button onclick="adminToggleBan('${u.id}')" class="w-full py-2 rounded-xl text-xs font-bold ${u.banned ? 'bg-emerald-500 text-white' : 'bg-red-500/15 text-red-500'}">${u.banned ? '🔓 Разбанить' : '🚫 Забанить пользователя'}</button>
+                <button onclick="adminToggleBan('${u.id}')" class="w-full py-2 rounded-xl text-xs font-bold ${u.banned ? 'bg-emerald-500 text-white' : 'bg-red-500/15 text-red-500'}">${u.banned ? `${icon('unlock', INL_S)}Разбанить` : `${icon('ban', INL_S)}Забанить пользователя`}</button>
               ` : ''}
             </div>
           ` : ''}
@@ -4582,7 +4498,7 @@
                       ${avatarBoxHtml(m, 'w-9 h-9 rounded-lg text-xs')}
                       <div class="min-w-0 flex-1">
                         <div class="text-xs font-semibold truncate flex items-center gap-1">${escapeHtml(m.displayName)}${renderBadges(m.badges, true)} ${roleTag}</div>
-                        <div class="text-[11px] text-slate-500 dark:text-[#8d887c] truncate">${escapeHtml(m.username)}${mMuted ? ' • 🔇 Мут' : ''}</div>
+                        <div class="text-[11px] text-slate-500 dark:text-[#8d887c] truncate">${escapeHtml(m.username)}${mMuted ? ' • Мут' : ''}</div>
                       </div>
                     </div>
                     <div class="flex flex-wrap gap-1 pt-1.5 border-t border-slate-200 dark:border-[#36322e]">
@@ -4694,7 +4610,7 @@
                 <code class="text-sm font-bold tracking-wider hg-accent-text">${escapeHtml(chat.inviteCode)}</code>
                 <div class="flex gap-1">
                   <button onclick="copyInviteCode('${escapeHtml(chat.inviteCode)}')" class="px-2.5 py-1 rounded-lg hg-accent-bg text-white text-[11px] font-bold">Копировать</button>
-                  ${canManage ? `<button onclick="regenerateInviteCode('${chat.id}')" title="Сбросить код" class="px-2 py-1 rounded-lg border border-slate-300 dark:border-[#403b36] text-[11px]">↻</button>` : ''}
+                  ${canManage ? `<button onclick="regenerateInviteCode('${chat.id}')" title="Сбросить код" class="w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-300 dark:border-[#403b36]">${icon('refresh', 'w-4 h-4')}</button>` : ''}
                 </div>
               </div>
             </div>
@@ -4705,7 +4621,7 @@
           ` : ''}
 
           <button onclick="toggleMuteChat('${chat.id}')" class="w-full py-2 rounded-xl border border-slate-300 dark:border-[#36322e] hover:bg-slate-100 dark:hover:bg-[#2a2724] text-xs font-semibold transition">
-            ${isChatMutedByUser(chat.id) ? '🔔 Включить уведомления чата' : '🔕 Заглушить уведомления чата'}
+            ${isChatMutedByUser(chat.id) ? `${icon('bell', INL)}Включить уведомления чата` : `${icon('bell-off', INL)}Заглушить уведомления чата`}
           </button>
           ${(!isSys && isMem && !owner) ? `
             <button onclick="leaveChat('${chat.id}')" class="w-full py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-semibold transition">${chat.type === 'channel' ? 'Отписаться от канала' : 'Выйти из группы'}</button>
@@ -4855,7 +4771,7 @@
                 <div class="flex flex-wrap gap-2">
                   ${AVATAR_GRADIENTS.map(g => `
                     <button type="button" onclick="saveAvatarColor('${g}')" class="w-9 h-9 rounded-xl bg-gradient-to-tr ${g} flex items-center justify-center text-white text-xs font-bold transition ${u.avatarColor === g ? 'ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#1a1917] ring-slate-900 dark:ring-white' : 'opacity-80 hover:opacity-100'}">
-                      ${u.avatarColor === g ? '✓' : ''}
+                      ${u.avatarColor === g ? icon('check', 'w-5 h-5') : ''}
                     </button>
                   `).join('')}
                 </div>
@@ -4953,7 +4869,7 @@
                   <span>Скругление пузырей</span>
                   <span class="hg-accent-text">${settings.bubbleRadius} px</span>
                 </div>
-                <input type="range" min="0" max="16" step="2" value="${settings.bubbleRadius}" oninput="setSetting('bubbleRadius', Number(this.value))" class="w-full accent-[#e2461f]" />
+                <input type="range" min="0" max="24" step="2" value="${settings.bubbleRadius}" oninput="setSetting('bubbleRadius', Number(this.value))" class="w-full accent-[#e2461f]" />
               </div>
             </div>
 
@@ -5113,7 +5029,7 @@
 
             <div class="p-4 rounded-2xl bg-slate-100/70 dark:bg-[#262421] border border-slate-200 dark:border-[#36322e] space-y-2.5">
               <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#8d887c]">Режим синхронизации</div>
-              <div class="text-sm font-semibold">${useCloud ? '🟢 Облако Firebase Firestore (реальное время)' : '🟡 Локальное хранилище браузера'}</div>
+              <div class="text-sm font-semibold">${useCloud ? `<span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>Облако Firebase Firestore (реальное время)` : `<span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-2"></span>Локальное хранилище браузера`}</div>
               <div class="text-xs text-slate-500 dark:text-[#8d887c]">Приложение ID: <code class="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10">${escapeHtml(appId)}</code></div>
             </div>
 
@@ -5148,7 +5064,7 @@
                               <div class="text-[10px] text-slate-500 dark:text-[#8d887c] truncate">${kindLabel}</div>
                             </div>
                           </div>
-                          <span class="w-5 h-5 rounded flex items-center justify-center text-xs font-bold flex-shrink-0 ${checked ? 'hg-accent-bg text-white' : 'border border-slate-400 dark:border-[#5a564b]'}">${checked ? '✓' : ''}</span>
+                          <span class="w-5 h-5 rounded flex items-center justify-center text-xs font-bold flex-shrink-0 ${checked ? 'hg-accent-bg text-white' : 'border border-slate-400 dark:border-[#5a564b]'}">${checked ? icon('check', 'w-3.5 h-3.5') : ''}</span>
                         </div>
                       `;
                     }).join('')}
@@ -5381,10 +5297,10 @@
                     ${!isSystemChat(c) ? `<button onclick="deleteCustomChat('${c.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-red-500/15 text-red-500">Удалить</button>` : '<span class="px-2.5 py-1 rounded-lg hg-accent-soft hg-accent-text text-[11px] font-bold">Системный</span>'}
                   </div>
                   <div class="flex flex-wrap gap-1.5">
-                    <button onclick="adminToggleChatBadge('${c.id}','verified')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.verified ? 'bg-sky-500 text-white border-sky-500' : 'border-slate-300 dark:border-[#403b36]'}">✅ Верификация</button>
-                    <button onclick="adminToggleChatBadge('${c.id}','premium')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.premium ? 'bg-amber-500 text-white border-amber-500' : 'border-slate-300 dark:border-[#403b36]'}">⭐ VIP</button>
+                    <button onclick="adminToggleChatBadge('${c.id}','verified')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.verified ? 'bg-sky-500 text-white border-sky-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('check-circle', INL_S)}Верификация</button>
+                    <button onclick="adminToggleChatBadge('${c.id}','premium')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.premium ? 'bg-amber-500 text-white border-amber-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('star', INL_S)}VIP</button>
                     <button onclick="adminToggleChatBadge('${c.id}','staff')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.staff ? 'bg-indigo-500 text-white border-indigo-500' : 'border-slate-300 dark:border-[#403b36]'}">STAFF</button>
-                    <button onclick="adminToggleChatBadge('${c.id}','scam')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.scam ? 'bg-red-500 text-white border-red-500' : 'border-slate-300 dark:border-[#403b36]'}">⚠️ SCAM</button>
+                    <button onclick="adminToggleChatBadge('${c.id}','scam')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.scam ? 'bg-red-500 text-white border-red-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('alert', INL_S)}SCAM</button>
                   </div>
                 </div>
               `;
@@ -5397,7 +5313,7 @@
       if (adminTab === 'broadcast') {
         body.innerHTML = `
           <div class="space-y-3">
-            <div class="p-3 rounded-2xl hg-accent-soft border hg-accent-border text-xs">📢 Сообщение будет опубликовано от имени <b>Hyperchat</b> в канале «Новости HYPERCHAT».</div>
+            <div class="p-3 rounded-2xl hg-accent-soft border hg-accent-border text-sm">${icon('megaphone', INL)}Сообщение будет опубликовано от имени <b>Hyperchat</b> в канале «Новости HYPERCHAT».</div>
             <textarea id="broadcastInput" rows="4" placeholder="Введите текст новости или объявления..." class="w-full p-3.5 rounded-xl bg-slate-100 dark:bg-[#262421] text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/60"></textarea>
             <button onclick="sendAdminBroadcast()" class="w-full py-3 rounded-xl hg-accent-bg text-white font-semibold text-sm">Опубликовать в Новости</button>
           </div>
@@ -5426,15 +5342,15 @@
                     </div>
                   </div>
                   ${u.role !== 'admin' ? `
-                    <button onclick="adminToggleBan('${u.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold ${u.banned ? 'bg-emerald-500 text-white' : 'bg-red-500/15 text-red-500'}">${u.banned ? '🔓 Разбанить' : '🚫 Бан'}</button>
+                    <button onclick="adminToggleBan('${u.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold ${u.banned ? 'bg-emerald-500 text-white' : 'bg-red-500/15 text-red-500'}">${u.banned ? `${icon('unlock', INL_S)}Разбанить` : `${icon('ban', INL_S)}Бан`}</button>
                   ` : '<span class="px-2.5 py-1 rounded-lg hg-accent-soft hg-accent-text text-[11px] font-bold">Админ</span>'}
                 </div>
 
                 <div class="flex flex-wrap gap-1.5">
-                  <button onclick="adminToggleBadge('${u.id}','verified')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.verified ? 'bg-sky-500 text-white border-sky-500' : 'border-slate-300 dark:border-[#403b36]'}">✅ Синяя галочка</button>
-                  <button onclick="adminToggleBadge('${u.id}','premium')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.premium ? 'bg-amber-500 text-white border-amber-500' : 'border-slate-300 dark:border-[#403b36]'}">⭐ Золотая VIP</button>
+                  <button onclick="adminToggleBadge('${u.id}','verified')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.verified ? 'bg-sky-500 text-white border-sky-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('check-circle', INL_S)}Синяя галочка</button>
+                  <button onclick="adminToggleBadge('${u.id}','premium')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.premium ? 'bg-amber-500 text-white border-amber-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('star', INL_S)}Золотая VIP</button>
                   <button onclick="adminToggleBadge('${u.id}','staff')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.staff ? 'bg-indigo-500 text-white border-indigo-500' : 'border-slate-300 dark:border-[#403b36]'}">STAFF</button>
-                  <button onclick="adminToggleBadge('${u.id}','scam')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.scam ? 'bg-red-500 text-white border-red-500' : 'border-slate-300 dark:border-[#403b36]'}">⚠️ SCAM</button>
+                  <button onclick="adminToggleBadge('${u.id}','scam')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${b.scam ? 'bg-red-500 text-white border-red-500' : 'border-slate-300 dark:border-[#403b36]'}">${icon('alert', INL_S)}SCAM</button>
                 </div>
 
                 <div class="flex gap-2">
@@ -5473,7 +5389,7 @@
       if (!isAdmin() || !usersMap[userId] || usersMap[userId].role === 'admin') return;
       const banned = !usersMap[userId].banned;
       await dbUpdate('hg_users', userId, { banned });
-      showToast(banned ? 'Пользователь заблокирован 🚫' : 'Пользователь разблокирован 🔓', banned ? 'error' : 'success');
+      showToast(banned ? 'Пользователь заблокирован' : 'Пользователь разблокирован', banned ? 'error' : 'success');
     };
 
     window.adminSaveTitle = async function(userId) {
@@ -5500,7 +5416,7 @@
       });
       closeAdminModal();
       selectChat('news_channel');
-      showToast('Новость опубликована! 📢', 'success');
+      showToast('Новость опубликована!', 'success');
     };
 
     // =========================================================
@@ -5571,10 +5487,8 @@
       if (document.hidden) {
         notifyTyping(false);
         updateMyPresence(false, true);
-        syncPushPresenceState();
       } else {
         updateMyPresence(true, true);
-        syncPushPresenceState();
         if (currentUserId && settings.pinCode && (Number(settings.pinTimeoutSec) || 0) > 0 && isPinRequiredNow(currentUserId)) {
           lockScreenNow(false);
         } else {
@@ -5649,15 +5563,6 @@
       if (!e.target.closest('#attachMenu') && !e.target.closest('#btnAttachMenu')) document.getElementById('attachMenu')?.classList.add('hidden');
     });
 
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', () => {
-        const appEl = document.getElementById('app');
-        if (appEl) appEl.style.height = window.visualViewport.height + 'px';
-        const mc = document.getElementById('messagesContainer');
-        if (mc && activeChatId) mc.scrollTop = mc.scrollHeight;
-      });
-    }
-
     // Запуск
     applySettings();
     probeStorage();
@@ -5665,75 +5570,6 @@
     requestAnimationFrame(() => requestAnimationFrame(() => { const b = document.getElementById('hgBoot'); if (b) b.remove(); }));
     setTimeout(() => { if (!currentUserId) hideSessionLoader(true); }, 12000);
     initBackend();
-  </script>
-  <!-- Только для Android-приложения (на сайте этот код ничего не делает) -->
-  <script>
-    (function () {
-      var C = window.Capacitor;
-      if (!C || !C.isNativePlatform || !C.isNativePlatform()) return;
-      var P = C.Plugins || {};
-      try { if (P.StatusBar) { P.StatusBar.setStyle({ style: 'DARK' }); P.StatusBar.setBackgroundColor({ color: '#121110' }); } } catch (e) {}
-      try {
-        if (P.App) P.App.addListener('backButton', function () {
-          var hidden = function (id) { var el = document.getElementById(id); return !el || el.classList.contains('hidden'); };
-          if (!hidden('callOverlay')) return;
-          if (!hidden('chatContextMenu')) { document.getElementById('chatContextMenu').classList.add('hidden'); return; }
-          if (!hidden('msgContextMenu')) { document.getElementById('msgContextMenu').classList.add('hidden'); return; }
-          if (!hidden('attachMenu')) { document.getElementById('attachMenu').classList.add('hidden'); return; }
-          if (!hidden('pollModal') && window.closePollModal) return window.closePollModal();
-          if (!hidden('forwardModal') && window.closeForwardModal) return window.closeForwardModal();
-          if (!hidden('confirmChatModal') && window.closeConfirmChatModal) return window.closeConfirmChatModal();
-          if (!hidden('createChatModal') && window.closeCreateChatModal) return window.closeCreateChatModal();
-          if (!hidden('mediaLightbox') && window.closeMediaLightbox) return window.closeMediaLightbox();
-          if (!hidden('rightInfoPanel') && window.closeInfoPanel) return window.closeInfoPanel();
-          if (!hidden('settingsModal') && window.closeSettingsModal) return window.closeSettingsModal();
-          if (!hidden('adminModal') && window.closeAdminModal) return window.closeAdminModal();
-          if (!hidden('drawerOverlay') && window.closeDrawer) return window.closeDrawer();
-          var side = document.getElementById('leftSidebar');
-          var chatOpen = !hidden('chatArea') && side && side.classList.contains('hidden');
-          if (chatOpen && window.mobileBackToList) return window.mobileBackToList();
-          P.App.minimizeApp();
-        });
-      } catch (e) {}
-      try {
-        var PN = P.PushNotifications;
-        if (PN) {
-          PN.requestPermissions().then(function (perm) {
-            if (perm && perm.receive === 'granted') {
-              return PN.register();
-            }
-          }).catch(function (err) { console.warn('Push perm error:', err); });
-
-          PN.addListener('registration', function (tokenObj) {
-            if (tokenObj && tokenObj.value && window.saveAndroidFcmToken) {
-              window.saveAndroidFcmToken(tokenObj.value);
-            }
-          });
-
-          PN.addListener('registrationError', function (err) {
-            console.warn('Push reg error:', err);
-          });
-
-          PN.addListener('pushNotificationReceived', function (notif) {
-            var data = notif && notif.data ? notif.data : {};
-            var incomingChatId = data.chatId || data.chat_id || '';
-            if (incomingChatId && window.activeChatId === incomingChatId && !document.hidden) {
-              return;
-            }
-            if (window.showToast && notif && (notif.title || notif.body)) {
-              window.showToast((notif.title ? notif.title + ': ' : '') + (notif.body || ''), 'info');
-            }
-          });
-
-          PN.addListener('pushNotificationActionPerformed', function (action) {
-            var data = action && action.notification && action.notification.data ? action.notification.data : {};
-            if (window.handlePushNotificationOpen) {
-              window.handlePushNotificationOpen(data);
-            }
-          });
-        }
-      } catch (e) { console.warn('Push init error:', e); }
-    })();
   </script>
 </body>
 </html>
