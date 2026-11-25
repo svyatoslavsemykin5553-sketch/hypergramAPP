@@ -13,7 +13,7 @@
       setTimeout(function () { var b = document.getElementById('hgBoot'); if (b) b.remove(); }, 2500);
     })();
   </script>
-  <title>HYPERGRAM — Мессенджер</title>
+  <title>HYPERCHAT — Мессенджер</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -108,7 +108,7 @@
     @keyframes highlightFlash { 0% { background-color: var(--hg-accent-soft); } 100% { background-color: transparent; } }
     .msg-highlight { animation: highlightFlash 1.4s ease-out; border-radius: 8px; }
 
-    /* Плоский переключатель (Toggle) в стиле HYPERGRAM */
+    /* Плоский переключатель (Toggle) в стиле HYPERCHAT */
     .hg-switch {
       width: 40px; height: 22px; border-radius: 4px; position: relative;
       background: #47443b; transition: background 0.15s; flex-shrink: 0; cursor: pointer; border: none;
@@ -157,7 +157,7 @@
   <div id="pinLockScreen" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 chat-wallpaper-dark wp-lines">
     <div class="w-full max-w-xs bg-white dark:bg-[#1a1917] border border-slate-300 dark:border-[#36322e] p-6 space-y-5 text-center msg-animate">
       <div>
-        <div class="font-display text-3xl font-extrabold leading-none">hypergram<span class="hg-accent-text">.</span></div>
+        <div class="font-display text-3xl font-extrabold leading-none">hyperchat<span class="hg-accent-text">.</span></div>
         <p class="text-[11px] uppercase tracking-[0.14em] text-slate-500 dark:text-[#8d887c] mt-1.5">Введите PIN-код</p>
       </div>
 
@@ -196,7 +196,7 @@
     <div class="w-full max-w-sm bg-white dark:bg-[#1a1917] border border-slate-300 dark:border-[#36322e] p-7 sm:p-9 space-y-7 msg-animate">
       <!-- Логотип -->
       <div class="space-y-1.5">
-        <div class="font-display text-4xl font-extrabold leading-none">hypergram<span class="hg-accent-text">.</span></div>
+        <div class="font-display text-4xl font-extrabold leading-none">hyperchat<span class="hg-accent-text">.</span></div>
         <p class="text-[11px] uppercase tracking-[0.14em] text-slate-500 dark:text-[#8d887c]">мессенджер в реальном времени</p>
       </div>
 
@@ -226,7 +226,7 @@
         <div id="authError" class="hidden p-3 rounded-xl bg-red-500/15 border border-red-500/30 text-red-400 text-xs font-medium text-center"></div>
 
         <button id="authSubmitBtn" type="submit" class="w-full py-3 rounded-xl hg-accent-bg text-white font-semibold text-sm tracking-wide transition active:translate-y-px">
-          Войти в HYPERGRAM
+          Войти в HYPERCHAT
         </button>
       </form>
 
@@ -246,7 +246,7 @@
   ========================================================== -->
   <!-- Заставка: пока восстанавливается сохранённая сессия, форму входа не показываем -->
   <div id="sessionLoader" class="hidden fixed inset-0 z-[55] flex items-center justify-center bg-[#121110]">
-    <div class="font-display text-4xl font-extrabold text-white">hypergram<span class="hg-accent-text">.</span></div>
+    <div class="font-display text-4xl font-extrabold text-white">hyperchat<span class="hg-accent-text">.</span></div>
   </div>
   <script>
     try {
@@ -272,12 +272,12 @@
 
         <div class="flex items-center gap-2 flex-1 min-w-0">
           <div class="truncate">
-            <div class="font-display font-extrabold text-xl leading-none">hypergram<span class="hg-accent-text">.</span></div>
+            <div class="font-display font-extrabold text-xl leading-none">hyperchat<span class="hg-accent-text">.</span></div>
             <div id="sidebarUserSubtitle" class="text-[11px] text-slate-500 dark:text-[#8d887c] truncate mt-1"></div>
           </div>
         </div>
 
-        <!-- Кнопка Админ-панели (только для Hypergram) -->
+        <!-- Кнопка Админ-панели (только для Hyperchat) -->
         <button id="btnHeaderAdmin" onclick="openAdminModal()" class="hidden px-2.5 py-1.5 rounded-xl border hg-accent-border hg-accent-text hover:text-white hover:bg-sky-500 flex items-center transition">
           <span class="uppercase tracking-wider text-[10px] font-bold">Админ</span>
         </button>
@@ -332,7 +332,7 @@
     <main id="chatArea" class="hidden md:flex flex-1 flex-col h-full relative min-w-0">
       <!-- Заглушка -->
       <div id="emptyChatState" class="flex-1 flex flex-col items-center justify-center p-6 text-center chat-wallpaper-dark wp-lines">
-        <div class="font-display text-5xl font-extrabold mb-4">hypergram<span class="hg-accent-text">.</span></div>
+        <div class="font-display text-5xl font-extrabold mb-4">hyperchat<span class="hg-accent-text">.</span></div>
         <h2 class="text-lg font-bold">Выберите чат</h2>
         <p class="text-xs text-slate-500 dark:text-[#8d887c] mt-1 max-w-xs">Откройте общий чат, новости или найдите любого пользователя по @нику в поиске слева.</p>
       </div>
@@ -548,7 +548,7 @@
     </div>
 
     <!-- =========================================================
-         МОДАЛЬНОЕ ОКНО: НАСТРОЙКИ HYPERGRAM
+         МОДАЛЬНОЕ ОКНО: НАСТРОЙКИ HYPERCHAT
     ========================================================== -->
     <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
       <div class="w-full max-w-4xl h-[88vh] max-h-[720px] rounded-3xl bg-white dark:bg-[#1a1917] border border-slate-200 dark:border-[#36322e] shadow-2xl flex flex-col overflow-hidden msg-animate">
@@ -579,14 +579,14 @@
       </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО: АДМИН-ПАНЕЛЬ HYPERGRAM -->
+    <!-- МОДАЛЬНОЕ ОКНО: АДМИН-ПАНЕЛЬ HYPERCHAT -->
     <div id="adminModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
       <div class="w-full max-w-3xl max-h-[90vh] rounded-3xl bg-white dark:bg-[#1a1917] border border-slate-200 dark:border-[#36322e] shadow-2xl flex flex-col overflow-hidden">
         <div class="px-5 py-4 bg-slate-100 dark:bg-[#262421] border-b border-slate-200 dark:border-[#2e2b28] flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl hg-accent-bg flex items-center justify-center text-white font-display font-bold">A</div>
             <div>
-              <h3 class="font-bold text-base">Админ-панель Hypergram</h3>
+              <h3 class="font-bold text-base">Админ-панель Hyperchat</h3>
               <p class="text-xs text-slate-500 dark:text-[#8d887c]">Верификация, баны, титулы и новости</p>
             </div>
           </div>
@@ -692,7 +692,7 @@
   <div id="mediaLightbox" onclick="closeMediaLightbox()" class="hidden fixed inset-0 z-[80] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
     <div onclick="event.stopPropagation()" class="relative max-w-4xl max-h-[90vh] flex flex-col items-center gap-3">
       <div class="flex items-center justify-end gap-2 w-full">
-        <a id="mediaLightboxDownload" href="#" download="hypergram-media.jpg" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold transition">Скачать</a>
+        <a id="mediaLightboxDownload" href="#" download="hyperchat-media.jpg" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold transition">Скачать</a>
         <button onclick="closeMediaLightbox()" class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-sm transition">✕</button>
       </div>
       <img id="mediaLightboxImg" src="" alt="" class="max-w-full max-h-[80vh] rounded-xl object-contain" />
@@ -1377,7 +1377,7 @@
       }
       if (chat.type === 'channel') {
         if (chat.id === 'news_channel') {
-          return isAdmin() ? { ok: true, reason: '' } : { ok: false, reason: '📢 Писать в канал «Новости HYPERGRAM» может только администратор Hypergram.' };
+          return isAdmin() ? { ok: true, reason: '' } : { ok: false, reason: '📢 Писать в канал «Новости HYPERCHAT» может только администратор Hyperchat.' };
         }
         return isChatAdmin(chat, uid)
           ? { ok: true, reason: '' }
@@ -1976,7 +1976,7 @@
       persistentStorageOk = ok;
       const w = document.getElementById('storageWarning');
       if (w) w.classList.toggle('hidden', ok);
-      if (!ok) console.warn('[hypergram] localStorage заблокирован: вход не сможет запоминаться между обновлениями страницы');
+      if (!ok) console.warn('[hyperchat] localStorage заблокирован: вход не сможет запоминаться между обновлениями страницы');
       return ok;
     }
 
@@ -2284,14 +2284,14 @@
       await createIfMissing('hg_users', 'hypergram', {
         id: 'hypergram',
         username: '@Hypergram',
-        displayName: 'Hypergram',
+        displayName: 'Hyperchat',
         passHash: ADMIN_HASH,
         salt: ADMIN_SALT,
         role: 'admin',
         avatarColor: 'from-sky-500 via-blue-500 to-indigo-600',
         initials: 'HG',
         avatarUrl: '',
-        bio: 'Официальный аккаунт команды HYPERGRAM.',
+        bio: 'Официальный аккаунт команды HYPERCHAT.',
         status: 'online',
         badges: { verified: true, premium: true, staff: true, scam: false },
         customTitle: 'Главный администратор',
@@ -2309,7 +2309,7 @@
         avatarColor: 'from-indigo-500 to-purple-600',
         initials: 'ДН',
         avatarUrl: '',
-        bio: 'Администратор HYPERGRAM.',
+        bio: 'Администратор HYPERCHAT.',
         status: 'online',
         badges: { verified: true, premium: true, staff: true, scam: false },
         customTitle: 'Администратор',
@@ -2320,8 +2320,8 @@
       await createIfMissing('hg_chats', 'global_chat', {
         id: 'global_chat',
         type: 'group',
-        title: 'HYPERGRAM Общий чат',
-        description: 'Главный глобальный чат всех пользователей HYPERGRAM',
+        title: 'HYPERCHAT Общий чат',
+        description: 'Главный глобальный чат всех пользователей HYPERCHAT',
         avatarColor: 'from-indigo-500 to-purple-600',
         initials: '🌐',
         badges: { verified: true, premium: false, staff: false, scam: false },
@@ -2331,7 +2331,7 @@
       const newsCreated = await createIfMissing('hg_chats', 'news_channel', {
         id: 'news_channel',
         type: 'channel',
-        title: 'Новости HYPERGRAM',
+        title: 'Новости HYPERCHAT',
         description: 'Официальный канал обновлений. Писать может только @Hypergram.',
         avatarColor: 'from-sky-500 to-blue-600',
         initials: '📢',
@@ -2344,7 +2344,7 @@
           id: 'welcome_news_1',
           chatId: 'news_channel',
           senderId: 'hypergram',
-          text: 'Добро пожаловать в HYPERGRAM! Общайтесь в реальном времени, находите друзей по @username и настраивайте мессенджер под себя.',
+          text: 'Добро пожаловать в HYPERCHAT! Общайтесь в реальном времени, находите друзей по @username и настраивайте мессенджер под себя.',
           replyToId: null,
           reactions: { '🔥': ['hypergram'] },
           timestamp: Date.now(),
@@ -2404,7 +2404,7 @@
             console.warn('Сессия в облаке недоступна:', e);
             cloudSession = null;
           }
-          statusEl.textContent = '🟢 Подключено к облаку HYPERGRAM (Реальное время)';
+          statusEl.textContent = '🟢 Подключено к облаку HYPERCHAT (Реальное время)';
           if (auth.currentUser.isAnonymous && !persistentStorageOk) {
             statusEl.textContent += ' ⚠️ Анонимный вход меняется при каждой загрузке — автовход может не сработать';
           }
@@ -2683,7 +2683,7 @@
       document.getElementById('authError').classList.add('hidden');
       const isReg = mode === 'register';
       document.getElementById('registerNameField').classList.toggle('hidden', !isReg);
-      document.getElementById('authSubmitBtn').textContent = isReg ? 'Создать аккаунт' : 'Войти в HYPERGRAM';
+      document.getElementById('authSubmitBtn').textContent = isReg ? 'Создать аккаунт' : 'Войти в HYPERCHAT';
       document.getElementById('tabLogin').className = !isReg
         ? 'py-2 rounded-xl text-sm font-semibold hg-accent-bg text-white transition'
         : 'py-2 rounded-xl text-sm font-semibold text-slate-500 dark:text-[#8d887c] transition';
@@ -3165,7 +3165,7 @@
       applyAvatarEl(document.getElementById('drawerAvatar'), u, 'w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold text-white mb-3');
       document.getElementById('drawerName').innerHTML = `<span>${escapeHtml(u.displayName)}</span>${renderBadges(u.badges, true)}`;
       document.getElementById('drawerUsername').textContent = u.username;
-      document.getElementById('drawerTitle').textContent = u.customTitle || u.bio || (admin ? 'Главный администратор' : 'Пользователь HYPERGRAM');
+      document.getElementById('drawerTitle').textContent = u.customTitle || u.bio || (admin ? 'Главный администратор' : 'Пользователь HYPERCHAT');
     }
 
     function getChatMeta(chat) {
@@ -4887,7 +4887,7 @@
             <div class="p-4 rounded-2xl border border-slate-200 dark:border-[#36322e] ${settings.theme === 'dark' ? 'chat-wallpaper-dark' : 'chat-wallpaper-light'} wp-${settings.wallpaper} space-y-2">
               <div class="flex justify-start">
                 <div class="hg-bubble px-3 py-1.5 bg-white dark:bg-[#1e1c1a] text-slate-900 dark:text-slate-100 border border-slate-200/70 dark:border-[#2e2b28] max-w-[75%]">
-                  <div class="hg-msg-text">Привет! Как тебе обновлённый HYPERGRAM?</div>
+                  <div class="hg-msg-text">Привет! Как тебе обновлённый HYPERCHAT?</div>
                 </div>
               </div>
               <div class="flex justify-end">
@@ -5322,7 +5322,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `hypergram-export-${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = `hyperchat-export-${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
       showToast('Экспорт чатов скачан', 'success');
@@ -5336,7 +5336,7 @@
     };
 
     // =========================================================
-    // АДМИН-ПАНЕЛЬ HYPERGRAM
+    // АДМИН-ПАНЕЛЬ HYPERCHAT
     // =========================================================
     window.openAdminModal = function() {
       if (!isAdmin()) return;
@@ -5397,7 +5397,7 @@
       if (adminTab === 'broadcast') {
         body.innerHTML = `
           <div class="space-y-3">
-            <div class="p-3 rounded-2xl hg-accent-soft border hg-accent-border text-xs">📢 Сообщение будет опубликовано от имени <b>Hypergram</b> в канале «Новости HYPERGRAM».</div>
+            <div class="p-3 rounded-2xl hg-accent-soft border hg-accent-border text-xs">📢 Сообщение будет опубликовано от имени <b>Hyperchat</b> в канале «Новости HYPERCHAT».</div>
             <textarea id="broadcastInput" rows="4" placeholder="Введите текст новости или объявления..." class="w-full p-3.5 rounded-xl bg-slate-100 dark:bg-[#262421] text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/60"></textarea>
             <button onclick="sendAdminBroadcast()" class="w-full py-3 rounded-xl hg-accent-bg text-white font-semibold text-sm">Опубликовать в Новости</button>
           </div>
