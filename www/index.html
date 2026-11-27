@@ -146,6 +146,169 @@
       width: 14px;
       background-color: #ffffff;
     }
+
+    /* =========================================================
+       DISCORD СООБЩЕНИЯ И ПАНЕЛЬ ВВОДА (ANDROID + WEB)
+    ========================================================== */
+    .dc-msg-row {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 2px 14px;
+      margin: 0 -12px;
+      border-radius: 4px !important;
+      transition: background-color 0.08s ease;
+      -webkit-touch-callout: none;
+    }
+    @media (min-width: 640px) {
+      .dc-msg-row { margin: 0 -24px; padding: 2px 24px; gap: 14px; }
+    }
+    .dc-msg-row:hover, .dc-msg-row:active {
+      background-color: rgba(4, 4, 5, 0.16);
+    }
+    html:not(.dark) .dc-msg-row:hover, html:not(.dark) .dc-msg-row:active {
+      background-color: rgba(6, 6, 7, 0.04);
+    }
+    .dc-msg-group-start {
+      margin-top: 14px;
+      padding-top: 4px;
+    }
+    .dc-msg-row:first-child {
+      margin-top: 0;
+    }
+    .dc-msg-gutter {
+      width: 38px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .dc-msg-mini-time {
+      font-size: 10px;
+      color: var(--dc-m, #949ba4);
+      opacity: 0;
+      line-height: 22px;
+      user-select: none;
+    }
+    .dc-msg-row:hover .dc-msg-mini-time {
+      opacity: 1;
+    }
+    .dc-msg-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .dc-msg-hover-bar {
+      position: absolute;
+      right: 12px;
+      top: -14px;
+      display: none;
+      align-items: center;
+      gap: 2px;
+      background: var(--dc-2, #2b2d31);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px !important;
+      padding: 2px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 15;
+    }
+    html:not(.dark) .dc-msg-hover-bar {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+    @media (hover: hover) {
+      .dc-msg-row:hover .dc-msg-hover-bar {
+        display: flex;
+      }
+    }
+    .dc-hover-btn {
+      width: 28px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px !important;
+      color: var(--dc-m, #949ba4);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .dc-hover-btn:hover {
+      background: var(--dc-4, #383a40);
+      color: var(--dc-t, #dbdee1);
+    }
+
+    /* Единая капсула ввода в стиле Discord */
+    .dc-composer-shell {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      background: var(--dc-4, #383a40);
+      border-radius: 8px !important;
+      padding: 5px 6px;
+      min-height: 44px;
+    }
+    html:not(.dark) .dc-composer-shell {
+      background: #ebedef;
+    }
+    .dc-plus-btn {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 2px;
+      border-radius: 50% !important;
+      background: #4e5058;
+      color: #dbdee1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .dc-plus-btn:hover, .dc-plus-btn:active {
+      background: #6d6f78;
+      color: #fff;
+    }
+    .dc-plus-btn.open {
+      transform: rotate(45deg);
+      background: var(--hg-accent, #5865f2);
+      color: #fff;
+    }
+    .dc-composer-icon {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 2px;
+      border-radius: 6px !important;
+      color: var(--dc-m, #b5bac1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+    }
+    .dc-composer-icon:hover, .dc-composer-icon:active {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .dc-composer-send {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 2px;
+      border-radius: 6px !important;
+      background: var(--hg-accent, #5865f2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: opacity 0.12s;
+    }
+    .dc-composer-send:active {
+      opacity: 0.85;
+    }
+
   </style>
 </head>
 
@@ -426,41 +589,43 @@
           <!-- Баннер ограничения (Бан / Канал / ЧС / Мут / Slow Mode) -->
           <div id="composerRestriction" class="hidden py-2.5 px-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs sm:text-sm font-medium text-center"></div>
 
-          <div id="composerControls" class="flex items-end gap-2">
+          <div id="composerControls" class="relative">
             <input id="mediaFileInput" type="file" accept="image/*,video/*" class="hidden" onchange="handleChatMediaSelect(event)" />
-            <div class="relative flex-shrink-0">
-              <button id="btnAttachMenu" type="button" onclick="toggleAttachMenu(event)" title="Прикрепить" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] text-slate-600 dark:text-slate-300 flex items-center justify-center transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
-                </svg>
+
+            <!-- Компактное меню "+" в стиле Discord -->
+            <div id="attachMenu" class="hidden absolute bottom-14 left-0 w-56 rounded-xl bg-white dark:bg-[#1e1f22] border border-slate-200 dark:border-[#383a40] shadow-2xl p-1.5 z-30 space-y-0.5 msg-animate">
+              <button type="button" onclick="pickAttachMedia()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#35373c] active:bg-slate-200 text-xs font-semibold text-left transition">
+                <svg class="w-4 h-4 text-sky-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                <span>Прикрепить фото / видео</span>
               </button>
-              <!-- Мини-меню выбора вложения (как в Telegram) -->
-              <div id="attachMenu" class="hidden absolute bottom-12 left-0 w-52 rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-1.5 z-30 msg-animate">
-                <button type="button" onclick="pickAttachMedia()" class="w-full flex items-center gap-3 px-2.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] active:bg-slate-200 text-sm font-medium text-left transition">
-                  <span class="w-8 h-8 rounded-full bg-sky-500/15 text-sky-500 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.5-4.5a2 2 0 012.8 0L16 16m-2-2l1.5-1.5a2 2 0 012.8 0L20 14M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2zM14 9h.01"/></svg>
-                  </span>
-                  <span>Фото или видео</span>
-                </button>
-                <button type="button" onclick="pickAttachPoll()" class="w-full flex items-center gap-3 px-2.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2e2b28] active:bg-slate-200 text-sm font-medium text-left transition">
-                  <span class="w-8 h-8 rounded-full bg-amber-500/15 text-amber-500 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V9m4 10V5m4 14v-7M5 19h14"/></svg>
-                  </span>
-                  <span>Опрос</span>
-                </button>
-              </div>
+              <button type="button" onclick="pickAttachPoll()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#35373c] active:bg-slate-200 text-xs font-semibold text-left transition">
+                <span class="w-4 text-center">📊</span>
+                <span>Создать опрос</span>
+              </button>
+              <button type="button" onclick="closeAttachMenu(); window.openHypergramGifts && window.openHypergramGifts('shop');" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#35373c] active:bg-slate-200 text-xs font-semibold text-left transition">
+                <span class="w-4 text-center">🎁</span>
+                <span>Отправить подарок</span>
+              </button>
             </div>
-            <div class="flex-1 relative">
-              <textarea id="messageInput" rows="1" placeholder="Сообщение..." class="w-full max-h-32 resize-none rounded-2xl bg-slate-100 dark:bg-[#262421] text-slate-900 dark:text-slate-100 placeholder-slate-400 px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition custom-scroll"></textarea>
-              <button id="btnEmoji" onclick="toggleEmojiPopover(event)" class="absolute right-2 bottom-1.5 p-1.5 rounded-lg hover:bg-slate-200/70 dark:hover:bg-[#36322e] text-slate-500 dark:text-[#8d887c]">😊</button>
-              <div id="emojiPopover" class="hidden absolute bottom-12 right-0 w-64 max-w-[82vw] rounded-2xl bg-white dark:bg-[#211f1d] border border-slate-200 dark:border-[#36322e] shadow-2xl p-2.5 z-30">
-                <div id="emojiGrid" class="grid grid-cols-7 gap-1 text-lg"></div>
-              </div>
+
+            <div id="emojiPopover" class="hidden absolute bottom-14 right-0 w-64 max-w-[82vw] rounded-xl bg-white dark:bg-[#1e1f22] border border-slate-200 dark:border-[#383a40] shadow-2xl p-2.5 z-30">
+              <div id="emojiGrid" class="grid grid-cols-7 gap-1 text-lg"></div>
             </div>
-            <button id="btnVoiceRecord" type="button" onclick="toggleVoiceRecording()" title="Голосовое сообщение" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-[#262421] hover:bg-slate-200 dark:hover:bg-[#322f2b] text-slate-600 dark:text-slate-300 flex items-center justify-center transition flex-shrink-0"></button>
-            <button onclick="sendMessage()" class="w-10 h-10 rounded-xl hg-accent-bg text-white flex items-center justify-center transition active:translate-y-px flex-shrink-0">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-            </button>
+
+            <div class="dc-composer-shell">
+              <button id="btnAttachMenu" type="button" onclick="toggleAttachMenu(event)" title="Добавить вложение, опрос или подарок" class="dc-plus-btn">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
+              </button>
+
+              <textarea id="messageInput" rows="1" placeholder="Сообщение..." class="flex-1 max-h-32 resize-none bg-transparent text-slate-900 dark:text-[#dbdee1] placeholder-slate-400 px-1.5 py-1.5 text-sm focus:outline-none custom-scroll" style="background:transparent!important"></textarea>
+
+              <button id="btnEmoji" type="button" onclick="toggleEmojiPopover(event)" title="Эмодзи" class="dc-composer-icon text-base">😊</button>
+              <button type="button" onclick="window.openHypergramGifts && window.openHypergramGifts('shop')" title="Отправить подарок" class="dc-composer-icon text-sm">🎁</button>
+              <button id="btnVoiceRecord" type="button" onclick="toggleVoiceRecording()" title="Голосовое сообщение" class="dc-composer-icon"></button>
+              <button type="button" onclick="sendMessage()" title="Отправить" class="dc-composer-send">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -946,7 +1111,7 @@
 
     let useCloud = false;
 
-    let usersMap = {};
+    let usersMap = {}; window.__hgUsersMap = () => usersMap;
     let chatsMap = {};
     let messagesList = [];
 
@@ -3698,21 +3863,27 @@
       const mineNew = !!lastM && lastM.senderId === currentUserId && !animatedMsgIds.has(lastM.id);
       if (switched) { msgs.forEach(m => animatedMsgIds.add(m.id)); lastRenderedChatId = chat.id; }
 
-      container.innerHTML = msgs.map(msg => {
+      container.innerHTML = msgs.map((msg, idx) => {
         const isNewMsg = !animatedMsgIds.has(msg.id);
-        const isOut = msg.senderId === currentUserId && chat.type !== 'channel';
-        const sender = usersMap[msg.senderId] || { displayName: 'Пользователь', initials: '?', avatarColor: 'from-slate-500 to-slate-600', badges: {} };
+        const isOut = msg.senderId === currentUserId;
+        const sender = usersMap[msg.senderId] || { displayName: 'Пользователь', username: '@user', initials: '?', avatarColor: 'from-slate-500 to-slate-600', badges: {} };
 
         // Скрытие сообщений от пользователей в чёрном списке
         if (!isOut && settings.blockedUsers.includes(msg.senderId)) {
           return `
-            <div id="msg_${msg.id}" class="flex justify-start">
-              <div class="px-3 py-1.5 rounded-xl bg-slate-200/60 dark:bg-[#1e1c1a] border border-slate-300/60 dark:border-[#2e2b28] text-[11px] text-slate-500 dark:text-[#8d887c] italic">
+            <div id="msg_${msg.id}" class="dc-msg-row">
+              <div class="dc-msg-gutter"></div>
+              <div class="dc-msg-body text-xs text-slate-500 dark:text-[#949ba4] italic py-1">
                 Сообщение от ${escapeHtml(sender.displayName)} скрыто (в чёрном списке)
               </div>
             </div>
           `;
         }
+
+        const prevMsg = idx > 0 ? msgs[idx - 1] : null;
+        const sameAuthor = prevMsg && prevMsg.senderId === msg.senderId && chat.type !== 'channel';
+        const closeInTime = prevMsg && Math.abs((msg.timestamp || 0) - (prevMsg.timestamp || 0)) < 5 * 60 * 1000;
+        const isGrouped = !!(sameAuthor && closeInTime && !msg.replyToId && !msg.forwardedFrom);
 
         let replyHtml = '';
         if (msg.replyToId) {
@@ -3720,9 +3891,10 @@
           if (orig) {
             const origUser = usersMap[orig.senderId]?.displayName || 'Сообщение';
             replyHtml = `
-              <div onclick="scrollToMsg('${orig.id}')" class="mb-1.5 pl-2 py-1 pr-2 rounded-lg bg-black/10 dark:bg-white/10 border-l-2 hg-accent-border cursor-pointer">
-                <div class="text-[11px] font-semibold hg-accent-text">${escapeHtml(origUser)}</div>
-                <div class="text-[11px] opacity-80 truncate max-w-[200px]">${escapeHtml(getMessagePreviewText(orig))}</div>
+              <div onclick="scrollToMsg('${orig.id}')" class="mb-1 flex items-center gap-1.5 text-xs text-slate-500 dark:text-[#b5bac1] cursor-pointer hover:text-white transition">
+                <span class="inline-block w-4 h-2.5 border-l-2 border-t-2 border-slate-500 rounded-tl-md ml-1"></span>
+                <span class="font-semibold hg-accent-text">@${escapeHtml(origUser)}</span>
+                <span class="opacity-80 truncate max-w-[220px]">${escapeHtml(getMessagePreviewText(orig))}</span>
               </div>
             `;
           }
@@ -3730,70 +3902,66 @@
 
         const reactionsHtml = Object.entries(msg.reactions || {}).filter(([, arr]) => arr.length > 0).map(([emoji, arr]) => {
           const mine = arr.includes(currentUserId);
-          return `<button onclick="toggleReaction('${msg.id}','${emoji}')" class="px-2 py-0.5 rounded-full text-xs flex items-center gap-1 ${mine ? 'hg-accent-bg text-white' : 'bg-black/10 dark:bg-white/10'}"><span>${emoji}</span><span class="text-[10px] font-bold">${arr.length}</span></button>`;
+          return `<button onclick="toggleReaction('${msg.id}','${emoji}')" class="px-2 py-0.5 rounded-md text-xs flex items-center gap-1 border transition ${mine ? 'hg-accent-soft hg-accent-border text-white' : 'bg-[#2b2d31] border-transparent hover:border-white/15'}"><span>${emoji}</span><span class="text-[11px] font-bold">${arr.length}</span></button>`;
         }).join('');
 
-        let senderHeader = '';
-        if (!isOut && chat.type === 'group') {
-          senderHeader = `
-            <div onclick="openUserProfile('${sender.id}')" class="flex items-center gap-1 mb-1 cursor-pointer hover:underline">
-              <span class="text-xs font-bold hg-accent-text">${escapeHtml(sender.displayName)}</span>
-              ${renderBadges(sender.badges, true)}
-              ${sender.customTitle ? `<span class="text-[10px] px-1.5 rounded hg-accent-soft hg-accent-text font-medium">${escapeHtml(sender.customTitle)}</span>` : ''}
-            </div>
-          `;
-        } else if (chat.type === 'channel') {
-          const signAuthor = chat.signPosts !== false;
-          senderHeader = `
-            <div class="flex items-center justify-between gap-2 mb-1">
-              <span class="text-xs font-bold hg-accent-text flex items-center gap-1">${escapeHtml(chat.title)}${renderBadges(chat.badges, true)}</span>
-              ${signAuthor ? `<span onclick="openUserProfile('${sender.id}')" class="text-[10px] text-slate-400 hover:underline cursor-pointer">${escapeHtml(sender.displayName)}</span>` : ''}
-            </div>
-          `;
-        }
-
-        const showAvatar = !isOut && chat.type === 'group' && settings.showGroupAvatars;
         const isRead = isOut ? isMessageRead(msg, chat) : false;
         const receiptHtml = (isOut && settings.showReadReceipts)
           ? (isRead
-              ? '<span title="Прочитано" class="hg-sig hg-sig-read"></span>'
-              : '<span title="Отправлено" class="hg-sig hg-sig-sent"></span>')
+              ? '<span title="Прочитано" class="hg-sig hg-sig-read ml-1"></span>'
+              : '<span title="Отправлено" class="hg-sig hg-sig-sent ml-1"></span>')
           : '';
         const viewsCount = chat.type === 'channel' ? Math.max(1, Array.isArray(msg.views) ? msg.views.length : 1) : 0;
-        const viewsHtml = chat.type === 'channel' ? `<span title="Просмотры" class="inline-flex items-center gap-0.5 mr-1">👁 ${viewsCount}</span>` : '';
-        const metaRow = (settings.showTimestamps || receiptHtml || viewsHtml || msg.editedAt) ? `
-          <div class="flex items-center justify-end gap-1 mt-1 text-[10px] ${isOut ? 'text-white/75' : 'text-slate-400'}">
-            ${msg.editedAt ? `<span class="italic mr-0.5">изм.</span>` : ''}
+        const viewsHtml = chat.type === 'channel' ? `<span title="Просмотры" class="inline-flex items-center gap-0.5 ml-1.5 text-[11px] text-[#949ba4]">👁 ${viewsCount}</span>` : '';
+
+        const displayAuthor = chat.type === 'channel' ? chat.title : sender.displayName;
+        const authorBadges = chat.type === 'channel' ? chat.badges : sender.badges;
+        const authorClick = chat.type === 'channel' ? '' : `onclick="openUserProfile('${sender.id}')"`;
+
+        const headerHtml = !isGrouped ? `
+          <div class="flex items-baseline gap-1.5 flex-wrap leading-tight mb-0.5">
+            <span ${authorClick} class="font-semibold text-[15px] text-slate-900 dark:text-[#f2f3f5] ${authorClick ? 'cursor-pointer hover:underline' : ''}">${escapeHtml(displayAuthor)}</span>
+            ${renderBadges(authorBadges, true)}
+            ${(chat.type !== 'channel' && sender.customTitle) ? `<span class="text-[10px] px-1.5 py-0.2 rounded hg-accent-soft hg-accent-text font-semibold">${escapeHtml(sender.customTitle)}</span>` : ''}
+            ${(chat.type === 'channel' && chat.signPosts !== false) ? `<span onclick="openUserProfile('${sender.id}')" class="text-[11px] text-[#949ba4] hover:underline cursor-pointer">• ${escapeHtml(sender.displayName)}</span>` : ''}
+            ${settings.showTimestamps ? `<span class="text-[11px] text-[#949ba4] ml-0.5">${formatTime(msg.timestamp)}</span>` : ''}
             ${viewsHtml}
-            ${settings.showTimestamps ? `<span>${formatTime(msg.timestamp)}</span>` : ''}
             ${receiptHtml}
           </div>
         ` : '';
 
+        const gutterHtml = !isGrouped
+          ? avatarBoxHtml(chat.type === 'channel' ? chat : sender, 'w-9 h-9 sm:w-10 sm:h-10 rounded-full text-sm cursor-pointer mt-0.5', authorClick)
+          : `<span class="dc-msg-mini-time">${settings.showTimestamps ? formatTime(msg.timestamp) : ''}</span>`;
+
         return `
-          <div id="msg_${msg.id}" class="flex items-end gap-2 ${isOut ? 'justify-end' : 'justify-start'} group ${isNewMsg ? 'msg-animate' : ''}" oncontextmenu="openCtxMenu(event, '${msg.id}')" ontouchstart="startMsgLongPress(event, '${msg.id}')" ontouchmove="cancelMsgLongPress(event)" ontouchend="endMsgLongPress()" ontouchcancel="endMsgLongPress()" ondblclick="quickReactMsg('${msg.id}')">
-            ${showAvatar ? avatarBoxHtml(sender, 'w-8 h-8 rounded-xl text-[11px] cursor-pointer', `onclick="openUserProfile('${sender.id}')"`) : ''}
-            <div class="hg-bubble relative max-w-[85%] sm:max-w-[70%] px-3.5 py-2 ${isOut
-              ? 'hg-bubble-out'
-              : 'bg-white dark:bg-[#1e1c1a] text-slate-900 dark:text-slate-100 border border-slate-200/70 dark:border-[#2e2b28]'
-            }">
-              <button onclick="openCtxMenu(event, '${msg.id}')" class="opacity-0 group-hover:opacity-100 absolute -top-2 ${isOut ? '-left-7' : '-right-7'} w-6 h-6 rounded-full bg-white dark:bg-[#262421] border border-slate-200 dark:border-[#403b36] text-xs shadow flex items-center justify-center text-slate-700 dark:text-slate-200">⋮</button>
-              ${senderHeader}
-              ${msg.forwardedFrom ? `<div class="text-[10px] font-semibold opacity-75 mb-1">↪ Переслано от ${escapeHtml(msg.forwardedFrom)}</div>` : ''}
+          <div id="msg_${msg.id}" class="dc-msg-row ${!isGrouped ? 'dc-msg-group-start' : ''} ${isNewMsg ? 'msg-animate' : ''}" oncontextmenu="openCtxMenu(event, '${msg.id}')" ontouchstart="startMsgLongPress(event, '${msg.id}')" ontouchmove="cancelMsgLongPress(event)" ontouchend="endMsgLongPress()" ontouchcancel="endMsgLongPress()" ondblclick="quickReactMsg('${msg.id}')">
+            <div class="dc-msg-hover-bar">
+              <button type="button" onclick="toggleReaction('${msg.id}','❤️')" title="Нравится" class="dc-hover-btn">❤️</button>
+              <button type="button" onclick="toggleReaction('${msg.id}','🔥')" title="Огонь" class="dc-hover-btn">🔥</button>
+              <button type="button" onclick="ctxMsgId='${msg.id}'; ctxReply();" title="Ответить" class="dc-hover-btn">↩</button>
+              <button type="button" onclick="openCtxMenu(event, '${msg.id}')" title="Ещё" class="dc-hover-btn">⋮</button>
+            </div>
+
+            <div class="dc-msg-gutter">${gutterHtml}</div>
+
+            <div class="dc-msg-body">
               ${replyHtml}
+              ${headerHtml}
+              ${msg.forwardedFrom ? `<div class="text-[11px] font-semibold text-[#949ba4] mb-0.5">↪ Переслано от ${escapeHtml(msg.forwardedFrom)}</div>` : ''}
               ${msg.media?.type === 'image' && msg.media?.url ? `
-                <div class="${msg.text ? 'mb-1.5' : ''} overflow-hidden rounded-lg">
+                <div class="my-1 overflow-hidden rounded-lg inline-block">
                   <img src="${escapeHtml(msg.media.url)}" alt="" loading="lazy" onclick="openMediaLightbox(this.src, ${JSON.stringify(msg.text || '')})" class="max-w-full max-h-72 rounded-lg object-cover cursor-pointer hover:opacity-95 transition" />
                 </div>
               ` : ''}
               ${msg.media?.type === 'video' && msg.media?.url ? `
-                <div class="${msg.text ? 'mb-1.5' : ''} overflow-hidden rounded-lg">
+                <div class="my-1 overflow-hidden rounded-lg inline-block">
                   <video src="${escapeHtml(msg.media.url)}" controls playsinline preload="metadata" class="max-w-full max-h-72 rounded-lg bg-black"></video>
                 </div>
               ` : ''}
               ${msg.voice?.url ? `
-                <div class="space-y-1 py-0.5">
-                  <div class="text-[11px] font-semibold">🎤 Голосовое • ${Number(msg.voice.durationSec || 1)} сек</div>
+                <div class="my-1 p-2.5 rounded-lg bg-[#2b2d31] border border-white/10 inline-block space-y-1">
+                  <div class="text-[11px] font-semibold text-[#dbdee1]">🎤 Голосовое • ${Number(msg.voice.durationSec || 1)} сек</div>
                   <audio src="${escapeHtml(msg.voice.url)}" controls preload="metadata" class="max-w-[240px] h-8"></audio>
                 </div>
               ` : ''}
@@ -3803,18 +3971,18 @@
                 const totalVotes = allVoterIds.reduce((acc, k) => acc + (Array.isArray(votesMap[k]) ? votesMap[k].length : 0), 0);
                 const myChoice = Array.isArray(votesMap[currentUserId]) ? votesMap[currentUserId] : [];
                 return `
-                  <div class="space-y-1.5 min-w-[210px]">
-                    <div class="text-xs font-bold">📊 ${escapeHtml(msg.poll.question)}</div>
-                    <div class="text-[10px] opacity-75">${msg.poll.multiple ? 'Несколько вариантов' : 'Один вариант'} • Голосов: ${totalVotes}</div>
-                    <div class="space-y-1 pt-0.5">
-                      ${(msg.poll.options || []).map((opt, idx) => {
-                        const cnt = Object.values(votesMap).filter(arr => Array.isArray(arr) && arr.includes(idx)).length;
+                  <div class="my-1 p-3 rounded-lg bg-[#2b2d31] border border-white/10 max-w-md space-y-2">
+                    <div class="text-sm font-bold text-white">📊 ${escapeHtml(msg.poll.question)}</div>
+                    <div class="text-[11px] text-[#949ba4]">${msg.poll.multiple ? 'Несколько вариантов' : 'Один вариант'} • Голосов: ${totalVotes}</div>
+                    <div class="space-y-1.5 pt-0.5">
+                      ${(msg.poll.options || []).map((opt, optIdx) => {
+                        const cnt = Object.values(votesMap).filter(arr => Array.isArray(arr) && arr.includes(optIdx)).length;
                         const pct = totalVotes > 0 ? Math.round((cnt / totalVotes) * 100) : 0;
-                        const picked = myChoice.includes(idx);
+                        const picked = myChoice.includes(optIdx);
                         return `
-                          <button type="button" onclick="voteInPoll('${msg.id}', ${idx})" class="w-full px-2.5 py-1.5 rounded-lg text-left text-xs border transition flex items-center justify-between gap-2 ${picked ? 'border-white/70 bg-black/20 font-bold' : 'border-current/20 hover:bg-black/10'}">
+                          <button type="button" onclick="voteInPoll('${msg.id}', ${optIdx})" class="w-full px-3 py-2 rounded-md text-left text-xs border transition flex items-center justify-between gap-2 ${picked ? 'hg-accent-border hg-accent-soft text-white font-bold' : 'border-white/10 bg-[#1e1f22] hover:bg-[#35373c] text-[#dbdee1]'}">
                             <span class="truncate">${picked ? '✓ ' : ''}${escapeHtml(opt)}</span>
-                            <span class="text-[10px] opacity-85 flex-shrink-0">${cnt} (${pct}%)</span>
+                            <span class="text-[11px] opacity-85 flex-shrink-0">${cnt} (${pct}%)</span>
                           </button>
                         `;
                       }).join('')}
@@ -3822,9 +3990,8 @@
                   </div>
                 `;
               })() : ''}
-              ${msg.text ? `<div class="hg-msg-text leading-relaxed whitespace-pre-wrap break-words">${formatMessageBodyHtml(msg.text)}</div>` : ''}
+              ${msg.text ? `<div class="hg-msg-text text-slate-900 dark:text-[#dbdee1] leading-[1.375] whitespace-pre-wrap break-words">${formatMessageBodyHtml(msg.text)}${msg.editedAt ? `<span class="text-[10px] text-[#949ba4] ml-1.5">(изменено)</span>` : ''}${isGrouped && receiptHtml ? receiptHtml : ''}</div>` : ''}
               ${reactionsHtml ? `<div class="flex flex-wrap gap-1 mt-1.5">${reactionsHtml}</div>` : ''}
-              ${metaRow}
             </div>
           </div>
         `;
@@ -3834,6 +4001,7 @@
       container.scrollTop = (switched || nearBottom || mineNew) ? container.scrollHeight : prevTop;
       markActiveChatAsRead();
       markChannelPostsViewed(chat, msgs);
+      if (window.__hgEnhanceGifts) window.__hgEnhanceGifts();
     }
 
     // =========================================================
@@ -4093,11 +4261,17 @@
         return;
       }
       document.getElementById('emojiPopover')?.classList.add('hidden');
-      document.getElementById('attachMenu')?.classList.toggle('hidden');
+      const menu = document.getElementById('attachMenu');
+      const btn = document.getElementById('btnAttachMenu');
+      if (!menu) return;
+      const willOpen = menu.classList.contains('hidden');
+      menu.classList.toggle('hidden', !willOpen);
+      if (btn) btn.classList.toggle('open', willOpen);
     };
 
     window.closeAttachMenu = function() {
       document.getElementById('attachMenu')?.classList.add('hidden');
+      document.getElementById('btnAttachMenu')?.classList.remove('open');
     };
 
     window.pickAttachMedia = function() {
@@ -5646,7 +5820,7 @@
       if (!e.target.closest('#msgContextMenu')) document.getElementById('msgContextMenu').classList.add('hidden');
       if (!e.target.closest('#chatContextMenu')) document.getElementById('chatContextMenu')?.classList.add('hidden');
       if (!e.target.closest('#emojiPopover') && !e.target.closest('#btnEmoji')) document.getElementById('emojiPopover').classList.add('hidden');
-      if (!e.target.closest('#attachMenu') && !e.target.closest('#btnAttachMenu')) document.getElementById('attachMenu')?.classList.add('hidden');
+      if (!e.target.closest('#attachMenu') && !e.target.closest('#btnAttachMenu')) closeAttachMenu();
     });
 
     if (window.visualViewport) {
@@ -5677,6 +5851,9 @@
         if (P.App) P.App.addListener('backButton', function () {
           var hidden = function (id) { var el = document.getElementById(id); return !el || el.classList.contains('hidden'); };
           if (!hidden('callOverlay')) return;
+          if (document.getElementById('hggTransferModal')) { document.getElementById('hggTransferModal').remove(); return; }
+          if (document.getElementById('hggInspectModal')) { document.getElementById('hggInspectModal').remove(); return; }
+          if (document.getElementById('hggMainModal')) { document.getElementById('hggMainModal').remove(); return; }
           if (!hidden('chatContextMenu')) { document.getElementById('chatContextMenu').classList.add('hidden'); return; }
           if (!hidden('msgContextMenu')) { document.getElementById('msgContextMenu').classList.add('hidden'); return; }
           if (!hidden('attachMenu')) { document.getElementById('attachMenu').classList.add('hidden'); return; }
@@ -5735,5 +5912,1161 @@
       } catch (e) { console.warn('Push init error:', e); }
     })();
   </script>
+
+<style id="dcTheme">:root{--hg-accent:#5865f2;--hg-accent-hover:#4752c4;--hg-accent-soft:rgba(88,101,242,.16);--hg-bubble-radius:4px;
+--dc-1:#1e1f22;--dc-2:#2b2d31;--dc-3:#313338;--dc-4:#383a40;--dc-t:#dbdee1;--dc-m:#949ba4;--dc-line:#1e1f22}
+body.dc-ash{--dc-1:#1a1a1e;--dc-2:#242429;--dc-3:#2c2c32;--dc-4:#35353c}
+body.dc-onyx{--dc-1:#000;--dc-2:#0a0a0a;--dc-3:#111;--dc-4:#1b1b1b;--dc-line:#000}
+body.dc-light{--dc-1:#e3e5e8;--dc-2:#f2f3f5;--dc-3:#fff;--dc-4:#ebedef;--dc-t:#313338;--dc-m:#5c5e66;--dc-line:#e3e5e8}
+html,body{font-family:'Inter','gg sans',system-ui,sans-serif!important;background:var(--dc-1)!important;color:var(--dc-t)}
+.font-display{font-family:'Inter',system-ui,sans-serif!important;letter-spacing:-.02em;font-weight:800}
+#app{background:var(--dc-3)!important;color:var(--dc-t)}
+#leftSidebar{background:var(--dc-2)!important;border-color:var(--dc-line)!important;width:300px!important}
+@media(max-width:767px){#leftSidebar{width:100%!important}}
+#chatArea,#activeChatContainer,#emptyChatState,#messagesContainer,.chat-wallpaper-dark,.chat-wallpaper-light{background:var(--dc-3)!important;background-image:none!important}
+[class*="bg-[#1a1917]"],[class*="bg-[#161513]"],[class*="bg-[#121110]"],[class*="bg-[#151412]"]{background:var(--dc-2)!important}
+#leftSidebar>div:last-child{background:var(--dc-1)!important;border:0!important}
+[class*="border-[#2e2b28]"],[class*="border-slate-200"]{border-color:var(--dc-line)!important}
+[class*="bg-[#2a2724]"],[class*="bg-[#22201e]"],[class*="bg-[#2e2b28]"]{background:var(--dc-4)!important}
+[class*="hover:bg-[#2a2724]"]:hover{background:var(--dc-4)!important}
+[class*="text-[#8d887c]"],.text-slate-500,.text-slate-400{color:var(--dc-m)!important}
+*{border-radius:6px;clip-path:none!important}
+.rounded-full,#dcRail *{border-radius:999px}
+input,textarea{background:var(--dc-1)!important;color:var(--dc-t)!important;border:0!important;border-radius:6px!important}
+#chatList>*{border-radius:6px!important}
+.hg-chat-active{background:var(--dc-4)!important;box-shadow:none!important;color:#fff}
+.hg-bubble,.hg-bubble-out{background:transparent!important;color:var(--dc-t)!important;border-radius:4px!important}
+#settingsModal>div,#createChatModal>div,#mainDrawer,#adminModal>div,#forwardModal>div,#pollModal>div{background:var(--dc-2)!important;color:var(--dc-t)!important}
+#dcRail{width:72px;flex:none;background:var(--dc-1);display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 0;z-index:30}
+@media(max-width:767px){#dcRail{display:none}}
+.dcb{width:48px;height:48px;background:var(--dc-3);color:var(--dc-t);display:flex;align-items:center;justify-content:center;cursor:pointer;border:0;font-weight:700;font-size:15px;position:relative;transition:.15s;border-radius:50%!important;overflow:hidden}
+.dcb:hover,.dcb.on{background:var(--hg-accent);color:#fff;border-radius:16px!important}
+.dcpill{position:absolute;left:0;width:4px;height:40px;background:#fff;border-radius:0 4px 4px 0!important}
+.dcsep{width:32px;height:2px;background:var(--dc-4)}
+.dcadd{background:var(--dc-3);color:#23a559;border:1px dashed #23a559}
+.dcm{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center}
+.dcc{background:var(--dc-2);color:var(--dc-t);width:min(760px,96vw);max-height:90vh;overflow:auto;border-radius:8px!important}
+.dcbanner{height:120px;background:var(--hg-accent) center/cover}
+.dcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.dcbtn{background:var(--hg-accent);color:#fff;padding:8px 14px;border:0;cursor:pointer;font-weight:600;font-size:13px}
+.dcbtn.g{background:var(--dc-4)}.dcbtn.r{background:#da373c}
+.dcsw{width:32px;height:32px;cursor:pointer;border:2px solid transparent;border-radius:50%!important}
+#dcCall{position:fixed;inset:0;background:#000;z-index:300;display:flex;flex-direction:column}
+#dcGrid{flex:1;display:grid;gap:8px;padding:12px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-content:center}
+.dct{background:var(--dc-2);aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:8px!important}
+.dct video{width:100%;height:100%;object-fit:contain;background:#000}
+.dct b{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.6);color:#fff;padding:2px 8px;font-size:12px}
+#dcBar{display:flex;justify-content:center;gap:12px;padding:14px;background:var(--dc-1)}
+#dcBar .dcb{width:52px;height:52px;background:var(--dc-4)}
+#dcBar .dcb.off{background:#fff;color:#000}
+</style>
+
+<script id="dcAddon">(function(){
+const LS=localStorage,K='dc_accounts',S='hypergram_session_v1',P='dc_prefs';
+const J=(k,d)=>{try{return JSON.parse(LS.getItem(k))||d}catch(e){return d}};
+const prefs=Object.assign({theme:'',accent:'#5865f2',font:15,compact:false},J(P,{}));
+const $=s=>document.querySelector(s),el=(h)=>{const d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild};
+const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1.2l2-1.5-2-3.4-2.4 1a7 7 0 00-2-1.2L14 3h-4l-.4 2.7a7 7 0 00-2 1.2l-2.4-1-2 3.4 2 1.5a7 7 0 000 2.4l-2 1.5 2 3.4 2.4-1a7 7 0 002 1.2L10 21h4l.4-2.7a7 7 0 002-1.2l2.4 1 2-3.4-2-1.5c.1-.4.2-.8.2-1.2z"/>',plus:'<path d="M12 5v14M5 12h14"/>',cam:'<path d="M3 7h12v10H3zM15 11l6-3v8l-6-3"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/>',scr:'<rect x="3" y="4" width="18" height="12"/><path d="M8 20h8M12 16v4"/>',end:'<path d="M3 15c5-5 13-5 18 0l-3 3-3-2v-2a10 10 0 00-6 0v2l-3 2z"/>'};
+const svg=n=>`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+function applyPrefs(){
+  document.body.classList.remove('dc-ash','dc-onyx','dc-light');
+  if(prefs.theme)document.body.classList.add('dc-'+prefs.theme);
+  document.documentElement.style.setProperty('--hg-accent',prefs.accent);
+  document.documentElement.style.setProperty('--hg-accent-hover',prefs.accent+'cc');
+  document.documentElement.style.setProperty('--hg-accent-soft',prefs.accent+'29');
+  document.documentElement.style.setProperty('--hg-msg-font',prefs.font+'px');
+  document.body.classList.toggle('hg-compact',!!prefs.compact);
+  LS.setItem(P,JSON.stringify(prefs));
+}
+const uid=()=>(J(S,null)||{}).userId;
+const bannerKey=u=>'dc_banner_'+u;
+
+function track(){
+  const u=uid(),n=$('#bottomUserName'),a=$('#bottomUserAvatar');
+  if(!u||!n||!n.textContent.trim())return;
+  let list=J(K,[]);const name=n.textContent.trim(),h=($('#bottomUserHandle')||{}).textContent||'';
+  const bg=a?getComputedStyle(a).backgroundColor:'#5865f2',img=a&&a.querySelector('img')?a.querySelector('img').src:'';
+  const rec={userId:u,name,handle:h,bg,img,ini:name.slice(0,2).toUpperCase()};
+  const i=list.findIndex(x=>x.userId===u);
+  if(i>=0){if(JSON.stringify(list[i])===JSON.stringify(rec))return;list[i]=rec}else if(list.length<3)list.push(rec);else return;
+  LS.setItem(K,JSON.stringify(list));renderRail();
+}
+function avatarHtml(r){return r.img?`<img src="${r.img}" style="width:100%;height:100%;object-fit:cover">`:`<span style="background:${r.bg};width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff">${r.ini}</span>`}
+function switchTo(id){
+  const s=J(S,{})||{};if(s.userId===id)return;
+  const v=JSON.stringify({userId:id,loginAt:Date.now(),lastSeen:Date.now()});
+  LS.setItem(S,v);try{sessionStorage.setItem(S,v)}catch(e){}
+  LS.setItem('hypergram_last_login_v1',id);location.reload();
+}
+function addAccount(){
+  if(J(K,[]).length>=3)return alert('Максимум 3 аккаунта');
+  if(!confirm('Откроется экран входа. Войдите во второй аккаунт — он появится в панели переключения.'))return;
+  LS.setItem('dc_pending_add','1');
+  if(window.logout)window.logout();
+}
+function removeAccount(id){
+  if(id===uid())return alert('Нельзя убрать активный аккаунт — сначала переключитесь.');
+  LS.setItem(K,JSON.stringify(J(K,[]).filter(x=>x.userId!==id)));renderRail();
+}
+function renderRail(){
+  let r=$('#dcRail');if(!r){r=el('<nav id="dcRail"></nav>');$('#app').prepend(r)}
+  const list=J(K,[]),cur=uid();
+  r.innerHTML='<button class="dcb on" title="Главная" id="dcHome"><span class="dcpill"></span>'+svg('home')+'</button><div class="dcsep"></div>';
+  list.forEach(a=>{
+    const b=el(`<button class="dcb ${a.userId===cur?'on':''}" title="${a.name} ${a.handle} (ПКМ — убрать)">${a.userId===cur?'<span class="dcpill"></span>':''}${avatarHtml(a)}</button>`);
+    b.onclick=()=>switchTo(a.userId);
+    b.oncontextmenu=e=>{e.preventDefault();if(confirm('Убрать '+a.name+' из быстрого переключения?'))removeAccount(a.userId)};
+    r.appendChild(b);
+  });
+  if(list.length<3){const b=el('<button class="dcb dcadd" title="Добавить аккаунт">'+svg('plus')+'</button>');b.onclick=addAccount;r.appendChild(b)}
+  const sp=el('<div style="flex:1"></div>');r.appendChild(sp);
+  const g=el('<button class="dcb" title="Настройки профиля и мессенджера">'+svg('gear')+'</button>');g.onclick=()=>{if(window.openSettingsModal)window.openSettingsModal('profile');else openDc();};r.appendChild(g);
+  $('#dcHome').onclick=()=>{const b=$('#btnMobileBack');if(b)b.click()};
+}
+function modal(html){
+  const m=el('<div class="dcm"><div class="dcc">'+html+'</div></div>');
+  m.onclick=e=>{if(e.target===m)m.remove()};document.body.appendChild(m);return m;
+}
+function profileCard(){
+  const n=($('#chatHeaderTitle')||{}).textContent||'',st=($('#chatHeaderStatus')||{}).textContent||'';
+  const av=$('#chatHeaderAvatar'),u=uid(),bn=LS.getItem(bannerKey(u))||'';
+  const m=modal(`<div class="dcbanner" style="${bn.startsWith('data:')?`background-image:url(${bn})`:bn?`background:${bn}`:''}"></div>
+  <div style="padding:0 20px 20px"><div style="width:84px;height:84px;margin-top:-42px;border:6px solid var(--dc-2);overflow:hidden;border-radius:50%" id="dcPAv"></div>
+  <h2 style="font-size:20px;font-weight:800;margin-top:8px">${n}</h2><div style="color:var(--dc-m);font-size:13px">${st}</div>
+  <div class="dcrow"><button class="dcbtn" id="dcMsg">Сообщение</button><button class="dcbtn g" id="dcCallBtn">Звонок</button></div></div>`);
+  if(av)m.querySelector('#dcPAv').appendChild(av.cloneNode(true));
+  m.querySelector('#dcMsg').onclick=()=>m.remove();
+  m.querySelector('#dcCallBtn').onclick=()=>{m.remove();startCall()};
+}
+function openDc(){
+  const u=uid(),cols=['#5865f2','#eb459e','#23a559','#f0b132','#da373c','#00a8fc','#9b59b6'];
+  const m=modal(`<div style="padding:20px"><h2 style="font-size:20px;font-weight:800">Настройки</h2>
+  <h3 class="dcl">Тема</h3><div class="dcrow" id="dcT"></div>
+  <h3 class="dcl">Акцентный цвет</h3><div class="dcrow" id="dcA"></div><div class="dcrow"><input type="color" id="dcAc" value="${prefs.accent}" style="width:48px;height:32px;padding:0"></div>
+  <h3 class="dcl">Размер текста сообщений: <span id="dcFv">${prefs.font}</span>px</h3><input type="range" min="12" max="20" value="${prefs.font}" id="dcF" style="width:100%">
+  <label class="dcrow"><input type="checkbox" id="dcC" ${prefs.compact?'checked':''}> Компактный режим</label>
+  <h3 class="dcl">Баннер профиля</h3><div class="dcbanner" id="dcBp" style="border-radius:8px"></div>
+  <div class="dcrow" id="dcBc"></div><div class="dcrow"><button class="dcbtn g" id="dcBu">Загрузить картинку</button><button class="dcbtn g" id="dcBr">Сбросить</button><input type="file" accept="image/*" id="dcBf" hidden></div>
+  <div class="dcrow"><button class="dcbtn" id="dcPrf">Мой профиль</button><button class="dcbtn g" id="dcSet">Настройки мессенджера</button></div></div>
+  <style>.dcl{margin:16px 0 4px;font-size:12px;text-transform:uppercase;font-weight:700;color:var(--dc-m)}</style>`);
+  const T=[['','Dark'],['ash','Ash'],['onyx','Onyx'],['light','Light']];
+  T.forEach(([k,l])=>{const b=el(`<button class="dcbtn ${prefs.theme===k?'':'g'}">${l}</button>`);b.onclick=()=>{prefs.theme=k;applyPrefs();m.remove();openDc()};m.querySelector('#dcT').appendChild(b)});
+  cols.forEach(c=>{const s=el(`<div class="dcsw" style="background:${c};border-color:${prefs.accent===c?'#fff':'transparent'}"></div>`);s.onclick=()=>{prefs.accent=c;applyPrefs();m.remove();openDc()};m.querySelector('#dcA').appendChild(s)});
+  m.querySelector('#dcAc').oninput=e=>{prefs.accent=e.target.value;applyPrefs()};
+  m.querySelector('#dcF').oninput=e=>{prefs.font=+e.target.value;m.querySelector('#dcFv').textContent=prefs.font;applyPrefs()};
+  m.querySelector('#dcC').onchange=e=>{prefs.compact=e.target.checked;applyPrefs()};
+  const setB=v=>{LS.setItem(bannerKey(u),v);const p=m.querySelector('#dcBp');p.style.cssText=v.startsWith('data:')?`background-image:url(${v});border-radius:8px`:`background:${v||prefs.accent};border-radius:8px`};
+  setB(LS.getItem(bannerKey(u))||'');
+  cols.forEach(c=>{const s=el(`<div class="dcsw" style="background:${c}"></div>`);s.onclick=()=>setB(c);m.querySelector('#dcBc').appendChild(s)});
+  m.querySelector('#dcBu').onclick=()=>m.querySelector('#dcBf').click();
+  m.querySelector('#dcBr').onclick=()=>setB('');
+  m.querySelector('#dcBf').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image(),r=new FileReader();r.onload=()=>{im.onload=()=>{const c=document.createElement('canvas');c.width=680;c.height=240;c.getContext('2d').drawImage(im,0,0,680,240);setB(c.toDataURL('image/jpeg',.8))};im.src=r.result};r.readAsDataURL(f)};
+  m.querySelector('#dcPrf').onclick=()=>{m.remove();profileCard()};
+  m.querySelector('#dcSet').onclick=()=>{m.remove();window.openSettingsModal&&window.openSettingsModal('profile')};
+}
+let loc={},tiles={};
+async function startCall(){
+  if(!navigator.mediaDevices)return alert('Нужен https и доступ к устройствам');
+  const o=el(`<div id="dcCall"><div id="dcGrid"></div><div id="dcBar"></div></div>`);document.body.appendChild(o);
+  const grid=o.querySelector('#dcGrid');
+  const tile=(id,label,stream)=>{let t=tiles[id];if(!t){t=el(`<div class="dct"><video autoplay playsinline ${id==='me'?'muted':''}></video><b>${label}</b></div>`);grid.appendChild(t);tiles[id]=t}
+    t.querySelector('video').srcObject=stream};
+  const drop=id=>{if(tiles[id]){tiles[id].remove();delete tiles[id]}};
+  loc={mic:true,cam:false,scr:false,streams:{}};
+  const bar=o.querySelector('#dcBar');
+  const btn=(ic,t,fn)=>{const b=el(`<button class="dcb" title="${t}">${svg(ic)}</button>`);b.onclick=()=>fn(b);bar.appendChild(b);return b};
+  try{loc.streams.mic=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){loc.mic=false}
+  const hasAudio=()=>loc.streams.mic;
+  btn('mic','Микрофон',b=>{const s=hasAudio();if(!s)return;const on=s.getAudioTracks()[0].enabled=!s.getAudioTracks()[0].enabled;b.classList.toggle('off',!on)});
+  btn('cam','Камера',async b=>{
+    if(loc.streams.cam){loc.streams.cam.getTracks().forEach(t=>t.stop());delete loc.streams.cam;drop('cam');b.classList.remove('off');return}
+    try{loc.streams.cam=await navigator.mediaDevices.getUserMedia({video:true});tile('cam','Вы (камера)',loc.streams.cam);b.classList.add('off')}catch(e){alert('Камера недоступна')}});
+  btn('scr','Демонстрация экрана',async b=>{
+    if(loc.streams.scr){loc.streams.scr.getTracks().forEach(t=>t.stop());delete loc.streams.scr;drop('scr');b.classList.remove('off');return}
+    try{const s=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:30},audio:true,monitorTypeSurfaces:'include',surfaceSwitching:'include'});
+      loc.streams.scr=s;tile('scr','Вы (экран)',s);b.classList.add('off');s.getVideoTracks()[0].onended=()=>b.click&&loc.streams.scr&&b.click()}catch(e){}});
+  const end=btn('end','Завершить',()=>{Object.values(loc.streams).forEach(s=>s.getTracks().forEach(t=>t.stop()));tiles={};o.remove()});end.style.background='#da373c';
+  tile('me',(($('#bottomUserName')||{}).textContent||'Вы'),new MediaStream());
+}
+function hook(){
+  const b=$('#btnCall');
+  if(b&&!b.dataset.dc){b.dataset.dc=1;
+    const v=el('<button title="Видео / экран" class="p-2 rounded-xl" style="color:var(--dc-m)">'+svg('cam')+'</button>');v.onclick=startCall;b.after(v)}
+  const t=$('#chatHeaderTitle');if(t&&!t.dataset.dc){t.dataset.dc=1;t.style.cursor='pointer';t.onclick=profileCard}
+}
+function init(){
+  const f=document.createElement('link');f.rel='stylesheet';f.href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';document.head.appendChild(f);
+  applyPrefs();
+  let tm=null;
+  const run=()=>{tm=null;const a=$('#app');if(!a||a.classList.contains('hidden'))return;if(!$('#dcRail'))renderRail();hook();track()};
+  const mo=new MutationObserver(()=>{if(tm)return;tm=setTimeout(run,400)});
+  mo.observe($('#app')||document.body,{attributes:true,attributeFilter:['class']});
+  const nm=$('#bottomUserName');if(nm)mo.observe(nm,{childList:true,characterData:true,subtree:true});
+  setInterval(run,1500);
+}
+document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+})();
+</script>
+
+<!-- =========================================================
+     МОДУЛЬ КОЛЛЕКЦИОННЫХ ПОДАРКОВ + ЛУНЫ (🌙) + ПЕРЕДАЧА (ANDROID + WEB)
+========================================================== -->
+<style id="hgGiftsStyle">
+  .hgg-modal{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:240;display:flex;align-items:center;justify-content:center;padding:10px}
+  .hgg-box{background:var(--dc-2,#2b2d31);color:var(--dc-t,#dbdee1);width:min(780px,96vw);max-height:90dvh;display:flex;flex-direction:column;border-radius:10px!important;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+  .hgg-head{padding:14px 16px;background:var(--dc-1,#1e1f22);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .hgg-balances{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .hgg-bal-star{padding:5px 10px;border-radius:999px!important;background:rgba(245,158,11,.18);color:#fbbf24;font-weight:800;font-size:12px}
+  .hgg-bal-moon{padding:5px 10px;border-radius:999px!important;background:rgba(129,140,248,.2);color:#a5b4fc;font-weight:800;font-size:12px}
+  .hgg-tabs{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.07);overflow-x:auto}
+  .hgg-tab{padding:7px 12px;border-radius:6px!important;font-size:12px;font-weight:700;cursor:pointer;border:0;background:var(--dc-4,#383a40);color:var(--dc-m,#949ba4);transition:.15s;white-space:nowrap}
+  .hgg-tab.on{background:var(--hg-accent,#5865f2);color:#fff}
+  .hgg-body{padding:14px 16px;overflow:auto;flex:1}
+  .hgg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .hgg-card{background:var(--dc-3,#313338);border:1px solid rgba(255,255,255,.08);border-radius:8px!important;padding:12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;position:relative;transition:.15s}
+  .hgg-card:hover{border-color:var(--hg-accent,#5865f2)}
+  .hgg-ico{width:58px;height:58px;border-radius:12px!important;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative}
+  .hgg-rar{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:999px!important}
+  .rar-common{background:rgba(148,163,184,.18);color:#cbd5e1}
+  .rar-rare{background:rgba(56,189,248,.18);color:#38bdf8}
+  .rar-epic{background:rgba(168,85,247,.2);color:#c084fc}
+  .rar-legendary{background:rgba(245,158,11,.22);color:#fbbf24}
+  .rar-mythic{background:rgba(244,63,94,.22);color:#fb7185}
+  .hgg-btn{background:var(--hg-accent,#5865f2);color:#fff;border:0;padding:8px 10px;border-radius:6px!important;font-size:12px;font-weight:700;cursor:pointer;width:100%;transition:.15s}
+  .hgg-btn:active{opacity:.88}
+  .hgg-btn.sec{background:var(--dc-4,#383a40);color:var(--dc-t,#dbdee1)}
+  .hgg-btn.gold{background:#d97706;color:#fff}
+  .hgg-btn.moon{background:#4f46e5;color:#fff}
+  .hgg-msg-card{margin-top:4px;padding:12px 14px;border-radius:8px!important;border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--hg-accent,#5865f2);background:var(--dc-2,#2b2d31);width:min(330px,100%);cursor:pointer;transition:.15s;display:block}
+  .hgg-msg-card:active,.hgg-msg-card:hover{border-color:var(--hg-accent,#5865f2);background:#32353b}
+  .hgg-showcase{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .hgg-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px!important;background:var(--dc-3,#313338);border:1px solid rgba(255,255,255,.1);font-size:12px;cursor:pointer}
+  .hgg-pin-badge{display:inline-flex;align-items:center;justify-content:center;font-size:13px;margin-left:3px;cursor:pointer}
+  .hgg-shop-form{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:14px;align-items:end;background:var(--dc-1,#1e1f22);padding:12px;border-radius:8px!important}
+  @media(max-width:600px){.hgg-shop-form{grid-template-columns:1fr}}
+</style>
+
+<script id="hgGiftsAddon">
+(function () {
+  const LS = localStorage;
+  const S_KEY = 'hypergram_session_v1';
+  const G_STORE_KEY = 'hg_gifts_local_v1';
+  const START_STARS = 500;
+  const START_MOONS = 250;
+  const INFINITE_MOON_USERS = ['shikariy'];
+
+  const RARITY_META = {
+    common:    { label: 'Обычный',     cls: 'rar-common',    bg: '#334155' },
+    rare:      { label: 'Редкий',      cls: 'rar-rare',      bg: '#0369a1' },
+    epic:      { label: 'Эпический',   cls: 'rar-epic',      bg: '#6d28d9' },
+    legendary: { label: 'Легендарный', cls: 'rar-legendary', bg: '#b45309' },
+    mythic:    { label: 'Мифический',  cls: 'rar-mythic',    bg: '#be123c' }
+  };
+
+  const UPGRADE_STYLES = [
+    { name: 'Королевский индиго', bg: '#3730a3', border: '#818cf8' },
+    { name: 'Чистое золото',      bg: '#92400e', border: '#fbbf24' },
+    { name: 'Изумрудный неон',    bg: '#065f46', border: '#34d399' },
+    { name: 'Кровавый рубин',     bg: '#881337', border: '#fb7185' },
+    { name: 'Кибер-бирюза',       bg: '#155e75', border: '#22d3ee' }
+  ];
+
+  const CATALOG = [
+    { id: 'plush_bear',    name: 'Плюшевый мишка',    emoji: '🧸', price: 25,   moonPrice: 15,  rarity: 'common',    supply: 0,   upgradeCost: 50,   moonUpgrade: 30  },
+    { id: 'red_rose',      name: 'Алая роза',         emoji: '🌹', price: 35,   moonPrice: 20,  rarity: 'common',    supply: 0,   upgradeCost: 60,   moonUpgrade: 35  },
+    { id: 'party_cake',    name: 'Праздничный торт',  emoji: '🎂', price: 50,   moonPrice: 30,  rarity: 'common',    supply: 0,   upgradeCost: 75,   moonUpgrade: 45  },
+    { id: 'crystal_star',  name: 'Звезда Hyperchat',  emoji: '🌟', price: 100,  moonPrice: 60,  rarity: 'rare',      supply: 500, upgradeCost: 120,  moonUpgrade: 70  },
+    { id: 'cyber_cat',     name: 'Кибер-кот',         emoji: '🐱', price: 150,  moonPrice: 90,  rarity: 'rare',      supply: 300, upgradeCost: 150,  moonUpgrade: 90  },
+    { id: 'rocket_ship',   name: 'Звёздолёт HG',      emoji: '🚀', price: 250,  moonPrice: 150, rarity: 'epic',      supply: 150, upgradeCost: 220,  moonUpgrade: 130 },
+    { id: 'magic_diamond', name: 'Чистый бриллиант',  emoji: '💎', price: 400,  moonPrice: 240, rarity: 'epic',      supply: 100, upgradeCost: 300,  moonUpgrade: 180 },
+    { id: 'royal_crown',   name: 'Корона Основателя', emoji: '👑', price: 750,  moonPrice: 450, rarity: 'legendary', supply: 50,  upgradeCost: 500,  moonUpgrade: 300 },
+    { id: 'pepe_frog',     name: 'Золотой Пепе',      emoji: '🐸', price: 1000, moonPrice: 600, rarity: 'legendary', supply: 25,  upgradeCost: 650,  moonUpgrade: 400 },
+    { id: 'hyper_core',    name: 'Ядро Сингулярности',emoji: '🔮', price: 2000, moonPrice: 1200,rarity: 'mythic',    supply: 10,  upgradeCost: 1000, moonUpgrade: 600 }
+  ];
+
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const normUser = u => String(u || '').trim().replace(/^@+/, '').toLowerCase();
+  const getUid = () => { try { return (JSON.parse(LS.getItem(S_KEY) || 'null') || {}).userId || ''; } catch (e) { return ''; } };
+  const hasInfiniteMoons = uid => INFINITE_MOON_USERS.includes(normUser(uid));
+  const getUsersMap = () => (typeof window.__hgUsersMap === 'function' ? window.__hgUsersMap() : {}) || {};
+
+  function formatMoonsBalance(uid, rawMoons) {
+    if (hasInfiniteMoons(uid)) return '∞ 🌙';
+    return `🌙 ${rawMoons || 0}`;
+  }
+
+  function loadLocalDb() {
+    try { return JSON.parse(LS.getItem(G_STORE_KEY) || '{}') || {}; } catch (e) { return {}; }
+  }
+  function saveLocalDb(data) {
+    try { LS.setItem(G_STORE_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function getUserGiftState(uid) {
+    const cleanUid = normUser(uid);
+    if (!cleanUid) return { stars: START_STARS, moons: START_MOONS, gifts: [], pinnedGiftId: '' };
+    const local = loadLocalDb();
+    const uDoc = getUsersMap()[cleanUid];
+
+    if (!local[cleanUid]) {
+      local[cleanUid] = {
+        stars: typeof uDoc?.hgStars === 'number' ? uDoc.hgStars : START_STARS,
+        moons: hasInfiniteMoons(cleanUid) ? 999999999 : (typeof uDoc?.hgMoons === 'number' ? uDoc.hgMoons : START_MOONS),
+        gifts: Array.isArray(uDoc?.hgGifts) ? uDoc.hgGifts : [],
+        pinnedGiftId: uDoc?.hgPinnedGiftId || ''
+      };
+      saveLocalDb(local);
+    } else if (uDoc) {
+      if (typeof uDoc.hgStars === 'number') local[cleanUid].stars = uDoc.hgStars;
+      if (typeof uDoc.hgMoons === 'number') local[cleanUid].moons = hasInfiniteMoons(cleanUid) ? 999999999 : uDoc.hgMoons;
+      if (Array.isArray(uDoc.hgGifts)) local[cleanUid].gifts = uDoc.hgGifts;
+      if (typeof uDoc.hgPinnedGiftId === 'string') local[cleanUid].pinnedGiftId = uDoc.hgPinnedGiftId;
+      saveLocalDb(local);
+    }
+
+    const state = Object.assign({}, local[cleanUid]);
+    if (hasInfiniteMoons(cleanUid)) state.moons = Number.POSITIVE_INFINITY;
+    return state;
+  }
+
+  function setUserGiftState(uid, patch) {
+    const cleanUid = normUser(uid);
+    if (!cleanUid) return;
+    const local = loadLocalDb();
+    const prev = getUserGiftState(cleanUid);
+    const prevSavedMoons = hasInfiniteMoons(cleanUid) ? 999999999 : (prev.moons || START_MOONS);
+    const next = Object.assign({}, prev, patch);
+    const savedMoons = hasInfiniteMoons(cleanUid)
+      ? 999999999
+      : (Number.isFinite(next.moons) ? Math.max(0, Math.floor(next.moons)) : prevSavedMoons);
+
+    local[cleanUid] = {
+      stars: Number.isFinite(next.stars) ? Math.max(0, Math.floor(next.stars)) : (prev.stars || START_STARS),
+      moons: savedMoons,
+      gifts: Array.isArray(next.gifts) ? next.gifts : (prev.gifts || []),
+      pinnedGiftId: next.pinnedGiftId !== undefined ? next.pinnedGiftId : (prev.pinnedGiftId || '')
+    };
+    saveLocalDb(local);
+
+    const uMap = getUsersMap();
+    if (uMap[cleanUid]) {
+      uMap[cleanUid].hgStars = local[cleanUid].stars;
+      uMap[cleanUid].hgMoons = local[cleanUid].moons;
+      uMap[cleanUid].hgGifts = local[cleanUid].gifts;
+      uMap[cleanUid].hgPinnedGiftId = local[cleanUid].pinnedGiftId;
+    }
+
+    if (typeof window.dbUpdate === 'function' && uMap[cleanUid]) {
+      window.dbUpdate('hg_users', cleanUid, {
+        hgStars: local[cleanUid].stars,
+        hgMoons: local[cleanUid].moons,
+        hgGifts: local[cleanUid].gifts,
+        hgPinnedGiftId: local[cleanUid].pinnedGiftId || ''
+      }).catch(() => {});
+    }
+  }
+
+  function getIssuedCount(giftId) {
+    const seen = new Set();
+    const uMap = getUsersMap();
+    Object.values(uMap).forEach(u => {
+      if (Array.isArray(u?.hgGifts)) {
+        u.hgGifts.forEach(g => { if (g.giftId === giftId && g.instanceId) seen.add(g.instanceId); });
+      }
+    });
+    const local = loadLocalDb();
+    Object.values(local).forEach(u => {
+      if (Array.isArray(u?.gifts)) {
+        u.gifts.forEach(g => { if (g.giftId === giftId && g.instanceId) seen.add(g.instanceId); });
+      }
+    });
+    return seen.size;
+  }
+
+  function formatDate(ts) {
+    return new Date(ts || Date.now()).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function getActivePeerId() {
+    const statusTxt = ($('#chatHeaderStatus') || {}).textContent || '';
+    const m = statusTxt.match(/@([a-z0-9_а-яё]+)/i);
+    return m ? m[1].toLowerCase() : '';
+  }
+
+  async function postGiftChatMarker(markerText) {
+    const msgInput = $('#messageInput');
+    if (msgInput && typeof window.sendMessage === 'function') {
+      const prevVal = msgInput.value;
+      msgInput.value = markerText;
+      await window.sendMessage();
+      if (prevVal) msgInput.value = prevVal;
+    }
+  }
+
+  async function giftMoonsToUser(targetUserRaw, amountRaw, noteText) {
+    const senderId = normUser(getUid());
+    const toId = normUser(targetUserRaw);
+    const amount = Math.floor(Number(amountRaw) || 0);
+    if (!senderId) return alert('Сначала войдите в аккаунт.');
+    if (!hasInfiniteMoons(senderId)) return alert('Функция прямого дарения Лун доступна аккаунту @shikariy.');
+    if (!toId) return alert('Укажите @username получателя.');
+    if (toId === senderId) return alert('У вас уже бесконечные Луны!');
+    if (!amount || amount <= 0) return alert('Введите положительное количество Лун.');
+
+    const recState = getUserGiftState(toId);
+    setUserGiftState(toId, { moons: (recState.moons || 0) + amount });
+    setUserGiftState(senderId, {});
+
+    const notePart = noteText ? ' «' + String(noteText).trim().slice(0, 100) + '»' : '';
+    await postGiftChatMarker(`🌙 [ЛУНЫ:${senderId}:${toId}:${amount}]${notePart}`);
+    alert(`Пользователю @${toId} подарено ${amount} 🌙!`);
+    return true;
+  }
+
+  async function sendGiftToUser(recipientId, giftId, noteText, isAnon, currency = 'stars') {
+    const senderId = normUser(getUid());
+    if (!senderId) return alert('Сначала войдите в аккаунт.');
+    recipientId = normUser(recipientId);
+    if (!recipientId) return alert('Укажите @username получателя.');
+
+    const item = CATALOG.find(x => x.id === giftId);
+    if (!item) return;
+
+    const useMoon = currency === 'moons';
+    const cost = useMoon ? item.moonPrice : item.price;
+    const sym = useMoon ? '🌙' : '★';
+    const infMoon = useMoon && hasInfiniteMoons(senderId);
+
+    const senderState = getUserGiftState(senderId);
+    const bal = useMoon ? (senderState.moons || 0) : (senderState.stars || 0);
+    if (!infMoon && bal < cost) {
+      return alert(`Недостаточно ${useMoon ? 'Лун 🌙' : 'Звёзд ★'} (нужно ${cost} ${sym}, у вас ${bal} ${sym}).`);
+    }
+
+    const issued = getIssuedCount(item.id);
+    if (item.supply > 0 && issued >= item.supply) {
+      return alert('Этот коллекционный подарок полностью распродан!');
+    }
+
+    const serial = issued + 1;
+    const instanceId = 'gift_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    const senderName = ($('#bottomUserName')?.textContent || senderId).trim();
+
+    const giftInstance = {
+      instanceId,
+      giftId: item.id,
+      name: item.name,
+      emoji: item.emoji,
+      rarity: item.rarity,
+      serial,
+      supply: item.supply,
+      fromId: isAnon ? 'anonymous' : senderId,
+      fromName: isAnon ? 'Анонимно' : senderName,
+      note: String(noteText || '').trim().slice(0, 100),
+      receivedAt: Date.now(),
+      upgraded: false,
+      styleName: '',
+      styleBg: '',
+      styleBorder: '',
+      history: [{ from: isAnon ? 'anonymous' : senderId, to: recipientId, at: Date.now() }]
+    };
+
+    if (useMoon) {
+      if (!infMoon) setUserGiftState(senderId, { moons: senderState.moons - cost });
+    } else {
+      setUserGiftState(senderId, { stars: senderState.stars - cost });
+    }
+
+    const recState = getUserGiftState(recipientId);
+    setUserGiftState(recipientId, { gifts: [giftInstance, ...(recState.gifts || [])] });
+
+    const serialTxt = item.supply > 0 ? `#${serial}/${item.supply}` : `#${serial}`;
+    const notePart = noteText ? ' «' + noteText.trim() + '»' : '';
+    await postGiftChatMarker(`🎁 [ПОДАРОК:${instanceId}:${item.emoji}:${item.name}:${serialTxt}:${recipientId}]${notePart}`);
+    return giftInstance;
+  }
+
+  async function transferGiftInstance(instanceId, targetUserRaw, noteText) {
+    const senderId = normUser(getUid());
+    const toId = normUser(targetUserRaw);
+    if (!senderId) return;
+    if (!toId) return alert('Введите @username пользователя, которому хотите передать подарок.');
+    if (toId === senderId) return alert('Нельзя передать подарок самому себе.');
+
+    const senderState = getUserGiftState(senderId);
+    const idx = (senderState.gifts || []).findIndex(g => g.instanceId === instanceId);
+    if (idx === -1) return alert('Подарок не найден в вашей коллекции.');
+
+    const gift = Object.assign({}, senderState.gifts[idx]);
+    const nextSenderGifts = [...senderState.gifts];
+    nextSenderGifts.splice(idx, 1);
+
+    const history = Array.isArray(gift.history) ? [...gift.history] : [];
+    history.push({ from: senderId, to: toId, at: Date.now() });
+
+    const transferredGift = Object.assign({}, gift, {
+      fromId: senderId,
+      fromName: ($('#bottomUserName')?.textContent || senderId).trim(),
+      note: noteText ? String(noteText).trim().slice(0, 100) : gift.note,
+      receivedAt: Date.now(),
+      history
+    });
+
+    const nextPin = senderState.pinnedGiftId === instanceId ? '' : senderState.pinnedGiftId;
+    setUserGiftState(senderId, { gifts: nextSenderGifts, pinnedGiftId: nextPin });
+
+    const recState = getUserGiftState(toId);
+    setUserGiftState(toId, { gifts: [transferredGift, ...(recState.gifts || [])] });
+    renderPinnedGiftOnHeader();
+
+    const serialTxt = transferredGift.supply > 0 ? `#${transferredGift.serial}/${transferredGift.supply}` : `#${transferredGift.serial}`;
+    const notePart = noteText ? ' «' + String(noteText).trim() + '»' : '';
+    await postGiftChatMarker(`⇄ [ПЕРЕДАЧА:${transferredGift.instanceId}:${transferredGift.emoji}:${transferredGift.name}:${serialTxt}:${senderId}:${toId}]${notePart}`);
+    return transferredGift;
+  }
+
+  function openTransferGiftModal(instanceId, prefillTo = '') {
+    const uid = normUser(getUid());
+    const st = getUserGiftState(uid);
+    const g = (st.gifts || []).find(x => x.instanceId === instanceId);
+    if (!g) return;
+
+    const old = document.getElementById('hggTransferModal');
+    if (old) old.remove();
+
+    const m = document.createElement('div');
+    m.id = 'hggTransferModal';
+    m.className = 'hgg-modal';
+    m.style.zIndex = '270';
+    m.onclick = e => { if (e.target === m) m.remove(); };
+    m.innerHTML = `
+      <div class="hgg-box" style="max-width:410px">
+        <div class="hgg-head">
+          <div style="font-weight:800;font-size:15px">⇄ Передать подарок</div>
+          <button id="hggTrClose" style="background:transparent;border:0;color:var(--dc-m);font-size:18px;cursor:pointer">✕</button>
+        </div>
+        <div class="hgg-body" style="display:grid;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px;background:var(--dc-3,#313338);padding:12px;border-radius:8px!important">
+            <div style="font-size:40px">${g.emoji}</div>
+            <div>
+              <div style="font-weight:800;font-size:14px">${esc(g.name)} #${g.serial}</div>
+              <div style="font-size:11px;color:var(--dc-m)">${g.upgraded ? '✨ Улучшенный: ' + esc(g.styleName) : 'Базовый экземпляр'}</div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;color:var(--dc-m);margin-bottom:4px">Кому передать (@username)</div>
+            <input id="hggTrUser" type="text" value="${esc(prefillTo || getActivePeerId() || '')}" placeholder="@username" style="width:100%;padding:9px 11px;font-size:13px" />
+          </div>
+
+          <div>
+            <div style="font-size:11px;color:var(--dc-m);margin-bottom:4px">Комментарий при передаче (необязательно)</div>
+            <input id="hggTrNote" type="text" maxlength="100" placeholder="Дарю коллекцию..." style="width:100%;padding:9px 11px;font-size:13px" />
+          </div>
+
+          <button id="hggTrConfirm" class="hgg-btn moon">Подтвердить передачу</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(m);
+    m.querySelector('#hggTrClose').onclick = () => m.remove();
+    m.querySelector('#hggTrConfirm').onclick = async () => {
+      const toVal = m.querySelector('#hggTrUser').value;
+      const noteVal = m.querySelector('#hggTrNote').value;
+      const done = await transferGiftInstance(instanceId, toVal, noteVal);
+      if (done) {
+        m.remove();
+        const insp = document.getElementById('hggInspectModal');
+        if (insp) insp.remove();
+        const main = document.getElementById('hggMainModal');
+        if (main) openGiftsModal('inv');
+      }
+    };
+  }
+
+  function upgradeGiftInstance(ownerId, instanceId, currency = 'stars') {
+    const cleanOwner = normUser(ownerId);
+    const st = getUserGiftState(cleanOwner);
+    const idx = (st.gifts || []).findIndex(g => g.instanceId === instanceId);
+    if (idx === -1) return;
+    const g = st.gifts[idx];
+    if (g.upgraded) return;
+    const item = CATALOG.find(x => x.id === g.giftId) || { upgradeCost: 100, moonUpgrade: 60 };
+    const useMoon = currency === 'moons';
+    const cost = useMoon ? item.moonUpgrade : item.upgradeCost;
+    const sym = useMoon ? '🌙' : '★';
+    const bal = useMoon ? (st.moons || 0) : (st.stars || 0);
+    const infMoon = useMoon && hasInfiniteMoons(cleanOwner);
+
+    if (!infMoon && bal < cost) {
+      return alert(`Недостаточно ${useMoon ? 'Лун 🌙' : 'Звёзд ★'} для улучшения (нужно ${cost} ${sym}).`);
+    }
+
+    const style = UPGRADE_STYLES[Math.floor(Math.random() * UPGRADE_STYLES.length)];
+    const updated = Object.assign({}, g, {
+      upgraded: true,
+      styleName: style.name,
+      styleBg: style.bg,
+      styleBorder: style.border
+    });
+    const nextGifts = [...st.gifts];
+    nextGifts[idx] = updated;
+    if (useMoon) {
+      setUserGiftState(cleanOwner, { moons: infMoon ? st.moons : (st.moons - cost), gifts: nextGifts });
+    } else {
+      setUserGiftState(cleanOwner, { stars: st.stars - cost, gifts: nextGifts });
+    }
+    openGiftInspectModal(cleanOwner, instanceId);
+  }
+
+  function togglePinGift(ownerId, instanceId) {
+    const cleanOwner = normUser(ownerId);
+    const st = getUserGiftState(cleanOwner);
+    const nextPin = st.pinnedGiftId === instanceId ? '' : instanceId;
+    setUserGiftState(cleanOwner, { pinnedGiftId: nextPin });
+    renderPinnedGiftOnHeader();
+  }
+
+  function openGiftsModal(initialTab = 'shop', prefillRecipient = '') {
+    const uid = normUser(getUid());
+    if (!uid) return;
+    const old = document.getElementById('hggMainModal');
+    if (old) old.remove();
+
+    let tab = initialTab;
+    let selectedGiftId = CATALOG[0].id;
+    let recipient = prefillRecipient || getActivePeerId() || uid;
+
+    const modal = document.createElement('div');
+    modal.id = 'hggMainModal';
+    modal.className = 'hgg-modal';
+    modal.onclick = e => { if (e.target === modal) modal.remove(); };
+    document.body.appendChild(modal);
+
+    function render() {
+      const st = getUserGiftState(uid);
+      const isAdminUser = uid === 'hypergram' || uid === 'danya';
+      const canGiftMoons = hasInfiniteMoons(uid);
+
+      modal.innerHTML = `
+        <div class="hgg-box">
+          <div class="hgg-head">
+            <div>
+              <div style="font-size:16px;font-weight:800">🎁 Коллекционные подарки</div>
+              <div style="font-size:11px;color:var(--dc-m,#949ba4)">Редкие подарки за Звёзды ★ и Луны 🌙 • Передача игрокам</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <div class="hgg-balances">
+                <div class="hgg-bal-star">★ ${st.stars}</div>
+                <div class="hgg-bal-moon">${formatMoonsBalance(uid, st.moons)}</div>
+              </div>
+              <button id="hggCloseBtn" style="background:transparent;border:0;color:var(--dc-m);font-size:18px;cursor:pointer;padding:4px 8px">✕</button>
+            </div>
+          </div>
+
+          <div class="hgg-tabs">
+            <button class="hgg-tab ${tab === 'shop' ? 'on' : ''}" data-tab="shop">Магазин</button>
+            <button class="hgg-tab ${tab === 'inv' ? 'on' : ''}" data-tab="inv">Моя коллекция (${(st.gifts || []).length})</button>
+            <button class="hgg-tab ${tab === 'stars' ? 'on' : ''}" data-tab="stars">Пополнить ★ / 🌙</button>
+          </div>
+
+          <div class="hgg-body" id="hggBody"></div>
+        </div>
+      `;
+
+      modal.querySelector('#hggCloseBtn').onclick = () => modal.remove();
+      modal.querySelectorAll('.hgg-tab').forEach(btn => {
+        btn.onclick = () => { tab = btn.dataset.tab; render(); };
+      });
+
+      const body = modal.querySelector('#hggBody');
+
+      if (tab === 'shop') {
+        body.innerHTML = `
+          <div class="hgg-shop-form">
+            <div>
+              <div style="font-size:11px;color:var(--dc-m);margin-bottom:4px">Кому подарить (@username)</div>
+              <input id="hggRecInput" type="text" value="${esc(recipient)}" placeholder="@username" style="width:100%;padding:8px 10px;font-size:13px" />
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--dc-m);margin-bottom:4px">Подпись к подарку</div>
+              <input id="hggNoteInput" type="text" maxlength="100" placeholder="С наилучшими пожеланиями!" style="width:100%;padding:8px 10px;font-size:13px" />
+            </div>
+            <label style="display:flex;align-items:center;gap:6px;font-size:12px;padding-bottom:6px;cursor:pointer">
+              <input id="hggAnonChk" type="checkbox" /> Анонимно
+            </label>
+          </div>
+
+          <div class="hgg-grid">
+            ${CATALOG.map(item => {
+              const rar = RARITY_META[item.rarity];
+              const issued = getIssuedCount(item.id);
+              const left = item.supply > 0 ? Math.max(0, item.supply - issued) : null;
+              const soldOut = item.supply > 0 && left <= 0;
+              return `
+                <div class="hgg-card" style="${selectedGiftId === item.id ? 'border-color:var(--hg-accent,#5865f2)' : ''}">
+                  <span class="hgg-rar ${rar.cls}">${rar.label}</span>
+                  <div class="hgg-ico" style="background:${rar.bg}33">${item.emoji}</div>
+                  <div style="font-weight:700;font-size:13px">${esc(item.name)}</div>
+                  <div style="font-size:11px;color:var(--dc-m)">
+                    ${item.supply > 0 ? `Осталось: <b>${left}</b> из ${item.supply}` : 'Безлимитный выпуск'}
+                  </div>
+                  <button class="hgg-btn ${soldOut ? 'sec' : ''}" data-buy-stars="${item.id}" ${soldOut ? 'disabled' : ''}>
+                    ${soldOut ? 'Распродано' : `За ${item.price} ★`}
+                  </button>
+                  <button class="hgg-btn moon ${soldOut ? 'sec' : ''}" data-buy-moon="${item.id}" ${soldOut ? 'disabled' : ''}>
+                    ${soldOut ? 'Распродано' : `За ${item.moonPrice} 🌙`}
+                  </button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+
+        const bindBuy = (attr, curr) => {
+          body.querySelectorAll(`[${attr}]`).forEach(btn => {
+            btn.onclick = async () => {
+              const gid = btn.getAttribute(attr);
+              const recVal = body.querySelector('#hggRecInput').value;
+              const noteVal = body.querySelector('#hggNoteInput').value;
+              const anonVal = body.querySelector('#hggAnonChk').checked;
+              const res = await sendGiftToUser(recVal, gid, noteVal, anonVal, curr);
+              if (res) {
+                tab = 'inv';
+                render();
+              }
+            };
+          });
+        };
+        bindBuy('data-buy-stars', 'stars');
+        bindBuy('data-buy-moon', 'moons');
+      } else if (tab === 'inv') {
+        const gifts = st.gifts || [];
+        if (!gifts.length) {
+          body.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--dc-m);font-size:13px">У вас пока нет подарков в коллекции. Купите первый в магазине или получите в подарок/передачу!</div>`;
+          return;
+        }
+        body.innerHTML = `
+          <div class="hgg-grid">
+            ${gifts.map(g => {
+              const rar = RARITY_META[g.rarity] || RARITY_META.common;
+              const isPinned = st.pinnedGiftId === g.instanceId;
+              const bgStyle = g.upgraded ? `background:${g.styleBg};border-color:${g.styleBorder}` : '';
+              return `
+                <div class="hgg-card" style="${bgStyle}">
+                  <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+                    <span class="hgg-rar ${rar.cls}">${g.upgraded ? '★ Улучшен' : rar.label}</span>
+                    <span style="font-size:11px;font-weight:800;opacity:.85">#${g.serial}</span>
+                  </div>
+                  <div class="hgg-ico" style="background:rgba(0,0,0,.22)">${g.emoji}</div>
+                  <div style="font-weight:700;font-size:13px">${esc(g.name)}</div>
+                  <div style="font-size:11px;opacity:.8">От: ${esc(g.fromName)}</div>
+                  <div style="display:flex;gap:5px;width:100%;margin-top:4px">
+                    <button class="hgg-btn sec" data-inspect="${g.instanceId}">Открыть</button>
+                    <button class="hgg-btn moon" data-transfer="${g.instanceId}" title="Передать пользователю">⇄</button>
+                    <button class="hgg-btn ${isPinned ? 'gold' : 'sec'}" data-pin="${g.instanceId}" title="Закрепить рядом с именем">
+                      ${isPinned ? '📌' : '📍'}
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        body.querySelectorAll('[data-inspect]').forEach(b => {
+          b.onclick = () => openGiftInspectModal(uid, b.dataset.inspect);
+        });
+        body.querySelectorAll('[data-transfer]').forEach(b => {
+          b.onclick = () => openTransferGiftModal(b.dataset.transfer);
+        });
+        body.querySelectorAll('[data-pin]').forEach(b => {
+          b.onclick = () => { togglePinGift(uid, b.dataset.pin); render(); };
+        });
+      } else if (tab === 'stars') {
+        const starPacks = [
+          { amount: 100,  label: 'Стартовый набор ★' },
+          { amount: 500,  label: 'Набор коллекционера ★' },
+          { amount: 1500, label: 'VIP-сундук Звёзд ★' }
+        ];
+        const moonPacks = [
+          { amount: 100,  label: 'Лунный осколок 🌙' },
+          { amount: 300,  label: 'Лунное сияние 🌙' },
+          { amount: 1000, label: 'Полнолуние 🌙' }
+        ];
+        body.innerHTML = `
+          <div style="display:grid;gap:16px">
+            ${canGiftMoons ? `
+              <div style="padding:14px;border-radius:8px!important;background:var(--dc-1,#1e1f22);border:1px solid #818cf8">
+                <div style="font-size:12px;font-weight:800;margin-bottom:8px;color:#a5b4fc">🌙 Подарить Луны пользователю (бесконечный баланс @shikariy)</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <input id="hggGiftMoonUser" type="text" value="${esc(getActivePeerId() || '')}" placeholder="@username получателя" style="flex:1;min-width:140px;padding:8px 10px;font-size:13px" />
+                  <input id="hggGiftMoonAmt" type="number" min="1" value="100" style="width:110px;padding:8px 10px;font-size:13px" />
+                  <input id="hggGiftMoonNote" type="text" maxlength="100" placeholder="Комментарий..." style="flex:1;min-width:140px;padding:8px 10px;font-size:13px" />
+                  <button id="hggGiftMoonBtn" class="hgg-btn moon" style="width:auto;padding:8px 16px">Подарить 🌙</button>
+                </div>
+              </div>
+            ` : ''}
+
+            <div>
+              <div style="font-size:12px;font-weight:800;margin-bottom:8px;color:#fbbf24">★ Звёзды</div>
+              <div class="hgg-grid">
+                ${starPacks.map(p => `
+                  <div class="hgg-card">
+                    <div class="hgg-ico" style="background:rgba(245,158,11,.18)">⭐</div>
+                    <div style="font-weight:800;font-size:16px">+${p.amount} ★</div>
+                    <div style="font-size:11px;color:var(--dc-m)">${p.label}</div>
+                    <button class="hgg-btn gold" data-add-stars="${p.amount}">Получить бесплатно</button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size:12px;font-weight:800;margin-bottom:8px;color:#a5b4fc">🌙 Луны</div>
+              <div class="hgg-grid">
+                ${moonPacks.map(p => `
+                  <div class="hgg-card">
+                    <div class="hgg-ico" style="background:rgba(129,140,248,.18)">🌙</div>
+                    <div style="font-weight:800;font-size:16px">${canGiftMoons ? '∞ 🌙' : '+' + p.amount + ' 🌙'}</div>
+                    <div style="font-size:11px;color:var(--dc-m)">${canGiftMoons ? 'У вас уже бесконечные Луны' : p.label}</div>
+                    <button class="hgg-btn moon" data-add-moons="${p.amount}">${canGiftMoons ? 'Бесконечно (∞ 🌙)' : 'Получить бесплатно'}</button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            ${isAdminUser ? `
+              <div style="padding:14px;border-radius:8px!important;background:var(--dc-1,#1e1f22);border:1px solid var(--hg-accent)">
+                <div style="font-size:12px;font-weight:800;margin-bottom:8px">🛡️ Выдача Звёзд и Лун (Админ-инструмент)</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <input id="hggAdmUser" type="text" placeholder="@username" style="flex:1;min-width:140px;padding:8px 10px;font-size:13px" />
+                  <input id="hggAdmAmt" type="number" value="1000" style="width:110px;padding:8px 10px;font-size:13px" />
+                  <button id="hggAdmGiveStars" class="hgg-btn gold" style="width:auto;padding:8px 14px">Выдать ★</button>
+                  <button id="hggAdmGiveMoons" class="hgg-btn moon" style="width:auto;padding:8px 14px">Выдать 🌙</button>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        const giftMoonBtn = body.querySelector('#hggGiftMoonBtn');
+        if (giftMoonBtn) {
+          giftMoonBtn.onclick = async () => {
+            const toVal = body.querySelector('#hggGiftMoonUser').value;
+            const amtVal = body.querySelector('#hggGiftMoonAmt').value;
+            const noteVal = body.querySelector('#hggGiftMoonNote').value;
+            await giftMoonsToUser(toVal, amtVal, noteVal);
+            render();
+          };
+        }
+
+        body.querySelectorAll('[data-add-stars]').forEach(b => {
+          b.onclick = () => {
+            const add = Number(b.dataset.addStars) || 0;
+            const cur = getUserGiftState(uid);
+            setUserGiftState(uid, { stars: (cur.stars || 0) + add });
+            render();
+          };
+        });
+        body.querySelectorAll('[data-add-moons]').forEach(b => {
+          b.onclick = () => {
+            if (canGiftMoons) {
+              setUserGiftState(uid, {});
+              render();
+              return;
+            }
+            const add = Number(b.dataset.addMoons) || 0;
+            const cur = getUserGiftState(uid);
+            setUserGiftState(uid, { moons: (cur.moons || 0) + add });
+            render();
+          };
+        });
+        const admStarsBtn = body.querySelector('#hggAdmGiveStars');
+        const admMoonsBtn = body.querySelector('#hggAdmGiveMoons');
+        if (admStarsBtn) {
+          admStarsBtn.onclick = () => {
+            const target = normUser(body.querySelector('#hggAdmUser').value);
+            const amt = Number(body.querySelector('#hggAdmAmt').value) || 0;
+            if (!target || !amt) return;
+            const tState = getUserGiftState(target);
+            setUserGiftState(target, { stars: (tState.stars || 0) + amt });
+            alert(`Пользователю @${target} начислено ${amt} ★!`);
+            render();
+          };
+        }
+        if (admMoonsBtn) {
+          admMoonsBtn.onclick = () => {
+            const target = normUser(body.querySelector('#hggAdmUser').value);
+            const amt = Number(body.querySelector('#hggAdmAmt').value) || 0;
+            if (!target || !amt) return;
+            const tState = getUserGiftState(target);
+            setUserGiftState(target, { moons: (tState.moons || 0) + amt });
+            alert(`Пользователю @${target} начислено ${amt} 🌙!`);
+            render();
+          };
+        }
+      }
+    }
+
+    render();
+  }
+
+  function openGiftInspectModal(ownerId, instanceId) {
+    const cleanOwner = normUser(ownerId);
+    const st = getUserGiftState(cleanOwner);
+    let g = (st.gifts || []).find(x => x.instanceId === instanceId);
+    if (!g) {
+      const allMap = getUsersMap();
+      for (const u of Object.values(allMap)) {
+        const found = (u?.hgGifts || []).find(x => x.instanceId === instanceId);
+        if (found) { g = found; break; }
+      }
+    }
+    if (!g) return alert('Экземпляр подарка не найден или был передан.');
+
+    const old = document.getElementById('hggInspectModal');
+    if (old) old.remove();
+
+    const item = CATALOG.find(x => x.id === g.giftId) || { upgradeCost: 100, moonUpgrade: 60 };
+    const rar = RARITY_META[g.rarity] || RARITY_META.common;
+    const isMine = (getUserGiftState(normUser(getUid())).gifts || []).some(x => x.instanceId === instanceId);
+    const histCount = Array.isArray(g.history) ? g.history.length : 1;
+
+    const m = document.createElement('div');
+    m.id = 'hggInspectModal';
+    m.className = 'hgg-modal';
+    m.style.zIndex = '260';
+    m.onclick = e => { if (e.target === m) m.remove(); };
+    m.innerHTML = `
+      <div class="hgg-box" style="max-width:410px">
+        <div class="hgg-head" style="${g.upgraded ? `background:${g.styleBg}` : ''}">
+          <span class="hgg-rar ${rar.cls}">${rar.label}</span>
+          <span style="font-weight:800;font-size:13px">Экземпляр #${g.serial}${g.supply > 0 ? ' / ' + g.supply : ''}</span>
+          <button id="hggInspClose" style="background:transparent;border:0;color:#fff;font-size:18px;cursor:pointer">✕</button>
+        </div>
+        <div class="hgg-body" style="text-align:center">
+          <div style="font-size:74px;line-height:1.1;margin:8px 0">${g.emoji}</div>
+          <div style="font-size:20px;font-weight:800">${esc(g.name)}</div>
+          ${g.upgraded ? `<div style="display:inline-block;padding:4px 10px;border-radius:999px!important;background:rgba(251,191,36,.2);color:#fbbf24;font-size:11px;font-weight:800;margin-top:4px">✨ Коллекционный фон: ${esc(g.styleName)}</div>` : ''}
+          ${g.note ? `<div style="margin-top:10px;padding:10px;border-radius:8px!important;background:var(--dc-3,#313338);font-size:13px">«${esc(g.note)}»</div>` : ''}
+
+          <div style="margin-top:14px;text-align:left;background:var(--dc-1,#1e1f22);padding:12px;border-radius:8px!important;font-size:12px;display:grid;gap:6px">
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--dc-m)">Владелец:</span><b>@${esc(cleanOwner)}</b></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--dc-m)">Отправитель:</span><b>${esc(g.fromName)}</b></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--dc-m)">Дата:</span><b>${formatDate(g.receivedAt)}</b></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--dc-m)">Владельцев в истории:</span><b>${histCount}</b></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--dc-m)">Статус:</span><b>${g.upgraded ? 'Улучшенный коллекционный' : 'Базовый'}</b></div>
+          </div>
+
+          ${isMine ? `
+            <div style="display:grid;gap:8px;margin-top:14px">
+              <button id="hggInspTransferBtn" class="hgg-btn moon">⇄ Передать пользователю</button>
+              ${!g.upgraded ? `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <button id="hggUpgradeStarsBtn" class="hgg-btn gold">✨ За ${item.upgradeCost} ★</button>
+                  <button id="hggUpgradeMoonsBtn" class="hgg-btn sec">🌙 За ${item.moonUpgrade} 🌙</button>
+                </div>
+              ` : ''}
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+    document.body.appendChild(m);
+    m.querySelector('#hggInspClose').onclick = () => m.remove();
+    const trBtn = m.querySelector('#hggInspTransferBtn');
+    if (trBtn) trBtn.onclick = () => openTransferGiftModal(instanceId);
+    const upS = m.querySelector('#hggUpgradeStarsBtn');
+    if (upS) upS.onclick = () => { m.remove(); upgradeGiftInstance(normUser(getUid()), instanceId, 'stars'); };
+    const upM = m.querySelector('#hggUpgradeMoonsBtn');
+    if (upM) upM.onclick = () => { m.remove(); upgradeGiftInstance(normUser(getUid()), instanceId, 'moons'); };
+  }
+
+  function enhanceChatGiftMessages() {
+    const box = $('#messagesContainer');
+    if (!box) return;
+    box.querySelectorAll('.hg-msg-text').forEach(el => {
+      if (el.dataset.hggParsed) return;
+      const txt = (el.textContent || '').trim();
+
+      const mMoon = txt.match(/^🌙\s*\[ЛУНЫ:([^:]+):([^:]+):([^\]]+)\]\s*(.*)$/);
+      if (mMoon) {
+        el.dataset.hggParsed = '1';
+        const [, fromId, toId, amt, note] = mMoon;
+        el.innerHTML = `
+          <div class="hgg-msg-card" style="border-left-color:#818cf8;cursor:default">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="font-size:32px;line-height:1">🌙</div>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:10px;text-transform:uppercase;font-weight:800;color:#a5b4fc;letter-spacing:.04em">Подарок в Лунах</div>
+                <div style="font-size:15px;font-weight:800;color:#fff;margin-top:1px">+${esc(amt)} 🌙</div>
+                <div style="font-size:11px;color:#b5bac1">@${esc(fromId)} → @${esc(toId)}</div>
+              </div>
+            </div>
+            ${note ? `<div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:#dbdee1">${esc(note)}</div>` : ''}
+          </div>
+        `;
+        return;
+      }
+
+      const mGift = txt.match(/^🎁\s*\[ПОДАРОК:([^:]+):([^:]+):([^:]+):([^:]+):([^\]]+)\]\s*(.*)$/);
+      if (mGift) {
+        el.dataset.hggParsed = '1';
+        const [, instId, emoji, title, serialTxt, recId, note] = mGift;
+        el.innerHTML = `
+          <div class="hgg-msg-card" data-inst="${esc(instId)}" data-owner="${esc(recId)}">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="font-size:36px;line-height:1">${esc(emoji)}</div>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:10px;text-transform:uppercase;font-weight:800;color:#949ba4;letter-spacing:.04em">Коллекционный подарок</div>
+                <div style="font-size:14px;font-weight:800;color:#fff;margin-top:1px">${esc(title)} <span style="opacity:.8">${esc(serialTxt)}</span></div>
+                <div style="font-size:11px;color:#b5bac1">Для @${esc(recId)}</div>
+              </div>
+            </div>
+            ${note ? `<div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:#dbdee1">${esc(note)}</div>` : ''}
+            <div style="margin-top:8px;font-size:11px;font-weight:700;color:#818cf8">Нажмите, чтобы осмотреть →</div>
+          </div>
+        `;
+        el.querySelector('.hgg-msg-card').onclick = () => openGiftInspectModal(recId, instId);
+        return;
+      }
+
+      const mTr = txt.match(/^⇄\s*\[ПЕРЕДАЧА:([^:]+):([^:]+):([^:]+):([^:]+):([^:]+):([^\]]+)\]\s*(.*)$/);
+      if (mTr) {
+        el.dataset.hggParsed = '1';
+        const [, instId, emoji, title, serialTxt, fromId, toId, note] = mTr;
+        el.innerHTML = `
+          <div class="hgg-msg-card" style="border-left-color:#818cf8" data-inst="${esc(instId)}" data-owner="${esc(toId)}">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="font-size:36px;line-height:1">${esc(emoji)}</div>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:10px;text-transform:uppercase;font-weight:800;color:#a5b4fc;letter-spacing:.04em">⇄ Передача подарка</div>
+                <div style="font-size:14px;font-weight:800;color:#fff;margin-top:1px">${esc(title)} <span style="opacity:.8">${esc(serialTxt)}</span></div>
+                <div style="font-size:11px;color:#b5bac1">@${esc(fromId)} → @${esc(toId)}</div>
+              </div>
+            </div>
+            ${note ? `<div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:#dbdee1">${esc(note)}</div>` : ''}
+            <div style="margin-top:8px;font-size:11px;font-weight:700;color:#a5b4fc">Нажмите, чтобы осмотреть →</div>
+          </div>
+        `;
+        el.querySelector('.hgg-msg-card').onclick = () => openGiftInspectModal(toId, instId);
+      }
+    });
+  }
+
+  function enhanceRightProfileShowcase() {
+    const panel = $('#rightInfoContent');
+    if (!panel || panel.querySelector('#hggProfileShowcase')) return;
+    const handleEl = panel.querySelector('.hg-accent-text');
+    if (!handleEl) return;
+    const rawHandle = (handleEl.textContent || '').trim();
+    if (!rawHandle.startsWith('@')) return;
+    const targetId = normUser(rawHandle);
+    const st = getUserGiftState(targetId);
+    const gifts = st.gifts || [];
+    const curUid = normUser(getUid());
+    const canSendMoons = hasInfiniteMoons(curUid) && curUid !== targetId;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'hggProfileShowcase';
+    wrap.style.cssText = 'padding:12px;border-radius:8px;background:var(--dc-3,#313338);border:1px solid rgba(255,255,255,.08);margin-top:10px';
+    wrap.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:6px">
+        <span style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:.75">🎁 Коллекция (${gifts.length})</span>
+        <div style="display:flex;gap:4px">
+          ${canSendMoons ? `<button id="hggSendMoonsPeerBtn" style="border:0;background:#4f46e5;color:#fff;font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer">+🌙</button>` : ''}
+          <button id="hggSendToPeerBtn" style="border:0;background:var(--hg-accent,#5865f2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer">Подарить</button>
+        </div>
+      </div>
+      ${gifts.length ? `
+        <div class="hgg-showcase">
+          ${gifts.slice(0, 8).map(g => `
+            <span class="hgg-chip" data-inst="${esc(g.instanceId)}" title="${esc(g.name)} #${g.serial}">
+              <span>${g.emoji}</span>
+              <span style="font-size:10px;font-weight:700">#${g.serial}</span>
+            </span>
+          `).join('')}
+        </div>
+      ` : `<div style="font-size:11px;opacity:.65">Подарков пока нет — станьте первым дарителем!</div>`}
+    `;
+    panel.appendChild(wrap);
+    wrap.querySelector('#hggSendToPeerBtn').onclick = () => openGiftsModal('shop', targetId);
+    const mBtn = wrap.querySelector('#hggSendMoonsPeerBtn');
+    if (mBtn) {
+      mBtn.onclick = async () => {
+        const amt = prompt(`Сколько Лун 🌙 подарить @${targetId}?`, '100');
+        if (amt !== null) await giftMoonsToUser(targetId, amt, '');
+      };
+    }
+    wrap.querySelectorAll('.hgg-chip').forEach(ch => {
+      ch.onclick = () => openGiftInspectModal(targetId, ch.dataset.inst);
+    });
+  }
+
+  function renderPinnedGiftOnHeader() {
+    const uid = normUser(getUid());
+    const nameEl = $('#bottomUserName');
+    if (!uid || !nameEl) return;
+    const old = nameEl.querySelector('.hgg-pin-badge');
+    if (old) old.remove();
+    const st = getUserGiftState(uid);
+    if (!st.pinnedGiftId) return;
+    const pinned = (st.gifts || []).find(g => g.instanceId === st.pinnedGiftId);
+    if (!pinned) return;
+    const badge = document.createElement('span');
+    badge.className = 'hgg-pin-badge';
+    badge.textContent = pinned.emoji;
+    badge.title = `${pinned.name} #${pinned.serial}`;
+    badge.onclick = e => { e.stopPropagation(); openGiftInspectModal(uid, pinned.instanceId); };
+    nameEl.appendChild(badge);
+  }
+
+  function mountGiftButtons() {
+    // 1. Кнопка в левом рейле (на планшетах/десктопах)
+    const rail = $('#dcRail');
+    if (rail && !document.getElementById('hggRailBtn')) {
+      const gBtn = document.createElement('button');
+      gBtn.id = 'hggRailBtn';
+      gBtn.className = 'dcb';
+      gBtn.title = 'Коллекционные подарки • Звёзды ★ и Луны 🌙';
+      gBtn.textContent = '🎁';
+      gBtn.onclick = () => openGiftsModal('shop');
+      const gearBtn = rail.lastElementChild;
+      if (gearBtn) rail.insertBefore(gBtn, gearBtn);
+      else rail.appendChild(gBtn);
+    }
+
+    // 2. Пункт «Подарки и Звёзды» в боковом меню Android (#mainDrawer)
+    const drawerNav = $('#mainDrawer nav');
+    if (drawerNav && !document.getElementById('hggDrawerBtn')) {
+      const dBtn = document.createElement('button');
+      dBtn.id = 'hggDrawerBtn';
+      dBtn.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#2a2724] text-sm font-semibold transition';
+      dBtn.innerHTML = '<span class="w-4 text-center">🎁</span><span>Подарки (★ и 🌙)</span>';
+      dBtn.onclick = () => { if (window.closeDrawer) window.closeDrawer(); openGiftsModal('shop'); };
+      const firstSep = drawerNav.querySelector('.border-t');
+      if (firstSep) drawerNav.insertBefore(dBtn, firstSep);
+      else drawerNav.appendChild(dBtn);
+    }
+  }
+
+  function tick() {
+    if (!getUid()) return;
+    mountGiftButtons();
+    enhanceChatGiftMessages();
+    enhanceRightProfileShowcase();
+    renderPinnedGiftOnHeader();
+  }
+
+  window.__hgEnhanceGifts = enhanceChatGiftMessages;
+  window.openHypergramGifts = openGiftsModal;
+  window.transferHypergramGift = transferGiftInstance;
+  window.giftMoonsToUser = giftMoonsToUser;
+  setInterval(tick, 600);
+  document.addEventListener('DOMContentLoaded', tick);
+})();
+</script>
+
 </body>
 </html>
